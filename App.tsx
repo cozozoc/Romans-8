@@ -28,6 +28,7 @@ export default function App(): React.ReactNode {
   const [showChunks, setShowChunks] = useState<boolean>(false);
   const [manualChunks, setManualChunks] = useState<Record<number, string>>({});
   const [hasLoadedChunks, setHasLoadedChunks] = useState<boolean>(false);
+  const [languages, setLanguages] = useState<('eng' | 'kor')[]>(['eng']);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -50,9 +51,7 @@ export default function App(): React.ReactNode {
         }
       } catch (error) {
         console.error("Failed to load chunks from IndexedDB:", error);
-      } finally {
-        setHasLoadedChunks(true);
-      }
+      } 
 
       // Load recordings
       try {
@@ -70,6 +69,8 @@ export default function App(): React.ReactNode {
         }
       } catch (error) {
         console.error("Failed to load recordings from IndexedDB:", error);
+      } finally {
+        setHasLoadedChunks(true);
       }
     };
     loadData();
@@ -146,23 +147,53 @@ export default function App(): React.ReactNode {
   }, [currentVerse, stopAllAudio]);
 
   const handlePlayVerse = useCallback(() => {
-    if (!currentVerse?.text || typeof window.speechSynthesis === 'undefined') {
+    if (!currentVerse || typeof window.speechSynthesis === 'undefined') {
         return;
     }
     stopAllAudio();
-    const utterance = new SpeechSynthesisUtterance(currentVerse.text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
+
+    const showEng = languages.includes('eng');
+    const showKor = languages.includes('kor');
+    const utterances = [];
+
+    if (showEng && currentVerse.text) {
+        const utterance = new SpeechSynthesisUtterance(currentVerse.text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+        utterances.push(utterance);
+    }
+
+    if (showKor && currentVerse.krv) {
+        const utterance = new SpeechSynthesisUtterance(currentVerse.krv);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 0.9;
+        utterances.push(utterance);
+    }
+
+    if (utterances.length === 0) return;
+
+    // Chain utterances
+    for (let i = 0; i < utterances.length - 1; i++) {
+        utterances[i].onend = () => {
+            // Check if it was not stopped manually before speaking next part
+            if (window.speechSynthesis.speaking) { 
+                window.speechSynthesis.speak(utterances[i+1]);
+            }
+        };
+    }
+
+    utterances[0].onstart = () => setIsSpeaking(true);
+    utterances[utterances.length - 1].onend = () => setIsSpeaking(false);
     
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = (event) => {
+    const onError = (event: SpeechSynthesisErrorEvent) => {
         console.error('Speech synthesis error:', event);
         setIsSpeaking(false);
     };
 
-    window.speechSynthesis.speak(utterance);
-  }, [currentVerse, stopAllAudio]);
+    utterances.forEach(u => u.onerror = onError);
+
+    window.speechSynthesis.speak(utterances[0]);
+}, [currentVerse, stopAllAudio, languages]);
   
   const handleToggleRecord = async () => {
     stopAllAudio();
@@ -275,6 +306,19 @@ export default function App(): React.ReactNode {
       return newChunks;
     });
   }, [currentVerseIndex]);
+
+  const handleLanguageToggle = (lang: 'eng' | 'kor') => {
+    stopAllAudio();
+    setLanguages(prev => {
+      const isPresent = prev.includes(lang);
+      if (isPresent) {
+        if (prev.length === 1) return prev; // Keep at least one language selected
+        return prev.filter(l => l !== lang);
+      } else {
+        return [...prev, lang].sort((a, b) => a === 'eng' ? -1 : 1); // Keep 'eng' first
+      }
+    });
+  };
   
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -341,6 +385,25 @@ export default function App(): React.ReactNode {
   return (
     <div className="min-h-screen bg-slate-100 font-sans flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-3xl mx-auto">
+        <div className="flex justify-center sm:justify-end mb-4">
+          <div className="flex gap-1 p-1 bg-slate-200 rounded-full">
+            <button
+              onClick={() => handleLanguageToggle('eng')}
+              className={`px-4 py-1 text-sm font-semibold rounded-full transition-colors duration-200 ${languages.includes('eng') ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:bg-slate-300'}`}
+              aria-pressed={languages.includes('eng')}
+            >
+              ENG
+            </button>
+            <button
+              onClick={() => handleLanguageToggle('kor')}
+              className={`px-4 py-1 text-sm font-semibold rounded-full transition-colors duration-200 ${languages.includes('kor') ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:bg-slate-300'}`}
+              aria-pressed={languages.includes('kor')}
+            >
+              KOR
+            </button>
+          </div>
+        </div>
+
         <header className="mb-6">
           <h1 className="text-3xl sm:text-4xl font-bold font-serif text-center text-slate-800 mb-2">Romans 8</h1>
           <p className="text-center text-slate-500">Memorize Romans Effectively</p>
@@ -357,12 +420,13 @@ export default function App(): React.ReactNode {
             {memorizeMode ? (
               <MemorizeView 
                 verse={currentVerse}
+                languages={languages}
                 memorizeWords={currentMemorizeWords}
               />
             ) : (
               <VerseDisplay 
-                verseNumber={currentVerse.verse} 
-                text={currentVerse.text}
+                verse={currentVerse}
+                languages={languages}
                 chunkedText={manualChunks[currentVerseIndex]}
                 showChunks={showChunks}
                 isChunkingMode={isChunkingMode}
@@ -404,6 +468,7 @@ export default function App(): React.ReactNode {
           showChunks={showChunks}
           onResetChunks={handleResetChunks}
           hasManualChunks={!!manualChunks[currentVerseIndex]}
+          hasLoadedChunks={hasLoadedChunks}
         />
         
         <AiInsight insight={aiInsight} isLoading={isAiLoading} />

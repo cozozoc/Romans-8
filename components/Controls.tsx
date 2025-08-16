@@ -25,6 +25,7 @@ interface ControlsProps {
   showChunks: boolean;
   onResetChunks: () => void;
   hasManualChunks: boolean;
+  hasLoadedChunks: boolean;
 }
 
 const NavButton: React.FC<{ onClick: () => void; disabled?: boolean; children: React.ReactNode; 'aria-label': string; }> = ({ onClick, disabled, children, 'aria-label': ariaLabel }) => (
@@ -50,8 +51,9 @@ const Controls: React.FC<ControlsProps> = ({
     onToggleChunkingMode, isChunkingMode,
     onToggleShowChunks, showChunks,
     onResetChunks, hasManualChunks,
+    hasLoadedChunks,
 }) => {
-  const isBusy = isSpeaking || isRecording;
+  const isBusy = isSpeaking || isRecording || !hasLoadedChunks;
 
   return (
     <div className="flex items-center justify-center gap-3 sm:gap-4 my-6">
@@ -66,7 +68,7 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           type="button"
           onClick={isSpeaking ? onStop : onPlay}
-          disabled={isRecording}
+          disabled={isRecording || !hasLoadedChunks}
           className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm transform hover:scale-105 disabled:opacity-50"
           aria-label={isSpeaking ? "Stop reading verse" : "Read verse aloud"}
         >
@@ -77,7 +79,7 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           type="button"
           onClick={onToggleRecord}
-          disabled={isSpeaking}
+          disabled={isSpeaking || !hasLoadedChunks}
           className={`flex items-center justify-center h-12 w-12 rounded-full text-white transition-colors shadow-sm transform hover:scale-105 disabled:opacity-50 ${isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-600 hover:bg-slate-700'}`}
           aria-label={isRecording ? "Stop recording" : "Start recording"}
         >

@@ -1,20 +1,21 @@
 import React, { Fragment, useState } from 'react';
+import type { Verse } from '../types';
 
 const VerseDisplay: React.FC<{
-  verseNumber: number;
-  text: string;
+  verse: Verse;
+  languages: ('eng' | 'kor')[];
   chunkedText?: string;
   showChunks: boolean;
   isChunkingMode: boolean;
   onUpdateChunks: (newText: string) => void;
-}> = ({ verseNumber, text, chunkedText, showChunks, isChunkingMode, onUpdateChunks }) => {
+}> = ({ verse, languages, chunkedText, showChunks, isChunkingMode, onUpdateChunks }) => {
   
   const [hoveredDividerIndex, setHoveredDividerIndex] = useState<number | null>(null);
   
-  const renderContent = () => {
+  const renderEnglishContent = () => {
     // In chunking mode, render an interactive UI for adding/removing dividers.
     if (isChunkingMode) {
-      const currentText = chunkedText || text;
+      const currentText = chunkedText || verse.text;
       
       // Tokenize the string into words, spaces, and existing dividers for individual rendering.
       const tokens: { type: 'word' | 'space' | 'divider'; content: string }[] = [];
@@ -109,18 +110,32 @@ const VerseDisplay: React.FC<{
     }
 
     // Default case: show the original, unchunked text.
-    return text;
+    return verse.text;
   };
+
+  const showEng = languages.includes('eng');
+  const showKor = languages.includes('kor');
 
   return (
     <div className="relative">
-      <p 
-        className="font-serif text-xl sm:text-2xl leading-relaxed text-slate-700"
-        aria-label={isChunkingMode ? "Verse text, hover between words to add a divider or click an existing divider to remove it" : "Verse text"}
-      >
-        <span className="font-bold text-slate-800 align-top text-sm mr-2 select-none">{verseNumber}</span>
-        {renderContent()}
-      </p>
+      <div className="flex items-start">
+        <span className="font-bold text-slate-800 align-top text-sm mr-2 select-none pt-1.5">{verse.verse}</span>
+        <div className="flex-1">
+          {showEng && (
+            <p 
+              className="font-serif text-xl sm:text-2xl leading-relaxed text-slate-700"
+              aria-label={isChunkingMode ? "Verse text, hover between words to add a divider or click an existing divider to remove it" : "Verse text"}
+            >
+              {renderEnglishContent()}
+            </p>
+          )}
+          {showKor && (
+            <p className={`font-sans text-lg sm:text-xl leading-relaxed text-slate-600 ${showEng ? 'mt-3' : ''}`} lang="ko">
+              {verse.krv}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

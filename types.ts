@@ -1,6 +1,7 @@
 export interface Verse {
   verse: number;
   text: string;
+  krv: string;
 }
 
 export interface WordTranslation {

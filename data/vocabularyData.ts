@@ -41,7 +41,7 @@ export const ROMANS_8_VOCABULARY: WordTranslation[][] = [
   ],
   // Verse 7
   [
-    { english: "hostile", krv: "원수", nksv: "적대감" },
+    { english: "hostile", krv: "적대적인", nksv: "적대적인" },
     { english: "obey", krv: "굴복하다", nksv: "복종하다" },
     { english: "law", krv: "법", nksv: "법" },
   ],
@@ -90,7 +90,7 @@ export const ROMANS_8_VOCABULARY: WordTranslation[][] = [
   [
     { english: "fearful", krv: "무서워하는", nksv: "두려움에 빠뜨리는" },
     { english: "slaves", krv: "종", nksv: "종살이" },
-    { english: "adopted", krv: "양자", nksv: "양자 삼으시는" },
+    { english: "adoption", krv: "양자", nksv: "양자 삼으심" },
     { english: "Abba, Father", krv: "아빠 아버지", nksv: "아빠, 아버지" },
   ],
   // Verse 16
@@ -130,7 +130,7 @@ export const ROMANS_8_VOCABULARY: WordTranslation[][] = [
   // Verse 22
   [
     { english: "groaning", krv: "탄식하며", nksv: "신음하며" },
-    { english: "childbirth", krv: "고통", nksv: "해산의 고통" },
+    { english: "childbirth", krv: "해산", nksv: "해산" },
   ],
   // Verse 23
   [
@@ -175,7 +175,7 @@ export const ROMANS_8_VOCABULARY: WordTranslation[][] = [
   [
     { english: "called", krv: "부르시고", nksv: "부르시고" },
     { english: "right standing", krv: "의롭다 하시고", nksv: "의롭게 하시고" },
-    { english: "glory", krv: "영화롭게", nksv: "영화롭게" },
+    { english: "glory", krv: "영광", nksv: "영광" },
   ],
   // Verse 31
   [
@@ -201,7 +201,7 @@ export const ROMANS_8_VOCABULARY: WordTranslation[][] = [
     { english: "separate", krv: "끊으리요", nksv: "끊을 수 있겠습니까" },
     { english: "love", krv: "사랑", nksv: "사랑" },
     { english: "trouble", krv: "환난", nksv: "환난" },
-    { english: "persecuted", krv: "박해", nksv: "박해" },
+    { english: "persecution", krv: "박해", nksv: "박해" },
   ],
   // Verse 36
   [
@@ -210,17 +210,17 @@ export const ROMANS_8_VOCABULARY: WordTranslation[][] = [
   ],
   // Verse 37
   [
-    { english: "victory", krv: "이기느니라", nksv: "이기고도 남습니다" },
+    { english: "victory", krv: "승리", nksv: "승리" },
   ],
   // Verse 38
   [
     { english: "convinced", krv: "확신하노니", nksv: "확신합니다" },
     { english: "neither", krv: "~이나 ~이나", nksv: "~이나 ~이나" },
-    { english: "demons", krv: "천사들이나 권세자들이나", nksv: "천사들이나 악마들이나" },
+    { english: "demons", krv: "권세자들", nksv: "악마들" },
+    { english: "powers", krv: "능력", nksv: "능력" },
   ],
   // Verse 39
   [
-    { english: "power", krv: "권능", nksv: "세력" },
     { english: "creation", krv: "피조물", nksv: "피조물" },
   ],
 ];

@@ -6,6 +6,7 @@ import { CheckCircleIcon } from './IconComponents';
 
 interface MemorizeViewProps {
   verse: Verse;
+  languages: ('eng' | 'kor')[];
   memorizeWords: string[];
 }
 
@@ -25,7 +26,7 @@ function calculateMaxHintLevel(word: string): number {
     return (word.match(/\w+/g) || []).length;
 }
 
-const MemorizeView: React.FC<MemorizeViewProps> = ({ verse, memorizeWords }) => {
+const MemorizeView: React.FC<MemorizeViewProps> = ({ verse, languages, memorizeWords }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hintStates, setHintStates] = useState<{ [key: number]: number }>({});
   const [isStudyMode, setIsStudyMode] = useState(false);
@@ -256,6 +257,9 @@ const MemorizeView: React.FC<MemorizeViewProps> = ({ verse, memorizeWords }) => 
     });
   };
 
+  const showEng = languages.includes('eng');
+  const showKor = languages.includes('kor');
+
   return (
     <div 
       ref={containerRef} 
@@ -316,8 +320,24 @@ const MemorizeView: React.FC<MemorizeViewProps> = ({ verse, memorizeWords }) => 
       )}
 
       <div className="relative font-serif text-xl sm:text-2xl leading-10 text-slate-700 min-h-[100px]">
-        <span className="font-bold text-slate-800 align-top text-sm mr-2">{verse.verse}</span>
-        {renderVerseWithBlanks()}
+        {showEng && (
+          <div>
+            <span className="font-bold text-slate-800 align-top text-sm mr-2 float-left pt-2.5">{verse.verse}</span>
+            <div className="overflow-hidden">
+              {renderVerseWithBlanks()}
+            </div>
+          </div>
+        )}
+        {showKor && (
+          <div className={`font-sans text-lg sm:text-xl leading-relaxed text-slate-600 ${showEng ? 'mt-3' : ''}`} lang="ko">
+            {!showEng && <span className="font-bold text-slate-800 align-top text-sm mr-2 float-left pt-1.5">{verse.verse}</span>}
+            <div className={`overflow-hidden ${!showEng ? '' : 'pl-6'}`}>
+                <p>
+                  {verse.krv}
+                </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
