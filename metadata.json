@@ -1,0 +1,7 @@
+{
+  "name": "Romans 8 Memorization Helper",
+  "description": "An application to help you effectively memorize Romans chapter 8 from the NLT Bible, with AI-powered insights for deeper understanding.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
