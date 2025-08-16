@@ -1,5 +1,6 @@
 
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { get, set } from 'idb-keyval';
 import { ROMANS_8 } from './constants';
 import { ROMANS_8_VOCABULARY } from './data/vocabularyData';
 import { ROMANS_8_MEMORIZE_WORDS } from './data/memorizeData';
@@ -26,37 +27,70 @@ export default function App(): React.ReactNode {
   const [isChunkingMode, setIsChunkingMode] = useState<boolean>(false);
   const [showChunks, setShowChunks] = useState<boolean>(false);
   const [manualChunks, setManualChunks] = useState<Record<number, string>>({});
+  const [hasLoadedChunks, setHasLoadedChunks] = useState<boolean>(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const recordingsRef = useRef(recordings);
+  recordingsRef.current = recordings;
 
   const currentVerse: Verse = useMemo(() => ROMANS_8[currentVerseIndex], [currentVerseIndex]);
   const currentMemorizeWords: string[] = useMemo(() => ROMANS_8_MEMORIZE_WORDS[currentVerseIndex] || [], [currentVerseIndex]);
   const currentVocabulary: WordTranslation[] = useMemo(() => ROMANS_8_VOCABULARY[currentVerseIndex] || [], [currentVerseIndex]);
 
-  // Load manual chunks from localStorage on initial app load.
-  // This ensures that the user's custom chunks are persisted between sessions.
+  // Load persisted data from IndexedDB on initial app load.
   useEffect(() => {
-    try {
-      const storedChunks = localStorage.getItem('romans8_manual_chunks');
-      if (storedChunks) {
-        setManualChunks(JSON.parse(storedChunks));
+    const loadData = async () => {
+      // Load chunks
+      try {
+        const storedChunks = await get<Record<number, string>>('romans8_manual_chunks');
+        if (storedChunks) {
+          setManualChunks(storedChunks);
+        }
+      } catch (error) {
+        console.error("Failed to load chunks from IndexedDB:", error);
+      } finally {
+        setHasLoadedChunks(true);
       }
-    } catch (error) {
-      console.error("Failed to load chunks from localStorage:", error);
-    }
+
+      // Load recordings
+      try {
+        const storedBlobs = await get<Record<number, Blob>>('romans8_recordings');
+        if (storedBlobs) {
+          const objectUrls: Record<number, string> = {};
+          for (const key in storedBlobs) {
+            const verseIndex = parseInt(key, 10);
+            const blob = storedBlobs[verseIndex];
+            if (blob instanceof Blob) {
+              objectUrls[verseIndex] = URL.createObjectURL(blob);
+            }
+          }
+          setRecordings(objectUrls);
+        }
+      } catch (error) {
+        console.error("Failed to load recordings from IndexedDB:", error);
+      }
+    };
+    loadData();
   }, []);
 
-  // Save manual chunks to localStorage whenever they are updated.
+
+  // Save manual chunks to IndexedDB whenever they are updated.
   // This automatically saves the user's changes for the next session.
   useEffect(() => {
-    try {
-      localStorage.setItem('romans8_manual_chunks', JSON.stringify(manualChunks));
-    } catch (error)      {
-      console.error("Failed to save chunks to localStorage:", error);
+    if (!hasLoadedChunks) {
+      return; // Don't save until initial data is loaded to prevent overwriting
     }
-  }, [manualChunks]);
+    const saveChunks = async () => {
+      try {
+        await set('romans8_manual_chunks', manualChunks);
+      } catch (error)      {
+        console.error("Failed to save chunks to IndexedDB:", error);
+      }
+    };
+    saveChunks();
+  }, [manualChunks, hasLoadedChunks]);
 
 
   const stopAllAudio = useCallback(() => {
@@ -147,12 +181,37 @@ export default function App(): React.ReactNode {
         };
 
         mediaRecorderRef.current.onstop = () => {
-          if (recordings[currentVerseIndex]) {
-            URL.revokeObjectURL(recordings[currentVerseIndex]);
+          if (audioChunksRef.current.length === 0) {
+            stream.getTracks().forEach(track => track.stop());
+            setIsRecording(false);
+            return;
           }
+          
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          const verseIndex = currentVerseIndex;
+
+          // Revoke old URL if it exists to prevent memory leaks
+          if (recordings[verseIndex]) {
+            URL.revokeObjectURL(recordings[verseIndex]);
+          }
+          
+          // Create new URL for immediate playback and update state
           const audioUrl = URL.createObjectURL(audioBlob);
-          setRecordings(prev => ({ ...prev, [currentVerseIndex]: audioUrl }));
+          setRecordings(prev => ({ ...prev, [verseIndex]: audioUrl }));
+
+          // Asynchronously save the blob to IndexedDB
+          const saveRecording = async () => {
+            try {
+              const allRecordings = (await get<Record<number, Blob>>('romans8_recordings')) || {};
+              allRecordings[verseIndex] = audioBlob;
+              await set('romans8_recordings', allRecordings);
+            } catch (error) {
+              console.error("Failed to save recording to IndexedDB:", error);
+            }
+          };
+          saveRecording();
+          
+          // Clean up
           stream.getTracks().forEach(track => track.stop());
           setIsRecording(false);
         };
@@ -188,11 +247,15 @@ export default function App(): React.ReactNode {
   };
 
   const handleToggleChunkingMode = useCallback(() => {
-    if (!isChunkingMode) {
-      stopAllAudio(); // Stop any audio when entering chunking mode
+    if (isChunkingMode) {
+      // When exiting chunking mode, automatically show the chunks.
+      setShowChunks(true);
+    } else {
+      // When entering chunking mode, stop any audio.
+      stopAllAudio();
     }
     setIsChunkingMode(prev => !prev);
-  }, [stopAllAudio, isChunkingMode]);
+  }, [isChunkingMode, stopAllAudio]);
 
   const handleToggleShowChunks = useCallback(() => {
     setShowChunks(prev => !prev);
@@ -248,9 +311,11 @@ export default function App(): React.ReactNode {
 
 
   useEffect(() => {
+    // On unmount, revoke all object URLs to prevent memory leaks.
+    // The ref is used to access the latest `recordings` state in the cleanup function.
     return () => {
       stopAllAudio();
-      Object.values(recordings).forEach(URL.revokeObjectURL);
+      Object.values(recordingsRef.current).forEach(URL.revokeObjectURL);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); 

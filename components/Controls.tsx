@@ -126,7 +126,7 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           type="button"
           onClick={onToggleShowChunks}
-          disabled={isBusy || !hasManualChunks}
+          disabled={isBusy || isChunkingMode || !hasManualChunks}
           className="flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50"
           aria-label={showChunks ? 'Hide Chunks' : 'Show Chunks'}
           aria-pressed={showChunks}
@@ -139,11 +139,13 @@ const Controls: React.FC<ControlsProps> = ({
         <button
           type="button"
           onClick={onResetChunks}
+
           disabled={isBusy || !hasManualChunks}
           className="flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50"
           aria-label={'Reset Chunks'}
         >
           <ResetIcon className="h-6 w-6" />
+          
           <span className="hidden sm:inline">Reset</span>
         </button>
 
