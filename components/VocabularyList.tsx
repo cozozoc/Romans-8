@@ -1,3 +1,4 @@
+
 import React from 'react';
 import type { WordTranslation } from '../types';
 
@@ -16,6 +17,7 @@ const VocabularyList: React.FC<VocabularyListProps> = ({ vocabulary, isVisible, 
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-base font-bold text-slate-700 tracking-wide uppercase">Key Vocabulary</h3>
         <button
+          type="button"
           onClick={onToggle}
           className="px-3 py-1 text-xs font-bold text-slate-600 bg-slate-200 rounded-full hover:bg-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
           aria-expanded={isVisible}

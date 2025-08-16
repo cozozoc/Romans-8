@@ -29,6 +29,7 @@ interface ControlsProps {
 
 const NavButton: React.FC<{ onClick: () => void; disabled?: boolean; children: React.ReactNode; 'aria-label': string; }> = ({ onClick, disabled, children, 'aria-label': ariaLabel }) => (
     <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className="flex items-center justify-center p-3 rounded-full bg-white shadow-md hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
@@ -63,6 +64,7 @@ const Controls: React.FC<ControlsProps> = ({
         
         {/* Play/Stop TTS Button */}
         <button
+          type="button"
           onClick={isSpeaking ? onStop : onPlay}
           disabled={isRecording}
           className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm transform hover:scale-105 disabled:opacity-50"
@@ -73,6 +75,7 @@ const Controls: React.FC<ControlsProps> = ({
         
         {/* Record/Stop Recording Button */}
         <button
+          type="button"
           onClick={onToggleRecord}
           disabled={isSpeaking}
           className={`flex items-center justify-center h-12 w-12 rounded-full text-white transition-colors shadow-sm transform hover:scale-105 disabled:opacity-50 ${isRecording ? 'bg-red-600 hover:bg-red-700' : 'bg-slate-600 hover:bg-slate-700'}`}
@@ -84,6 +87,7 @@ const Controls: React.FC<ControlsProps> = ({
         {/* Play User Recording Button */}
         {hasRecording && (
           <button
+            type="button"
             onClick={onPlayRecording}
             disabled={isBusy}
             className="flex items-center justify-center h-12 w-12 rounded-full bg-green-600 text-white hover:bg-green-700 transition-colors shadow-sm transform hover:scale-105 disabled:opacity-50"
@@ -95,6 +99,7 @@ const Controls: React.FC<ControlsProps> = ({
 
         {/* Memorize/Read Button */}
         <button
+          type="button"
           onClick={onToggleMemorize}
           disabled={isBusy}
           className="flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50"
@@ -106,6 +111,7 @@ const Controls: React.FC<ControlsProps> = ({
         
         {/* Divide by Chunk Button */}
         <button
+          type="button"
           onClick={onToggleChunkingMode}
           disabled={isBusy}
           className={`flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50 ${isChunkingMode ? 'bg-blue-100 ring-2 ring-blue-400' : ''}`}
@@ -118,10 +124,12 @@ const Controls: React.FC<ControlsProps> = ({
 
         {/* Show/Hide Chunks Button */}
         <button
+          type="button"
           onClick={onToggleShowChunks}
-          disabled={isBusy}
+          disabled={isBusy || !hasManualChunks}
           className="flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50"
           aria-label={showChunks ? 'Hide Chunks' : 'Show Chunks'}
+          aria-pressed={showChunks}
         >
           {showChunks ? <EyeSlashIcon className="h-6 w-6" /> : <EyeIcon className="h-6 w-6" />}
           <span className="hidden sm:inline">{showChunks ? 'Hide' : 'Show'}</span>
@@ -129,6 +137,7 @@ const Controls: React.FC<ControlsProps> = ({
 
         {/* Reset Chunks Button */}
         <button
+          type="button"
           onClick={onResetChunks}
           disabled={isBusy || !hasManualChunks}
           className="flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50"
@@ -140,6 +149,7 @@ const Controls: React.FC<ControlsProps> = ({
 
         {/* AI Insight Button */}
         <button
+          type="button"
           onClick={onGetInsight}
           disabled={isAiLoading || isBusy}
           className="flex items-center gap-2 text-slate-700 font-bold h-12 px-4 sm:px-5 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-wait"
