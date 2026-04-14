@@ -73,6 +73,7 @@ function startTest() {
     startLevel: parseInt($("startLevel").value),
     targetLevel: parseInt($("targetLevel").value),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
+    revealSeconds: Math.max(1, parseInt($("revealSeconds").value) || 2),
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -194,7 +195,18 @@ function previewAll() {
     $("hintBtn").disabled = false;
     $("submitBtn").disabled = false;
     $("answerInput").focus();
-  }, 2000);
+  }, state.config.revealSeconds * 1000);
+}
+
+function hideAll() {
+  const box = $("questionBox");
+  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
+  if (state.countdownTimer) { clearInterval(state.countdownTimer); state.countdownTimer = null; }
+  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; renderQuestionBody(); $("hintBtn").disabled = false; }
+  if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; box.classList.remove("reveal-all"); renderQuestionBody(); $("showAllBtn").disabled = false; $("hintBtn").disabled = false; $("submitBtn").disabled = false; }
+  $("timerText").textContent = "";
+  box.classList.add("hidden-state");
+  $("answerInput").focus();
 }
 
 function useHint() {
@@ -220,7 +232,7 @@ function useHint() {
     if (wasHidden) box.classList.add("hidden-state");
     $("hintBtn").disabled = false;
     state.hintRevealTimer = null;
-  }, 2000);
+  }, state.config.revealSeconds * 1000);
 }
 
 function renderDiff(expected, actual) {
@@ -263,6 +275,7 @@ function submit() {
     `;
     state.wrongStreak++;
     state.correctStreak = 0;
+    state.targetReachedCount = 0;
     handleWrong();
   }
 }
@@ -284,12 +297,21 @@ function revealAllThenAdvance() {
   state.revealAllTimer = setTimeout(() => {
     state.revealAllTimer = null;
     handleCorrectAdvance();
-  }, 2000);
+  }, state.config.revealSeconds * 1000);
 }
 
 function handleCorrectAdvance() {
   const { targetLevel, continuousCount, endVerse } = state.config;
 
+  // 1) 목표 레벨 미만이고 연속 cc회 달성했으면 레벨업
+  if (state.currentLevel < targetLevel &&
+      state.correctStreak >= continuousCount &&
+      state.currentLevel < 5) {
+    state.currentLevel++;
+    state.correctStreak = 0;
+  }
+
+  // 2) 목표 레벨에 도달했으면 이번 정답을 targetReachedCount에 카운트
   if (state.currentLevel >= targetLevel) {
     state.targetReachedCount++;
     if (state.targetReachedCount >= continuousCount) {
@@ -304,12 +326,8 @@ function handleCorrectAdvance() {
       showQuestion();
       return;
     }
-  } else {
-    if (state.correctStreak >= continuousCount && state.currentLevel < 5) {
-      state.currentLevel++;
-      state.correctStreak = 0;
-    }
   }
+
   showQuestion();
 }
 
@@ -348,6 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
   $("showAllBtn").addEventListener("click", previewAll);
+  $("hideAllBtn").addEventListener("click", hideAll);
   $("nextBtn").addEventListener("click", forceNextVerse);
   $("quitBtn").addEventListener("click", () => {
     if (confirm("테스트를 종료하고 설정 화면으로 돌아갈까요?")) {
