@@ -285,6 +285,21 @@ function handleCorrectAdvance() {
   showQuestion();
 }
 
+function forceNextVerse() {
+  clearTimers();
+  const { endVerse } = state.config;
+  if (state.currentVerse >= endVerse) {
+    finishAll();
+    return;
+  }
+  state.currentVerse++;
+  state.currentLevel = state.config.startLevel;
+  state.correctStreak = 0;
+  state.wrongStreak = 0;
+  state.targetReachedCount = 0;
+  showQuestion();
+}
+
 function handleWrong() {
   if (state.wrongStreak >= 3 && state.currentLevel > 1) {
     state.currentLevel--;
@@ -305,6 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
   $("showAgainBtn").addEventListener("click", showAgain);
+  $("nextBtn").addEventListener("click", forceNextVerse);
   $("quitBtn").addEventListener("click", () => {
     if (confirm("테스트를 종료하고 설정 화면으로 돌아갈까요?")) {
       clearTimers();
