@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로마서 8장 암송 테스트</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header class="app-header">
+    <h1>로마서 8장 암송 테스트</h1>
+    <p class="subtitle">개역개정 · 단어 빈칸 채우기 방식으로 암송을 연습하세요</p>
+  </header>
+
+  <!-- 설정 화면 -->
+  <section id="setup-screen" class="screen">
+    <h2>테스트 설정</h2>
+    <div class="settings-grid">
+      <div class="form-row">
+        <label>시작 구절 <span class="hint">1~39</span></label>
+        <input type="number" id="startVerse" min="1" max="39" value="1">
+      </div>
+      <div class="form-row">
+        <label>끝 구절 <span class="hint">1~39</span></label>
+        <input type="number" id="endVerse" min="1" max="39" value="39">
+      </div>
+
+      <div class="form-row toggle-row">
+        <label>숨기기 기능</label>
+        <label class="switch">
+          <input type="checkbox" id="hideEnabled" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>숨기는 시간 <span class="hint">초</span></label>
+        <input type="number" id="hideSeconds" min="1" max="60" value="3">
+      </div>
+
+      <div class="form-row">
+        <label>시작 레벨</label>
+        <select id="startLevel">
+          <option value="1">Level 1 · 빈칸 20%</option>
+          <option value="2">Level 2 · 빈칸 40%</option>
+          <option value="3" selected>Level 3 · 빈칸 60%</option>
+          <option value="4">Level 4 · 빈칸 80%</option>
+          <option value="5">Level 5 · 빈칸 100%</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>목표 레벨</label>
+        <select id="targetLevel">
+          <option value="1">Level 1 · 빈칸 20%</option>
+          <option value="2">Level 2 · 빈칸 40%</option>
+          <option value="3">Level 3 · 빈칸 60%</option>
+          <option value="4">Level 4 · 빈칸 80%</option>
+          <option value="5" selected>Level 5 · 빈칸 100%</option>
+        </select>
+      </div>
+
+      <div class="form-row full-width">
+        <label>연속 정답 횟수 <span class="hint">레벨업 / 다음 구절 이동 기준</span></label>
+        <input type="number" id="continuousCount" min="1" max="10" value="3">
+      </div>
+    </div>
+    <button id="startBtn" class="primary big-btn">테스트 시작하기</button>
+  </section>
+
+  <!-- 테스트 화면 -->
+  <section id="test-screen" class="screen hidden">
+    <div class="status-bar">
+      <div class="status-card">
+        <div class="label">구절</div>
+        <div class="value" id="verseInfo">—</div>
+      </div>
+      <div class="status-card">
+        <div class="label">현재 레벨</div>
+        <div class="value" id="levelInfo">—</div>
+      </div>
+      <div class="status-card">
+        <div class="label">연속 정답</div>
+        <div class="value" id="streakInfo">—</div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-labels">
+        <span id="progressLabel">진행률</span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+
+    <div id="questionBox" class="question-box">
+      <div id="timerText" class="timer"></div>
+      <div id="questionText"></div>
+    </div>
+
+    <div class="input-area">
+      <textarea id="answerInput" rows="4" placeholder="전체 구절을 입력하세요. Enter 키로 제출할 수 있습니다."></textarea>
+      <div class="input-hint">
+        <kbd>Enter</kbd> 제출 · <kbd>Shift</kbd>+<kbd>Enter</kbd> 줄바꿈
+      </div>
+      <div class="button-row">
+        <button id="submitBtn" class="primary">제출</button>
+        <button id="hintBtn" class="secondary">💡 힌트</button>
+        <button id="showAgainBtn" class="secondary">다시 보기</button>
+        <div class="spacer"></div>
+        <button id="quitBtn" class="ghost">종료</button>
+      </div>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+  </section>
+
+  <!-- 완료 화면 -->
+  <section id="done-screen" class="screen hidden">
+    <div class="trophy">🏆</div>
+    <h2>축하합니다!</h2>
+    <p id="doneMessage">로마서 8장 암송을 완료하셨습니다.</p>
+    <button id="restartBtn" class="primary big-btn">처음으로</button>
+  </section>
+</div>
+
+<script src="verses.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
