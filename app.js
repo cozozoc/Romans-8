@@ -221,8 +221,8 @@ function submit() {
   const fb = $("feedback");
 
   if (isCorrect) {
-    fb.className = "feedback correct";
-    fb.innerHTML = `<div class="fb-title">✓ 정답입니다!</div>`;
+    fb.className = "feedback";
+    fb.innerHTML = "";
     state.correctStreak++;
     state.wrongStreak = 0;
     revealAllThenAdvance();
