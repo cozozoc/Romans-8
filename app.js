@@ -164,9 +164,37 @@ function showQuestion() {
   }
 }
 
-function showAgain() {
-  // 힌트/리빌 타이머만 유지하지 않고 새로 출제 (랜덤 위치)
-  showQuestion();
+function previewAll() {
+  const box = $("questionBox");
+  const wasHidden = box.classList.contains("hidden-state");
+
+  // 숨김/카운트다운 타이머 일시 정지
+  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
+  if (state.countdownTimer) { clearInterval(state.countdownTimer); state.countdownTimer = null; }
+  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
+  $("timerText").textContent = "";
+
+  box.classList.remove("hidden-state");
+  box.classList.add("reveal-all");
+  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
+  $("questionText").innerHTML = labelHtml + body;
+
+  $("showAllBtn").disabled = true;
+  $("hintBtn").disabled = true;
+  $("submitBtn").disabled = true;
+
+  if (state.revealAllTimer) clearTimeout(state.revealAllTimer);
+  state.revealAllTimer = setTimeout(() => {
+    state.revealAllTimer = null;
+    box.classList.remove("reveal-all");
+    renderQuestionBody();
+    if (wasHidden) box.classList.add("hidden-state");
+    $("showAllBtn").disabled = false;
+    $("hintBtn").disabled = false;
+    $("submitBtn").disabled = false;
+    $("answerInput").focus();
+  }, 2000);
 }
 
 function useHint() {
@@ -319,7 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("startBtn").addEventListener("click", startTest);
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
-  $("showAgainBtn").addEventListener("click", showAgain);
+  $("showAllBtn").addEventListener("click", previewAll);
   $("nextBtn").addEventListener("click", forceNextVerse);
   $("quitBtn").addEventListener("click", () => {
     if (confirm("테스트를 종료하고 설정 화면으로 돌아갈까요?")) {
