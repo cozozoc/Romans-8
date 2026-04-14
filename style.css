@@ -286,24 +286,7 @@ button.ghost:hover { background: #f8fafc; }
   line-height: 2;
   transition: all 0.3s;
 }
-.question-box.hidden-state {
-  background: #1a202c;
-  border-color: #1a202c;
-  color: transparent;
-}
 .question-box.hidden-state #questionText { visibility: hidden; }
-.question-box.hidden-state::after {
-  content: "🔒 문제가 숨겨졌습니다. 전체 구절을 입력해 주세요.";
-  color: #a0aec0;
-  font-size: 15px;
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
 .verse-label {
   display: inline-block;
   background: var(--primary);
@@ -352,19 +335,23 @@ button.ghost:hover { background: #f8fafc; }
   background: var(--success);
 }
 
+.question-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 26px;
+  margin-bottom: 8px;
+}
 .timer {
-  position: absolute;
-  top: 14px;
-  right: 18px;
   font-size: 12px;
   font-weight: 600;
   color: var(--warning);
-  background: white;
-  padding: 4px 10px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 4px 12px;
   border-radius: 999px;
-  box-shadow: var(--shadow-sm);
 }
-.question-box.hidden-state .timer { display: none; }
+.timer:empty { display: none; }
 
 /* === Input area === */
 .input-area { margin-top: 24px; }
