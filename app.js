@@ -17,6 +17,33 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 
+const SETTINGS_KEY = "romans8_settings_v1";
+const SETTING_IDS = ["startVerse","endVerse","hideEnabled","startLevel","targetLevel","continuousCount","revealSeconds","blankMode","visibleWords"];
+
+function saveSettings() {
+  const obj = {};
+  SETTING_IDS.forEach(id => {
+    const el = $(id);
+    if (!el) return;
+    obj[id] = el.type === "checkbox" ? el.checked : el.value;
+  });
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); } catch (e) {}
+}
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return;
+    const obj = JSON.parse(raw);
+    SETTING_IDS.forEach(id => {
+      if (!(id in obj)) return;
+      const el = $(id);
+      if (!el) return;
+      if (el.type === "checkbox") el.checked = obj[id];
+      else el.value = obj[id];
+    });
+  } catch (e) {}
+}
+
 function showScreen(id) {
   ["setup-screen", "test-screen", "done-screen"].forEach(s => {
     $(s).classList.toggle("hidden", s !== id);
@@ -54,8 +81,14 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
 }
 
 function pickBlankIndices(wordCount, level) {
-  const ratio = LEVEL_RATIO[level];
-  const blankCount = Math.round(wordCount * ratio);
+  let blankCount;
+  if (state.config && state.config.blankMode === "visible") {
+    const raw = parseInt(state.config.visibleWordsRaw);
+    const visible = isNaN(raw) ? Math.max(0, wordCount - 2) : Math.max(0, Math.min(wordCount, raw));
+    blankCount = Math.max(0, wordCount - visible);
+  } else {
+    blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
+  }
   const indices = [...Array(wordCount).keys()];
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -69,11 +102,12 @@ function startTest() {
     startVerse: Math.max(1, Math.min(39, parseInt($("startVerse").value) || 1)),
     endVerse: Math.max(1, Math.min(39, parseInt($("endVerse").value) || 39)),
     hideEnabled: $("hideEnabled").checked,
-    hideSeconds: Math.max(1, parseInt($("hideSeconds").value) || 3),
     startLevel: parseInt($("startLevel").value),
     targetLevel: parseInt($("targetLevel").value),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
-    revealSeconds: Math.max(1, parseInt($("revealSeconds").value) || 2),
+    revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 5),
+    blankMode: $("blankMode").value,
+    visibleWordsRaw: $("visibleWords").value,
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -84,6 +118,7 @@ function startTest() {
     return;
   }
   state.config = cfg;
+  saveSettings();
   state.currentVerse = cfg.startVerse;
   state.currentLevel = cfg.startLevel;
   state.correctStreak = 0;
@@ -118,6 +153,8 @@ function renderQuestionBody() {
 
 function showQuestion() {
   clearTimers();
+  $("blankModeTest").value = state.config.blankMode;
+  $("visibleWordsTest").value = state.config.visibleWordsRaw;
   const verse = ROMANS_8[state.currentVerse];
   const words = splitWords(verse);
   state.currentWords = words;
@@ -133,7 +170,12 @@ function showQuestion() {
 
   updateProgress();
 
-  $("questionBox").classList.remove("hidden-state", "reveal-all");
+  const box = $("questionBox");
+  const qt = $("questionText");
+  qt.style.transition = "none";
+  box.classList.remove("hidden-state", "reveal-all");
+  void qt.offsetWidth;
+  qt.style.transition = "";
   renderQuestionBody();
   $("feedback").textContent = "";
   $("feedback").className = "feedback";
@@ -144,7 +186,10 @@ function showQuestion() {
   $("answerInput").focus();
 
   if (state.config.hideEnabled) {
-    let remaining = state.config.hideSeconds;
+    const total = state.config.revealSeconds;
+    const fadeSec = Math.max(0.5, total - 2);
+    qt.style.transitionDuration = fadeSec + "s";
+    let remaining = total;
     $("timerText").textContent = `${remaining}초 후 숨김`;
     state.countdownTimer = setInterval(() => {
       remaining--;
@@ -157,10 +202,10 @@ function showQuestion() {
       }
     }, 1000);
     state.hideTimer = setTimeout(() => {
-      $("questionBox").classList.add("hidden-state");
-      $("timerText").textContent = "";
-    }, state.config.hideSeconds * 1000);
+      box.classList.add("hidden-state");
+    }, 2000);
   } else {
+    qt.style.transitionDuration = "";
     $("timerText").textContent = "";
   }
 }
@@ -362,7 +407,20 @@ function finishAll() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadSettings();
   $("startBtn").addEventListener("click", startTest);
+  $("blankModeTest").addEventListener("change", (e) => {
+    state.config.blankMode = e.target.value;
+    $("blankMode").value = e.target.value;
+    saveSettings();
+    showQuestion();
+  });
+  $("visibleWordsTest").addEventListener("change", (e) => {
+    state.config.visibleWordsRaw = e.target.value;
+    $("visibleWords").value = e.target.value;
+    saveSettings();
+    showQuestion();
+  });
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
   $("showAllBtn").addEventListener("click", previewAll);
