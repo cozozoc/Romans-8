@@ -17,6 +17,83 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 
+const speech = {
+  recognition: null,
+  recording: false,
+  supported: false,
+  autoSubmit: false,
+};
+
+function initSpeechRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    speech.supported = false;
+    const btn = $("micBtn");
+    if (btn) {
+      btn.disabled = true;
+      btn.title = "이 브라우저는 음성 인식을 지원하지 않습니다";
+    }
+    return;
+  }
+  speech.supported = true;
+  const rec = new SR();
+  rec.lang = "ko-KR";
+  rec.interimResults = true;
+  rec.continuous = true;
+  rec.maxAlternatives = 1;
+
+  let finalTranscript = "";
+
+  rec.onstart = () => {
+    speech.recording = true;
+    finalTranscript = "";
+    $("micBtn").classList.add("recording");
+    $("micBtn").textContent = "🔴 녹음중";
+  };
+  rec.onresult = (e) => {
+    let interim = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const tr = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalTranscript += tr;
+      else interim += tr;
+    }
+    $("answerInput").value = (finalTranscript + interim).trim();
+  };
+  rec.onerror = (e) => {
+    speech.hadError = true;
+    console.warn("Speech recognition error:", e.error);
+  };
+  rec.onend = () => {
+    const wasRecording = speech.recording;
+    const hadError = speech.hadError;
+    const userStopped = speech.userStopped;
+    if (wasRecording && !userStopped && !hadError) {
+      try { rec.start(); return; } catch (e) { console.warn("restart failed:", e); }
+    }
+    speech.recording = false;
+    speech.hadError = false;
+    speech.userStopped = false;
+    $("micBtn").classList.remove("recording");
+    $("micBtn").textContent = "🎤 음성";
+    if (wasRecording && !hadError && $("answerInput").value.trim() && !$("answerInput").disabled) {
+      submit();
+    }
+  };
+  speech.recognition = rec;
+}
+
+function toggleMic() {
+  if (!speech.supported || !speech.recognition) return;
+  if (speech.recording) {
+    speech.userStopped = true;
+    try { speech.recognition.stop(); } catch (e) {}
+  } else {
+    if ($("answerInput").disabled) return;
+    $("answerInput").value = "";
+    try { speech.recognition.start(); } catch (e) { console.warn(e); }
+  }
+}
+
 const SETTINGS_KEY = "romans8_settings_v1";
 const SETTING_IDS = ["startVerse","endVerse","hideEnabled","startLevel","targetLevel","continuousCount","revealSeconds","blankMode","visibleWords"];
 
@@ -151,7 +228,30 @@ function renderQuestionBody() {
   $("questionText").innerHTML = labelHtml + body;
 }
 
-function showQuestion() {
+function startHideTimer() {
+  const box = $("questionBox");
+  const qt = $("questionText");
+  const total = state.config.revealSeconds;
+  const fadeSec = Math.max(0.5, total - 2);
+  qt.style.transitionDuration = fadeSec + "s";
+  let remaining = total;
+  $("timerText").textContent = `${remaining}초 후 숨김`;
+  state.countdownTimer = setInterval(() => {
+    remaining--;
+    if (remaining > 0) {
+      $("timerText").textContent = `${remaining}초 후 숨김`;
+    } else {
+      $("timerText").textContent = "";
+      clearInterval(state.countdownTimer);
+      state.countdownTimer = null;
+    }
+  }, 1000);
+  state.hideTimer = setTimeout(() => {
+    box.classList.add("hidden-state");
+  }, 2000);
+}
+
+function showQuestion(fadeIn = false) {
   clearTimers();
   $("blankModeTest").value = state.config.blankMode;
   $("visibleWordsTest").value = state.config.visibleWordsRaw;
@@ -173,7 +273,10 @@ function showQuestion() {
   const box = $("questionBox");
   const qt = $("questionText");
   qt.style.transition = "none";
-  box.classList.remove("hidden-state", "reveal-all");
+  qt.style.transitionDuration = "";
+  box.classList.remove("reveal-all", "wrong");
+  if (fadeIn) box.classList.add("hidden-state");
+  else box.classList.remove("hidden-state");
   void qt.offsetWidth;
   qt.style.transition = "";
   renderQuestionBody();
@@ -185,28 +288,22 @@ function showQuestion() {
   $("submitBtn").disabled = false;
   $("answerInput").focus();
 
-  if (state.config.hideEnabled) {
-    const total = state.config.revealSeconds;
-    const fadeSec = Math.max(0.5, total - 2);
-    qt.style.transitionDuration = fadeSec + "s";
-    let remaining = total;
-    $("timerText").textContent = `${remaining}초 후 숨김`;
-    state.countdownTimer = setInterval(() => {
-      remaining--;
-      if (remaining > 0) {
-        $("timerText").textContent = `${remaining}초 후 숨김`;
-      } else {
-        $("timerText").textContent = "";
-        clearInterval(state.countdownTimer);
-        state.countdownTimer = null;
-      }
-    }, 1000);
-    state.hideTimer = setTimeout(() => {
-      box.classList.add("hidden-state");
-    }, 2000);
+  const startHideIfNeeded = () => {
+    if (state.config.hideEnabled) startHideTimer();
+    else { qt.style.transitionDuration = ""; $("timerText").textContent = ""; }
+  };
+
+  if (fadeIn) {
+    const fadeInSec = 1;
+    qt.style.transitionDuration = fadeInSec + "s";
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        box.classList.remove("hidden-state");
+      });
+    });
+    state.hideTimer = setTimeout(startHideIfNeeded, fadeInSec * 1000 + 50);
   } else {
-    qt.style.transitionDuration = "";
-    $("timerText").textContent = "";
+    startHideIfNeeded();
   }
 }
 
@@ -280,6 +377,43 @@ function useHint() {
   }, state.config.revealSeconds * 1000);
 }
 
+function showWrongReveal(expected, actual) {
+  clearTimers();
+  const box = $("questionBox");
+  const qt = $("questionText");
+  qt.style.transition = "none";
+  qt.style.transitionDuration = "";
+  box.classList.remove("hidden-state", "reveal-all");
+  void qt.offsetWidth;
+  qt.style.transition = "";
+  box.classList.add("wrong");
+  $("timerText").textContent = "";
+  $("hintBtn").disabled = true;
+  $("submitBtn").disabled = true;
+  $("answerInput").disabled = true;
+
+  const ew = splitWords(expected);
+  const aw = splitWords(actual);
+  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const body = ew.map((w, i) => {
+    const a = aw[i];
+    const ok = a !== undefined && normalize(a) === normalize(w);
+    return ok ? escapeHtml(w) : `<span class="wrong-word">${escapeHtml(w)}</span>`;
+  }).join(" ");
+  qt.innerHTML = labelHtml + body;
+
+  const total = state.config.revealSeconds;
+  const fadeSec = Math.max(0.5, total - 2);
+  qt.style.transitionDuration = fadeSec + "s";
+  state.hideTimer = setTimeout(() => {
+    box.classList.add("hidden-state");
+  }, 2000);
+  state.revealAllTimer = setTimeout(() => {
+    state.revealAllTimer = null;
+    showQuestion(true);
+  }, total * 1000 + 100);
+}
+
 function renderDiff(expected, actual) {
   const ew = splitWords(expected);
   const aw = splitWords(actual);
@@ -298,6 +432,10 @@ function renderDiff(expected, actual) {
 }
 
 function submit() {
+  if (speech.recording) {
+    speech.userStopped = true;
+    try { speech.recognition.stop(); } catch (e) {}
+  }
   const verse = ROMANS_8[state.currentVerse];
   const userInput = $("answerInput").value;
   if (!userInput.trim()) return;
@@ -312,12 +450,9 @@ function submit() {
     state.wrongStreak = 0;
     revealAllThenAdvance();
   } else {
-    fb.className = "feedback wrong";
-    fb.innerHTML = `
-      <div class="fb-title">✗ 다시 시도해 보세요</div>
-      <div class="diff-line"><strong>정답:</strong> ${escapeHtml(verse)}</div>
-      <div class="diff-line" style="margin-top:8px"><strong>입력:</strong> ${renderDiff(verse, userInput)}</div>
-    `;
+    fb.className = "feedback";
+    fb.innerHTML = "";
+    showWrongReveal(verse, userInput);
     state.wrongStreak++;
     state.correctStreak = 0;
     state.targetReachedCount = 0;
@@ -339,19 +474,20 @@ function revealAllThenAdvance() {
   $("submitBtn").disabled = true;
   $("answerInput").disabled = true;
 
+  const delay = Math.max(500, (state.config.revealSeconds || 5) * 1000);
+  console.log("[reveal] scheduling advance in", delay, "ms");
   state.revealAllTimer = setTimeout(() => {
+    console.log("[reveal] timer fired -> handleCorrectAdvance");
     state.revealAllTimer = null;
     handleCorrectAdvance();
-  }, state.config.revealSeconds * 1000);
+  }, delay);
 }
 
 function handleCorrectAdvance() {
   const { targetLevel, continuousCount, endVerse } = state.config;
 
-  // 1) 목표 레벨 미만이고 연속 cc회 달성했으면 레벨업
-  if (state.currentLevel < targetLevel &&
-      state.correctStreak >= continuousCount &&
-      state.currentLevel < 5) {
+  // 1) 목표 레벨 미만이면 정답 1회당 레벨업
+  if (state.currentLevel < targetLevel && state.currentLevel < 5) {
     state.currentLevel++;
     state.correctStreak = 0;
   }
@@ -359,6 +495,12 @@ function handleCorrectAdvance() {
   // 2) 목표 레벨에 도달했으면 이번 정답을 targetReachedCount에 카운트
   if (state.currentLevel >= targetLevel) {
     state.targetReachedCount++;
+    console.log("[advance]", {
+      verse: state.currentVerse,
+      level: state.currentLevel,
+      targetReached: state.targetReachedCount,
+      continuousCount,
+    });
     if (state.targetReachedCount >= continuousCount) {
       if (state.currentVerse >= endVerse) {
         finishAll();
@@ -391,12 +533,23 @@ function forceNextVerse() {
   showQuestion();
 }
 
+function forcePrevVerse() {
+  clearTimers();
+  const { startVerse } = state.config;
+  if (state.currentVerse <= startVerse) return;
+  state.currentVerse--;
+  state.currentLevel = state.config.startLevel;
+  state.correctStreak = 0;
+  state.wrongStreak = 0;
+  state.targetReachedCount = 0;
+  showQuestion();
+}
+
 function handleWrong() {
   if (state.wrongStreak >= 3 && state.currentLevel > 1) {
     state.currentLevel--;
     state.wrongStreak = 0;
   }
-  setTimeout(showQuestion, 1800);
 }
 
 function finishAll() {
@@ -408,6 +561,8 @@ function finishAll() {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadSettings();
+  initSpeechRecognition();
+  $("micBtn").addEventListener("click", toggleMic);
   $("startBtn").addEventListener("click", startTest);
   $("blankModeTest").addEventListener("change", (e) => {
     state.config.blankMode = e.target.value;
@@ -426,6 +581,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("showAllBtn").addEventListener("click", previewAll);
   $("hideAllBtn").addEventListener("click", hideAll);
   $("nextBtn").addEventListener("click", forceNextVerse);
+  $("prevBtn").addEventListener("click", forcePrevVerse);
   $("quitBtn").addEventListener("click", () => {
     if (confirm("테스트를 종료하고 설정 화면으로 돌아갈까요?")) {
       clearTimers();
@@ -438,6 +594,24 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
       e.preventDefault();
       submit();
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      if (!$("hintBtn").disabled) useHint();
+    } else if (e.key === "Delete") {
+      e.preventDefault();
+      if (!$("showAllBtn").disabled) previewAll();
+    } else if (e.key === "End") {
+      e.preventDefault();
+      hideAll();
+    } else if (e.key === "Insert") {
+      e.preventDefault();
+      toggleMic();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      forcePrevVerse();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      forceNextVerse();
     }
   });
 });

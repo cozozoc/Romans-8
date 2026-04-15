@@ -18,28 +18,28 @@
     <h2>테스트 설정</h2>
     <div class="settings-grid">
       <div class="form-row">
-        <label>시작 구절 <span class="hint">1~39</span></label>
+        <label for="startVerse">시작 구절 <span class="hint">1~39</span></label>
         <input type="number" id="startVerse" min="1" max="39" value="1">
       </div>
       <div class="form-row">
-        <label>끝 구절 <span class="hint">1~39</span></label>
+        <label for="endVerse">끝 구절 <span class="hint">1~39</span></label>
         <input type="number" id="endVerse" min="1" max="39" value="39">
       </div>
 
       <div class="form-row toggle-row">
-        <label>숨기기 기능</label>
+        <label for="hideEnabled">숨기기 기능</label>
         <label class="switch">
           <input type="checkbox" id="hideEnabled" checked>
           <span class="slider"></span>
         </label>
       </div>
       <div class="form-row">
-        <label>문제 보는 시간 <span class="hint">초 (2초 대기 후 서서히 숨김)</span></label>
+        <label for="revealSeconds">문제 보는 시간 <span class="hint">초 (2초 대기 후 서서히 숨김)</span></label>
         <input type="number" id="revealSeconds" min="2" max="60" value="5">
       </div>
 
       <div class="form-row">
-        <label>시작 레벨</label>
+        <label for="startLevel">시작 레벨</label>
         <select id="startLevel">
           <option value="1">Level 1 · 빈칸 20%</option>
           <option value="2">Level 2 · 빈칸 40%</option>
@@ -49,7 +49,7 @@
         </select>
       </div>
       <div class="form-row">
-        <label>목표 레벨 <span class="hint">달성 시 다음 구절로 이동</span></label>
+        <label for="targetLevel">목표 레벨 <span class="hint">달성 시 다음 구절로 이동</span></label>
         <select id="targetLevel">
           <option value="1">Level 1 · 빈칸 20%</option>
           <option value="2">Level 2 · 빈칸 40%</option>
@@ -60,18 +60,18 @@
       </div>
 
       <div class="form-row">
-        <label>연속 정답 횟수 <span class="hint">레벨업 / 다음 구절 이동 기준</span></label>
+        <label for="continuousCount">연속 정답 횟수 <span class="hint">레벨업 / 다음 구절 이동 기준</span></label>
         <input type="number" id="continuousCount" min="1" max="10" value="1">
       </div>
       <div class="form-row">
-        <label>빈칸 기준</label>
+        <label for="blankMode">빈칸 기준</label>
         <select id="blankMode">
           <option value="percent" selected>퍼센트(레벨)</option>
           <option value="visible">보여질 단어 개수</option>
         </select>
       </div>
       <div class="form-row">
-        <label>보여질 단어 개수 <span class="hint">비워두면 (전체-2)</span></label>
+        <label for="visibleWords">보여질 단어 개수 <span class="hint">비워두면 (전체-2)</span></label>
         <input type="number" id="visibleWords" min="1" max="200" placeholder="auto">
       </div>
     </div>
@@ -104,13 +104,13 @@
     </div>
 
     <div class="inline-controls">
-      <label>빈칸 기준
+      <label for="blankModeTest">빈칸 기준
         <select id="blankModeTest">
           <option value="percent">퍼센트(레벨)</option>
           <option value="visible">보여질 단어 개수</option>
         </select>
       </label>
-      <label>보여질 단어 수
+      <label for="visibleWordsTest">보여질 단어 수
         <input type="number" id="visibleWordsTest" min="1" max="200" placeholder="auto">
       </label>
     </div>
@@ -128,9 +128,11 @@
       </div>
       <div class="button-row">
         <button id="submitBtn" class="primary">제출</button>
+        <button id="micBtn" class="secondary" title="음성 입력 (한국어)">🎤 음성</button>
         <button id="hintBtn" class="secondary">💡 힌트</button>
         <button id="showAllBtn" class="secondary">👁 전체 보기</button>
         <button id="hideAllBtn" class="secondary">🙈 전체 숨기기</button>
+        <button id="prevBtn" class="secondary">◀ Prev</button>
         <button id="nextBtn" class="secondary">Next ▶</button>
         <div class="spacer"></div>
         <button id="quitBtn" class="ghost">종료</button>

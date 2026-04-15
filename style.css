@@ -322,6 +322,14 @@ button.ghost:hover { background: #f8fafc; }
   background: var(--primary-light);
 }
 
+.question-box.wrong .wrong-word {
+  text-decoration: underline dotted var(--danger);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
 .question-box.reveal-all {
   background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   border-color: #6ee7b7;
@@ -434,6 +442,22 @@ textarea::placeholder { color: #a0aec0; }
   flex-wrap: wrap;
 }
 .button-row .spacer { flex: 1; }
+
+#micBtn.recording {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: #fca5a5;
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+#micBtn.recording:hover { background: #fecaca; }
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+#micBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 /* === Feedback === */
 .feedback {
