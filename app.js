@@ -488,6 +488,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === helpModal) closeHelp();
   });
 
+  let wheelLock = false;
+  window.addEventListener("wheel", (e) => {
+    if (!helpModal.classList.contains("hidden")) return;
+    if ($("test-screen").classList.contains("hidden")) return;
+    if (wheelLock) return;
+    if (Math.abs(e.deltaY) < 10) return;
+    wheelLock = true;
+    setTimeout(() => { wheelLock = false; }, 350);
+    if (e.deltaY > 0) forceNextVerse();
+    else forcePrevVerse();
+  }, { passive: true });
+
   document.addEventListener("keydown", (e) => {
     const helpOpen = !helpModal.classList.contains("hidden");
     if (helpOpen) {
