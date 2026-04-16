@@ -16,83 +16,6 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 
-const speech = {
-  recognition: null,
-  recording: false,
-  supported: false,
-  autoSubmit: false,
-};
-
-function initSpeechRecognition() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    speech.supported = false;
-    const btn = $("micBtn");
-    if (btn) {
-      btn.disabled = true;
-      btn.title = "이 브라우저는 음성 인식을 지원하지 않습니다";
-    }
-    return;
-  }
-  speech.supported = true;
-  const rec = new SR();
-  rec.lang = "ko-KR";
-  rec.interimResults = true;
-  rec.continuous = true;
-  rec.maxAlternatives = 1;
-
-  let finalTranscript = "";
-
-  rec.onstart = () => {
-    speech.recording = true;
-    finalTranscript = "";
-    $("micBtn").classList.add("recording");
-    $("micBtn").textContent = "🔴 녹음중";
-  };
-  rec.onresult = (e) => {
-    let interim = "";
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      const tr = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalTranscript += tr;
-      else interim += tr;
-    }
-    $("answerInput").value = (finalTranscript + interim).trim();
-  };
-  rec.onerror = (e) => {
-    speech.hadError = true;
-    console.warn("Speech recognition error:", e.error);
-  };
-  rec.onend = () => {
-    const wasRecording = speech.recording;
-    const hadError = speech.hadError;
-    const userStopped = speech.userStopped;
-    if (wasRecording && !userStopped && !hadError) {
-      try { rec.start(); return; } catch (e) { console.warn("restart failed:", e); }
-    }
-    speech.recording = false;
-    speech.hadError = false;
-    speech.userStopped = false;
-    $("micBtn").classList.remove("recording");
-    $("micBtn").textContent = "🎤 음성";
-    if (wasRecording && !hadError && $("answerInput").value.trim() && !$("answerInput").disabled) {
-      submit();
-    }
-  };
-  speech.recognition = rec;
-}
-
-function toggleMic() {
-  if (!speech.supported || !speech.recognition) return;
-  if (speech.recording) {
-    speech.userStopped = true;
-    try { speech.recognition.stop(); } catch (e) {}
-  } else {
-    if ($("answerInput").disabled) return;
-    $("answerInput").value = "";
-    try { speech.recognition.start(); } catch (e) { console.warn(e); }
-  }
-}
-
 const SETTINGS_KEY = "romans8_settings_v1";
 const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","startLevel","targetLevel","continuousCount","revealSeconds"];
 
@@ -250,7 +173,7 @@ function showQuestion(fadeIn = false) {
   const qt = $("questionText");
   qt.style.transition = "none";
   qt.style.transitionDuration = "";
-  box.classList.remove("reveal-all", "wrong");
+  box.classList.remove("reveal-all", "wrong", "correct");
   if (fadeIn) box.classList.add("hidden-state");
   else box.classList.remove("hidden-state");
   void qt.offsetWidth;
@@ -420,10 +343,6 @@ function renderDiff(expected, actual) {
 }
 
 function submit() {
-  if (speech.recording) {
-    speech.userStopped = true;
-    try { speech.recognition.stop(); } catch (e) {}
-  }
   const verse = ROMANS_8[state.currentVerse];
   const userInput = $("answerInput").value;
   if (!userInput.trim()) return;
@@ -453,7 +372,7 @@ function revealAllThenAdvance() {
   clearTimers();
   const box = $("questionBox");
   box.classList.remove("hidden-state");
-  box.classList.add("reveal-all");
+  box.classList.add("reveal-all", "correct");
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
@@ -548,8 +467,6 @@ function finishAll() {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadSettings();
-  initSpeechRecognition();
-  $("micBtn").addEventListener("click", toggleMic);
   $("startBtn").addEventListener("click", startTest);
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
@@ -578,9 +495,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (e.key === "Delete") {
       e.preventDefault();
       if (!$("hintBtn").disabled) useHint();
-    } else if (e.key === "Insert") {
-      e.preventDefault();
-      toggleMic();
     } else if (e.key === "PageUp") {
       e.preventDefault();
       forceNextVerse();
