@@ -94,7 +94,7 @@ function toggleMic() {
 }
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["startVerse","endVerse","hideEnabled","startLevel","targetLevel","continuousCount","revealSeconds"];
+const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","startLevel","targetLevel","continuousCount","revealSeconds"];
 
 function saveSettings() {
   const obj = {};
@@ -171,6 +171,7 @@ function startTest() {
     startVerse: Math.max(1, Math.min(39, parseInt($("startVerse").value) || 1)),
     endVerse: Math.max(1, Math.min(39, parseInt($("endVerse").value) || 39)),
     hideEnabled: $("hideEnabled").checked,
+    inputEnabled: $("inputEnabled").checked,
     startLevel: parseInt($("startLevel").value),
     targetLevel: parseInt($("targetLevel").value),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
@@ -262,7 +263,7 @@ function showQuestion(fadeIn = false) {
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
   updateViewToggleBtn();
-  $("answerInput").focus();
+  applyInputVisibility();
 
   const startHideIfNeeded = () => {
     if (state.config.hideEnabled) startHideTimer();
@@ -320,6 +321,23 @@ function updateViewToggleBtn() {
   if (!btn) return;
   if (box.classList.contains("reveal-all")) btn.textContent = "🙈 전체 숨기기";
   else btn.textContent = "👁 전체 보기";
+}
+
+function applyInputVisibility() {
+  const enabled = !!(state.config && state.config.inputEnabled);
+  $("answerInput").classList.toggle("hidden", !enabled);
+  document.querySelector(".input-hint").classList.toggle("hidden", !enabled);
+  $("submitBtn").classList.toggle("hidden", !enabled);
+  $("inputToggleBtn").textContent = enabled ? "⌨ 입력 ON" : "⌨ 입력 OFF";
+  if (enabled && !$("answerInput").disabled) $("answerInput").focus();
+}
+
+function toggleInputEnabled() {
+  if (!state.config) return;
+  state.config.inputEnabled = !state.config.inputEnabled;
+  $("inputEnabled").checked = state.config.inputEnabled;
+  saveSettings();
+  applyInputVisibility();
 }
 
 function useHint() {
@@ -536,6 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
   $("viewToggleBtn").addEventListener("click", toggleViewAll);
+  $("inputToggleBtn").addEventListener("click", toggleInputEnabled);
   $("nextBtn").addEventListener("click", forceNextVerse);
   $("prevBtn").addEventListener("click", forcePrevVerse);
   $("quitBtn").addEventListener("click", () => {
@@ -546,26 +565,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   $("restartBtn").addEventListener("click", () => showScreen("setup-screen"));
 
-  $("answerInput").addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+  document.addEventListener("keydown", (e) => {
+    if ($("test-screen").classList.contains("hidden")) return;
+    const inInput = document.activeElement === $("answerInput");
+
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing && inInput) {
       e.preventDefault();
       submit();
     } else if (e.key === "Home") {
       e.preventDefault();
-      if (!$("hintBtn").disabled) useHint();
+      toggleViewAll();
     } else if (e.key === "Delete") {
       e.preventDefault();
-      toggleViewAll();
-    } else if (e.key === "End") {
-      e.preventDefault();
-      hideAll();
+      if (!$("hintBtn").disabled) useHint();
     } else if (e.key === "Insert") {
       e.preventDefault();
       toggleMic();
-    } else if (e.key === "+" || e.key === "=") {
+    } else if (e.key === "PageUp") {
       e.preventDefault();
       forceNextVerse();
-    } else if (e.key === "-" || e.key === "_") {
+    } else if (e.key === "PageDown") {
+      e.preventDefault();
+      forcePrevVerse();
+    } else if (!inInput && (e.key === "+" || e.key === "=")) {
+      e.preventDefault();
+      forceNextVerse();
+    } else if (!inInput && (e.key === "-" || e.key === "_")) {
       e.preventDefault();
       forcePrevVerse();
     }

@@ -77,6 +77,7 @@ h2 {
 }
 
 .screen.hidden { display: none; }
+.hidden { display: none !important; }
 
 /* === Setup screen === */
 .settings-grid {
@@ -330,17 +331,8 @@ button.ghost:hover { background: #f8fafc; }
   font-weight: 700;
 }
 
-.question-box.reveal-all {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  border-color: #6ee7b7;
-}
 .question-box.reveal-all .blank {
-  color: #065f46;
-  font-weight: 700;
   min-width: 0;
-}
-.question-box.reveal-all .verse-label {
-  background: var(--success);
 }
 
 /* === Input area === */

@@ -33,6 +33,13 @@
           <span class="slider"></span>
         </label>
       </div>
+      <div class="form-row toggle-row">
+        <label for="inputEnabled">텍스트 입력</label>
+        <label class="switch">
+          <input type="checkbox" id="inputEnabled" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
       <div class="form-row">
         <label for="revealSeconds">문제 보는 시간 <span class="hint">초 (2초 대기 후 서서히 숨김)</span></label>
         <input type="number" id="revealSeconds" min="2" max="60" value="5">
@@ -116,6 +123,7 @@
         <button id="micBtn" class="secondary" title="음성 입력 (한국어)">🎤 음성</button>
         <button id="hintBtn" class="secondary">💡 힌트</button>
         <button id="viewToggleBtn" class="secondary">👁 전체 보기</button>
+        <button id="inputToggleBtn" class="secondary">⌨ 입력 ON</button>
         <button id="prevBtn" class="secondary">◀ Prev</button>
         <button id="nextBtn" class="secondary">Next ▶</button>
         <div class="spacer"></div>
