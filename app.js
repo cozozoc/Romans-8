@@ -209,25 +209,44 @@ function showQuestion(fadeIn = false) {
 
 function showAll() {
   const box = $("questionBox");
-  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
-  if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
+  const qt = $("questionText");
+  clearTimers();
 
-  box.classList.remove("hidden-state");
+  qt.style.transition = "none";
+  qt.style.transitionDuration = "0s";
+  box.classList.remove("hidden-state", "wrong", "correct");
   box.classList.add("reveal-all");
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
+  void qt.offsetWidth;
+  qt.style.transition = "";
+  qt.style.transitionDuration = "";
+
+  $("hintBtn").disabled = false;
+  $("submitBtn").disabled = false;
+  $("answerInput").disabled = false;
   updateViewToggleBtn();
   $("answerInput").focus();
 }
 
 function hideAll() {
   const box = $("questionBox");
-  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; renderQuestionBody(); $("hintBtn").disabled = false; }
-  if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; box.classList.remove("reveal-all"); renderQuestionBody(); $("hintBtn").disabled = false; $("submitBtn").disabled = false; }
+  const qt = $("questionText");
+  clearTimers();
+
+  qt.style.transition = "none";
+  qt.style.transitionDuration = "0s";
+  box.classList.remove("reveal-all", "wrong", "correct");
+  renderQuestionBody();
   box.classList.add("hidden-state");
+  void qt.offsetWidth;
+  qt.style.transition = "";
+  qt.style.transitionDuration = "";
+
+  $("hintBtn").disabled = false;
+  $("submitBtn").disabled = false;
+  $("answerInput").disabled = false;
   updateViewToggleBtn();
   $("answerInput").focus();
 }
@@ -265,6 +284,8 @@ function toggleInputEnabled() {
 
 function useHint() {
   const box = $("questionBox");
+  // 이미 전체 보기 상태면 힌트 무시
+  if (box.classList.contains("reveal-all")) return;
   // 숨김 상태 일시 해제
   const wasHidden = box.classList.contains("hidden-state");
   if (wasHidden) box.classList.remove("hidden-state");
@@ -281,11 +302,17 @@ function useHint() {
   $("hintBtn").disabled = true;
   if (state.hintRevealTimer) clearTimeout(state.hintRevealTimer);
   state.hintRevealTimer = setTimeout(() => {
-    // 원상 복구
-    renderQuestionBody();
-    if (wasHidden) box.classList.add("hidden-state");
-    $("hintBtn").disabled = false;
     state.hintRevealTimer = null;
+    $("hintBtn").disabled = false;
+    // 사용자가 수동으로 전체 보기/오답/정답 상태로 바꿨다면 그 상태를 존중
+    if (box.classList.contains("reveal-all")
+        || box.classList.contains("wrong")
+        || box.classList.contains("correct")) return;
+    renderQuestionBody();
+    // 현재 숨김 상태가 아닐 때만, 그리고 최초에 숨김이었던 경우에만 복구
+    if (wasHidden && !box.classList.contains("hidden-state")) {
+      box.classList.add("hidden-state");
+    }
   }, state.config.revealSeconds * 1000);
 }
 
@@ -492,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (e.key === "Home") {
       e.preventDefault();
       toggleViewAll();
-    } else if (e.key === "Delete") {
+    } else if (e.key === "End") {
       e.preventDefault();
       if (!$("hintBtn").disabled) useHint();
     } else if (e.key === "PageUp") {
