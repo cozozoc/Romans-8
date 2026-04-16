@@ -15,6 +15,15 @@ const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
 const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds"];
+const DEFAULT_SETTINGS = {
+  startVerse: "1",
+  endVerse: "39",
+  hideEnabled: true,
+  inputEnabled: true,
+  revealSeconds: "10",
+  level: "1",
+  continuousCount: "1",
+};
 
 function saveSettings() {
   const obj = {};
@@ -25,6 +34,17 @@ function saveSettings() {
   });
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); } catch (e) {}
 }
+function resetSettings() {
+  if (!confirm("모든 설정을 기본값으로 초기화할까요?")) return;
+  Object.entries(DEFAULT_SETTINGS).forEach(([id, val]) => {
+    const el = $(id);
+    if (!el) return;
+    if (el.type === "checkbox") el.checked = val;
+    else el.value = val;
+  });
+  try { localStorage.removeItem(SETTINGS_KEY); } catch (e) {}
+}
+
 function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -444,6 +464,7 @@ function finishAll() {
 document.addEventListener("DOMContentLoaded", () => {
   loadSettings();
   $("startBtn").addEventListener("click", startTest);
+  $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
   $("viewToggleBtn").addEventListener("click", toggleViewAll);
@@ -458,7 +479,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   $("restartBtn").addEventListener("click", () => showScreen("setup-screen"));
 
+  const helpModal = $("helpModal");
+  const openHelp = () => helpModal.classList.remove("hidden");
+  const closeHelp = () => helpModal.classList.add("hidden");
+  $("helpBtn").addEventListener("click", openHelp);
+  $("helpCloseBtn").addEventListener("click", closeHelp);
+  helpModal.addEventListener("click", (e) => {
+    if (e.target === helpModal) closeHelp();
+  });
+
   document.addEventListener("keydown", (e) => {
+    const helpOpen = !helpModal.classList.contains("hidden");
+    if (helpOpen) {
+      if (e.key === "Escape") { e.preventDefault(); closeHelp(); }
+      return;
+    }
     if ($("test-screen").classList.contains("hidden")) return;
     const inInput = document.activeElement === $("answerInput");
 
@@ -471,10 +506,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (e.key === "End") {
       e.preventDefault();
       if (!$("hintBtn").disabled) useHint();
-    } else if (e.key === "PageUp") {
+    } else if (e.key === "PageDown") {
       e.preventDefault();
       forceNextVerse();
-    } else if (e.key === "PageDown") {
+    } else if (e.key === "PageUp") {
       e.preventDefault();
       forcePrevVerse();
     } else if (!inInput && (e.key === "+" || e.key === "=")) {

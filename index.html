@@ -9,9 +9,57 @@
 <body>
 <div class="container">
   <header class="app-header">
+    <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>로마서 8장 암송 테스트</h1>
     <p class="subtitle">개역개정 · 직접 입력 하면서 외우기</p>
   </header>
+
+  <!-- 도움말 모달 -->
+  <div id="helpModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2 id="helpTitle">프로그램 사용 설명</h2>
+        <button id="helpCloseBtn" class="modal-close" aria-label="닫기">×</button>
+      </div>
+      <div class="modal-body">
+        <h3>🎯 개요</h3>
+        <p>로마서 8장 39절을 구절 단위로 반복 입력하며 암송하는 도구입니다. 각 구절에서 일부 단어가 빈칸으로 가려지고, 정답을 맞히면 다음 구절로 넘어갑니다.</p>
+
+        <h3>⚙️ 설정 화면</h3>
+        <ul>
+          <li><b>시작 / 끝 구절</b>: 학습할 범위 (1~39절)</li>
+          <li><b>숨기기 기능</b>: 문제 노출 후 2초 대기, 이후 서서히 구절 전체가 흐려져 사라짐</li>
+          <li><b>텍스트 입력</b>: 키보드로 전체 구절을 타이핑할지 여부 (끄면 힌트/전체 보기만으로 연습)</li>
+          <li><b>문제 보는 시간</b>: 숨기기 전까지 총 노출 시간(초)</li>
+          <li><b>난이도 레벨</b>: Lv.1(10%) ~ Lv.10(100%) — 빈칸 처리되는 단어 비율</li>
+          <li><b>연속 정답 횟수</b>: 이 횟수만큼 연속 정답해야 다음 구절로 이동</li>
+        </ul>
+
+        <h3>📝 테스트 화면</h3>
+        <ul>
+          <li><b>제출</b>: 입력한 전체 구절을 채점 — 일치하면 파란색으로 표시 후 다음 단계로 이동</li>
+          <li><b>💡 힌트</b>: 누를 때마다 빈칸 중 하나를 랜덤 위치로 즉시 공개 (숨김 ON/OFF 무관하게 계속 누를 수 있음)</li>
+          <li><b>👁 전체 보기 / 🙈 전체 숨기기</b>: 빈칸을 포함한 구절 전체 토글</li>
+          <li><b>⌨ 입력 ON/OFF</b>: 타이핑 영역 표시 여부 토글</li>
+          <li><b>◀ Prev / Next ▶</b>: 구절 수동 이동 (연속 카운트 초기화)</li>
+          <li><b>종료</b>: 설정 화면으로 돌아감</li>
+        </ul>
+
+        <h3>⌨ 키보드 단축키</h3>
+        <ul>
+          <li><kbd>Enter</kbd> — 제출 (입력 칸에 포커스 있을 때)</li>
+          <li><kbd>Shift</kbd>+<kbd>Enter</kbd> — 줄바꿈</li>
+          <li><kbd>Home</kbd> — 전체 보기 ↔ 전체 숨기기 토글</li>
+          <li><kbd>End</kbd> — 힌트 (매번 랜덤 위치)</li>
+          <li><kbd>PageDown</kbd> / <kbd>+</kbd> — 다음 구절</li>
+          <li><kbd>PageUp</kbd> / <kbd>-</kbd> — 이전 구절</li>
+        </ul>
+
+        <h3>💾 저장</h3>
+        <p>설정값은 브라우저 localStorage에 자동 저장되어 다음 방문 시 복원됩니다.</p>
+      </div>
+    </div>
+  </div>
 
   <!-- 설정 화면 -->
   <section id="setup-screen" class="screen">
@@ -67,6 +115,7 @@
       </div>
     </div>
     <button id="startBtn" class="primary big-btn">테스트 시작하기</button>
+    <button id="resetSettingsBtn" class="ghost reset-btn">설정 초기화</button>
   </section>
 
   <!-- 테스트 화면 -->
