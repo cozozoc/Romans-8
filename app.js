@@ -1,4 +1,4 @@
-const LEVEL_RATIO = { 1: 0.2, 2: 0.4, 3: 0.6, 4: 0.8, 5: 1.0 };
+const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
 
 const state = {
   config: null,
@@ -8,7 +8,6 @@ const state = {
   wrongStreak: 0,
   targetReachedCount: 0,
   hideTimer: null,
-  countdownTimer: null,
   currentWords: [],
   currentBlankSet: new Set(),
   hintRevealTimer: null,
@@ -95,7 +94,7 @@ function toggleMic() {
 }
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["startVerse","endVerse","hideEnabled","startLevel","targetLevel","continuousCount","revealSeconds","blankMode","visibleWords"];
+const SETTING_IDS = ["startVerse","endVerse","hideEnabled","startLevel","targetLevel","continuousCount","revealSeconds"];
 
 function saveSettings() {
   const obj = {};
@@ -158,14 +157,7 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
 }
 
 function pickBlankIndices(wordCount, level) {
-  let blankCount;
-  if (state.config && state.config.blankMode === "visible") {
-    const raw = parseInt(state.config.visibleWordsRaw);
-    const visible = isNaN(raw) ? Math.max(0, wordCount - 2) : Math.max(0, Math.min(wordCount, raw));
-    blankCount = Math.max(0, wordCount - visible);
-  } else {
-    blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
-  }
+  const blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
   const indices = [...Array(wordCount).keys()];
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -183,8 +175,6 @@ function startTest() {
     targetLevel: parseInt($("targetLevel").value),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
     revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 5),
-    blankMode: $("blankMode").value,
-    visibleWordsRaw: $("visibleWords").value,
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -207,7 +197,6 @@ function startTest() {
 
 function clearTimers() {
   if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (state.countdownTimer) { clearInterval(state.countdownTimer); state.countdownTimer = null; }
   if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
   if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
 }
@@ -234,18 +223,6 @@ function startHideTimer() {
   const total = state.config.revealSeconds;
   const fadeSec = Math.max(0.5, total - 2);
   qt.style.transitionDuration = fadeSec + "s";
-  let remaining = total;
-  $("timerText").textContent = `${remaining}초 후 숨김`;
-  state.countdownTimer = setInterval(() => {
-    remaining--;
-    if (remaining > 0) {
-      $("timerText").textContent = `${remaining}초 후 숨김`;
-    } else {
-      $("timerText").textContent = "";
-      clearInterval(state.countdownTimer);
-      state.countdownTimer = null;
-    }
-  }, 1000);
   state.hideTimer = setTimeout(() => {
     box.classList.add("hidden-state");
   }, 2000);
@@ -253,8 +230,6 @@ function startHideTimer() {
 
 function showQuestion(fadeIn = false) {
   clearTimers();
-  $("blankModeTest").value = state.config.blankMode;
-  $("visibleWordsTest").value = state.config.visibleWordsRaw;
   const verse = ROMANS_8[state.currentVerse];
   const words = splitWords(verse);
   state.currentWords = words;
@@ -286,11 +261,12 @@ function showQuestion(fadeIn = false) {
   $("answerInput").disabled = false;
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
+  updateViewToggleBtn();
   $("answerInput").focus();
 
   const startHideIfNeeded = () => {
     if (state.config.hideEnabled) startHideTimer();
-    else { qt.style.transitionDuration = ""; $("timerText").textContent = ""; }
+    else { qt.style.transitionDuration = ""; }
   };
 
   if (fadeIn) {
@@ -307,48 +283,43 @@ function showQuestion(fadeIn = false) {
   }
 }
 
-function previewAll() {
+function showAll() {
   const box = $("questionBox");
-  const wasHidden = box.classList.contains("hidden-state");
-
-  // 숨김/카운트다운 타이머 일시 정지
   if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (state.countdownTimer) { clearInterval(state.countdownTimer); state.countdownTimer = null; }
   if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
-  $("timerText").textContent = "";
+  if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
 
   box.classList.remove("hidden-state");
   box.classList.add("reveal-all");
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
-
-  $("showAllBtn").disabled = true;
-  $("hintBtn").disabled = true;
-  $("submitBtn").disabled = true;
-
-  if (state.revealAllTimer) clearTimeout(state.revealAllTimer);
-  state.revealAllTimer = setTimeout(() => {
-    state.revealAllTimer = null;
-    box.classList.remove("reveal-all");
-    renderQuestionBody();
-    if (wasHidden) box.classList.add("hidden-state");
-    $("showAllBtn").disabled = false;
-    $("hintBtn").disabled = false;
-    $("submitBtn").disabled = false;
-    $("answerInput").focus();
-  }, state.config.revealSeconds * 1000);
+  updateViewToggleBtn();
+  $("answerInput").focus();
 }
 
 function hideAll() {
   const box = $("questionBox");
   if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (state.countdownTimer) { clearInterval(state.countdownTimer); state.countdownTimer = null; }
   if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; renderQuestionBody(); $("hintBtn").disabled = false; }
-  if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; box.classList.remove("reveal-all"); renderQuestionBody(); $("showAllBtn").disabled = false; $("hintBtn").disabled = false; $("submitBtn").disabled = false; }
-  $("timerText").textContent = "";
+  if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; box.classList.remove("reveal-all"); renderQuestionBody(); $("hintBtn").disabled = false; $("submitBtn").disabled = false; }
   box.classList.add("hidden-state");
+  updateViewToggleBtn();
   $("answerInput").focus();
+}
+
+function toggleViewAll() {
+  const box = $("questionBox");
+  if (box.classList.contains("reveal-all")) hideAll();
+  else showAll();
+}
+
+function updateViewToggleBtn() {
+  const box = $("questionBox");
+  const btn = $("viewToggleBtn");
+  if (!btn) return;
+  if (box.classList.contains("reveal-all")) btn.textContent = "🙈 전체 숨기기";
+  else btn.textContent = "👁 전체 보기";
 }
 
 function useHint() {
@@ -387,7 +358,6 @@ function showWrongReveal(expected, actual) {
   void qt.offsetWidth;
   qt.style.transition = "";
   box.classList.add("wrong");
-  $("timerText").textContent = "";
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
   $("answerInput").disabled = true;
@@ -469,7 +439,6 @@ function revealAllThenAdvance() {
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
-  $("timerText").textContent = "";
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
   $("answerInput").disabled = true;
@@ -487,7 +456,7 @@ function handleCorrectAdvance() {
   const { targetLevel, continuousCount, endVerse } = state.config;
 
   // 1) 목표 레벨 미만이면 정답 1회당 레벨업
-  if (state.currentLevel < targetLevel && state.currentLevel < 5) {
+  if (state.currentLevel < targetLevel && state.currentLevel < 10) {
     state.currentLevel++;
     state.correctStreak = 0;
   }
@@ -564,22 +533,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initSpeechRecognition();
   $("micBtn").addEventListener("click", toggleMic);
   $("startBtn").addEventListener("click", startTest);
-  $("blankModeTest").addEventListener("change", (e) => {
-    state.config.blankMode = e.target.value;
-    $("blankMode").value = e.target.value;
-    saveSettings();
-    showQuestion();
-  });
-  $("visibleWordsTest").addEventListener("change", (e) => {
-    state.config.visibleWordsRaw = e.target.value;
-    $("visibleWords").value = e.target.value;
-    saveSettings();
-    showQuestion();
-  });
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
-  $("showAllBtn").addEventListener("click", previewAll);
-  $("hideAllBtn").addEventListener("click", hideAll);
+  $("viewToggleBtn").addEventListener("click", toggleViewAll);
   $("nextBtn").addEventListener("click", forceNextVerse);
   $("prevBtn").addEventListener("click", forcePrevVerse);
   $("quitBtn").addEventListener("click", () => {
@@ -599,19 +555,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!$("hintBtn").disabled) useHint();
     } else if (e.key === "Delete") {
       e.preventDefault();
-      if (!$("showAllBtn").disabled) previewAll();
+      toggleViewAll();
     } else if (e.key === "End") {
       e.preventDefault();
       hideAll();
     } else if (e.key === "Insert") {
       e.preventDefault();
       toggleMic();
-    } else if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      forcePrevVerse();
-    } else if (e.key === "ArrowRight") {
+    } else if (e.key === "+" || e.key === "=") {
       e.preventDefault();
       forceNextVerse();
+    } else if (e.key === "-" || e.key === "_") {
+      e.preventDefault();
+      forcePrevVerse();
     }
   });
 });
