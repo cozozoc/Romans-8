@@ -3,10 +3,7 @@ const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8:
 const state = {
   config: null,
   currentVerse: 1,
-  currentLevel: 3,
   correctStreak: 0,
-  wrongStreak: 0,
-  targetReachedCount: 0,
   hideTimer: null,
   currentWords: [],
   currentBlankSet: new Set(),
@@ -17,7 +14,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","startLevel","targetLevel","continuousCount","revealSeconds"];
+const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds"];
 
 function saveSettings() {
   const obj = {};
@@ -95,26 +92,18 @@ function startTest() {
     endVerse: Math.max(1, Math.min(39, parseInt($("endVerse").value) || 39)),
     hideEnabled: $("hideEnabled").checked,
     inputEnabled: $("inputEnabled").checked,
-    startLevel: parseInt($("startLevel").value),
-    targetLevel: parseInt($("targetLevel").value),
+    level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
-    revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 5),
+    revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 10),
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
     return;
   }
-  if (cfg.startLevel > cfg.targetLevel) {
-    alert("시작 레벨이 목표 레벨보다 클 수 없습니다.");
-    return;
-  }
   state.config = cfg;
   saveSettings();
   state.currentVerse = cfg.startVerse;
-  state.currentLevel = cfg.startLevel;
   state.correctStreak = 0;
-  state.wrongStreak = 0;
-  state.targetReachedCount = 0;
   showScreen("test-screen");
   showQuestion();
 }
@@ -157,15 +146,14 @@ function showQuestion(fadeIn = false) {
   const verse = ROMANS_8[state.currentVerse];
   const words = splitWords(verse);
   state.currentWords = words;
-  state.currentBlankSet = pickBlankIndices(words.length, state.currentLevel);
+  const level = state.config.level;
+  state.currentBlankSet = pickBlankIndices(words.length, level);
 
   $("verseInfo").innerHTML = `${state.currentVerse}절 <span class="sub">/ ${state.config.endVerse}절까지</span>`;
-  $("levelInfo").innerHTML = `Lv.${state.currentLevel} <span class="sub">(${Math.round(LEVEL_RATIO[state.currentLevel]*100)}%)</span>`;
+  $("levelInfo").innerHTML = `Lv.${level} <span class="sub">(${Math.round(LEVEL_RATIO[level]*100)}%)</span>`;
 
-  const streakText = state.currentLevel >= state.config.targetLevel
-    ? `${state.targetReachedCount} / ${state.config.continuousCount} <span class="sub">(다음 구절)</span>`
-    : `${state.correctStreak} / ${state.config.continuousCount} <span class="sub">(레벨업)</span>`;
-  $("streakInfo").innerHTML = streakText;
+  $("streakInfo").innerHTML =
+    `${state.correctStreak} / ${state.config.continuousCount} <span class="sub">(다음 구절)</span>`;
 
   updateProgress();
 
@@ -294,16 +282,14 @@ function useHint() {
   if (blanks.length === 0) return;
   const idx = blanks[Math.floor(Math.random() * blanks.length)];
 
-  // 힌트 한 단어만 revealed 처리
+  // 힌트 한 단어만 revealed 처리 (매번 새로운 랜덤 위치)
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set([idx]));
   $("questionText").innerHTML = labelHtml + body;
 
-  $("hintBtn").disabled = true;
   if (state.hintRevealTimer) clearTimeout(state.hintRevealTimer);
   state.hintRevealTimer = setTimeout(() => {
     state.hintRevealTimer = null;
-    $("hintBtn").disabled = false;
     // 사용자가 수동으로 전체 보기/오답/정답 상태로 바꿨다면 그 상태를 존중
     if (box.classList.contains("reveal-all")
         || box.classList.contains("wrong")
@@ -381,16 +367,12 @@ function submit() {
     fb.className = "feedback";
     fb.innerHTML = "";
     state.correctStreak++;
-    state.wrongStreak = 0;
     revealAllThenAdvance();
   } else {
     fb.className = "feedback";
     fb.innerHTML = "";
     showWrongReveal(verse, userInput);
-    state.wrongStreak++;
     state.correctStreak = 0;
-    state.targetReachedCount = 0;
-    handleWrong();
   }
 }
 
@@ -407,7 +389,7 @@ function revealAllThenAdvance() {
   $("submitBtn").disabled = true;
   $("answerInput").disabled = true;
 
-  const delay = Math.max(500, (state.config.revealSeconds || 5) * 1000);
+  const delay = Math.max(500, (state.config.revealSeconds || 10) * 1000);
   console.log("[reveal] scheduling advance in", delay, "ms");
   state.revealAllTimer = setTimeout(() => {
     console.log("[reveal] timer fired -> handleCorrectAdvance");
@@ -417,35 +399,15 @@ function revealAllThenAdvance() {
 }
 
 function handleCorrectAdvance() {
-  const { targetLevel, continuousCount, endVerse } = state.config;
+  const { continuousCount, endVerse } = state.config;
 
-  // 1) 목표 레벨 미만이면 정답 1회당 레벨업
-  if (state.currentLevel < targetLevel && state.currentLevel < 10) {
-    state.currentLevel++;
-    state.correctStreak = 0;
-  }
-
-  // 2) 목표 레벨에 도달했으면 이번 정답을 targetReachedCount에 카운트
-  if (state.currentLevel >= targetLevel) {
-    state.targetReachedCount++;
-    console.log("[advance]", {
-      verse: state.currentVerse,
-      level: state.currentLevel,
-      targetReached: state.targetReachedCount,
-      continuousCount,
-    });
-    if (state.targetReachedCount >= continuousCount) {
-      if (state.currentVerse >= endVerse) {
-        finishAll();
-        return;
-      }
-      state.currentVerse++;
-      state.currentLevel = state.config.startLevel;
-      state.correctStreak = 0;
-      state.targetReachedCount = 0;
-      showQuestion();
+  if (state.correctStreak >= continuousCount) {
+    if (state.currentVerse >= endVerse) {
+      finishAll();
       return;
     }
+    state.currentVerse++;
+    state.correctStreak = 0;
   }
 
   showQuestion();
@@ -459,10 +421,7 @@ function forceNextVerse() {
     return;
   }
   state.currentVerse++;
-  state.currentLevel = state.config.startLevel;
   state.correctStreak = 0;
-  state.wrongStreak = 0;
-  state.targetReachedCount = 0;
   showQuestion();
 }
 
@@ -471,18 +430,8 @@ function forcePrevVerse() {
   const { startVerse } = state.config;
   if (state.currentVerse <= startVerse) return;
   state.currentVerse--;
-  state.currentLevel = state.config.startLevel;
   state.correctStreak = 0;
-  state.wrongStreak = 0;
-  state.targetReachedCount = 0;
   showQuestion();
-}
-
-function handleWrong() {
-  if (state.wrongStreak >= 3 && state.currentLevel > 1) {
-    state.currentLevel--;
-    state.wrongStreak = 0;
-  }
 }
 
 function finishAll() {
