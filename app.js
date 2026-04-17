@@ -16,27 +16,6 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const THEME_KEY = "romans8_theme";
-
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  const btn = $("themeBtn");
-  if (btn) btn.textContent = theme === "dark" ? "☀" : "🌙";
-}
-function loadTheme() {
-  let theme;
-  try { theme = localStorage.getItem(THEME_KEY); } catch (e) {}
-  if (!theme) {
-    theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  }
-  applyTheme(theme);
-}
-function toggleTheme() {
-  const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
-  const next = cur === "dark" ? "light" : "dark";
-  applyTheme(next);
-  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
-}
 const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds"];
 const DEFAULT_SETTINGS = {
   startVerse: "1",
@@ -44,7 +23,7 @@ const DEFAULT_SETTINGS = {
   hideEnabled: false,
   inputEnabled: false,
   revealSeconds: "30",
-  level: "5",
+  level: "1",
   continuousCount: "1",
 };
 
@@ -130,7 +109,7 @@ function startTest() {
     endVerse: Math.max(1, Math.min(39, parseInt($("endVerse").value) || 39)),
     hideEnabled: $("hideEnabled").checked,
     inputEnabled: $("inputEnabled").checked,
-    level: Math.max(1, Math.min(10, parseInt($("level").value) || 5)),
+    level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
     revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 30),
   };
@@ -523,8 +502,6 @@ function finishAll() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadTheme();
-  $("themeBtn").addEventListener("click", toggleTheme);
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("sw.js").catch(() => {});

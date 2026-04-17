@@ -54,10 +54,6 @@ body {
   padding-bottom: 24px;
   border-bottom: 1px solid var(--border-light);
 }
-.theme-btn {
-  right: 44px !important;
-  font-size: 14px !important;
-}
 .help-btn {
   position: absolute;
   top: 0;
@@ -597,44 +593,3 @@ textarea::placeholder { color: #a0aec0; }
   .status-bar { grid-template-columns: 1fr; gap: 8px; }
   .question-box { padding: 22px 18px; font-size: 16px; }
 }
-
-/* === Dark theme === */
-[data-theme="dark"] {
-  --bg-gradient: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
-  --card-bg: #0f172a;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border: #334155;
-  --border-light: #1e293b;
-  --primary: #818cf8;
-  --primary-hover: #a5b4fc;
-  --primary-light: #1e1b4b;
-  --success: #34d399;
-  --success-bg: #064e3b;
-  --danger: #f87171;
-  --danger-bg: #4c1919;
-  --warning: #fbbf24;
-  --warning-bg: #3f2d0a;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
-}
-[data-theme="dark"] .modal-close:hover,
-[data-theme="dark"] .modal-body kbd,
-[data-theme="dark"] button.secondary,
-[data-theme="dark"] .question-box::before,
-[data-theme="dark"] .blank { background: #1e293b; }
-[data-theme="dark"] .form-row,
-[data-theme="dark"] button.ghost:hover { background: #1e293b; }
-[data-theme="dark"] button.secondary:hover { background: #334155; }
-[data-theme="dark"] .switch .slider { background: #475569; }
-[data-theme="dark"] .form-row input[type=number],
-[data-theme="dark"] .form-row select,
-[data-theme="dark"] textarea { background: #0b1220; color: var(--text-primary); }
-[data-theme="dark"] textarea::placeholder { color: #64748b; }
-[data-theme="dark"] .question-box { background: linear-gradient(135deg, #2a2233 0%, #2e2a3f 100%); border-color: #4a3f5c; }
-[data-theme="dark"] .feedback.correct .fb-title { color: #6ee7b7; }
-[data-theme="dark"] .feedback.wrong .fb-title { color: #fca5a5; }
-[data-theme="dark"] .feedback .diff-ok { color: #6ee7b7; }
-[data-theme="dark"] .feedback .diff-bad { color: #fca5a5; background: #1f1115; }
