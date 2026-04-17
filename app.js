@@ -329,7 +329,9 @@ function showWrongReveal(expected, actual) {
   box.classList.add("wrong");
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
-  $("answerInput").disabled = true;
+  $("answerInput").disabled = false;
+  $("answerInput").value = "";
+  $("answerInput").focus();
 
   const ew = splitWords(expected);
   const aw = splitWords(actual);
