@@ -16,7 +16,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds"];
+const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds","ttsVoice","ttsRate"];
 const DEFAULT_SETTINGS = {
   startVerse: "1",
   endVerse: "39",
@@ -25,7 +25,63 @@ const DEFAULT_SETTINGS = {
   revealSeconds: "30",
   level: "1",
   continuousCount: "1",
+  ttsVoice: "",
+  ttsRate: "0.95",
 };
+
+let availableKoVoices = [];
+function voiceQualityScore(v) {
+  const tag = ((v.name || "") + " " + (v.voiceURI || "")).toLowerCase();
+  let s = 0;
+  if (tag.includes("premium")) s += 40;
+  if (tag.includes("neural")) s += 35;
+  if (tag.includes("natural")) s += 35;
+  if (tag.includes("wavenet")) s += 35;
+  if (tag.includes("enhanced")) s += 25;
+  if (tag.includes("novel")) s += 20;
+  if (tag.includes("online")) s += 18;
+  if (tag.includes("google")) s += 12;
+  if (tag.includes("microsoft")) s += 8;
+  if (tag.includes("yuna")) s += 10; // macOS/iOS Korean
+  if (!v.localService) s += 15; // cloud voices usually higher quality
+  return s;
+}
+function refreshVoiceList() {
+  const synth = window.speechSynthesis;
+  if (!synth) return;
+  const all = synth.getVoices();
+  availableKoVoices = all
+    .filter(v => v.lang && v.lang.toLowerCase().startsWith("ko"))
+    .sort((a, b) => voiceQualityScore(b) - voiceQualityScore(a));
+  const sel = $("ttsVoice");
+  if (!sel) return;
+  const prev = sel.value;
+  const saved = (function() { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}").ttsVoice || ""; } catch (e) { return ""; } })();
+  sel.innerHTML = "";
+  const auto = document.createElement("option");
+  auto.value = "";
+  auto.textContent = availableKoVoices.length
+    ? `자동 (추천: ${availableKoVoices[0].name})`
+    : "자동 (한국어 음성 없음)";
+  sel.appendChild(auto);
+  availableKoVoices.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v.voiceURI || v.name;
+    const tag = voiceQualityScore(v) >= 25 ? " ⭐" : "";
+    opt.textContent = `${v.name}${tag}`;
+    sel.appendChild(opt);
+  });
+  sel.value = prev || saved || "";
+}
+function pickVoice() {
+  const sel = $("ttsVoice");
+  const pref = sel ? sel.value : "";
+  if (pref) {
+    const found = availableKoVoices.find(v => (v.voiceURI || v.name) === pref);
+    if (found) return found;
+  }
+  return availableKoVoices[0] || null;
+}
 
 function saveSettings() {
   const obj = {};
@@ -298,11 +354,16 @@ function speakCurrentVerse() {
   }
   const verse = ROMANS_8[state.currentVerse];
   if (!verse) return;
+  if (availableKoVoices.length === 0) refreshVoiceList();
+  const voice = pickVoice();
   const u = new SpeechSynthesisUtterance(verse);
-  u.lang = "ko-KR";
-  u.rate = 0.95;
-  const koVoice = synth.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith("ko"));
-  if (koVoice) u.voice = koVoice;
+  u.lang = voice ? voice.lang : "ko-KR";
+  const rateEl = $("ttsRate");
+  const rate = rateEl ? parseFloat(rateEl.value) : 0.95;
+  u.rate = isFinite(rate) ? Math.max(0.5, Math.min(1.5, rate)) : 0.95;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  if (voice) u.voice = voice;
   u.onend = () => { if (btn) btn.textContent = "🔊 낭독"; };
   u.onerror = () => { if (btn) btn.textContent = "🔊 낭독"; };
   synth.speak(u);
@@ -507,6 +568,10 @@ document.addEventListener("DOMContentLoaded", () => {
       navigator.serviceWorker.register("sw.js").catch(() => {});
     });
   }
+  if (window.speechSynthesis) {
+    refreshVoiceList();
+    window.speechSynthesis.onvoiceschanged = refreshVoiceList;
+  }
   loadSettings();
   $("startBtn").addEventListener("click", startTest);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
@@ -552,8 +617,20 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === "Escape") { e.preventDefault(); closeHelp(); }
       return;
     }
+
+    const setupActive = !$("setup-screen").classList.contains("hidden");
+    if (setupActive) {
+      const tag = (document.activeElement && document.activeElement.tagName || "").toLowerCase();
+      if (e.key === "Enter" && !e.shiftKey && !e.isComposing && tag !== "textarea") {
+        e.preventDefault();
+        startTest();
+      }
+      return;
+    }
+
     if ($("test-screen").classList.contains("hidden")) return;
     const inInput = document.activeElement === $("answerInput");
+    const inputOff = !(state.config && state.config.inputEnabled);
 
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing && inInput) {
       e.preventDefault();
@@ -568,6 +645,12 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       forceNextVerse();
     } else if (e.key === "PageUp") {
+      e.preventDefault();
+      forcePrevVerse();
+    } else if ((!inInput || inputOff) && e.key === "ArrowRight") {
+      e.preventDefault();
+      forceNextVerse();
+    } else if ((!inInput || inputOff) && e.key === "ArrowLeft") {
       e.preventDefault();
       forcePrevVerse();
     } else if (!inInput && (e.key === "+" || e.key === "=")) {

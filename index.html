@@ -37,8 +37,20 @@
           <li><b>문제 보는 시간</b> <i>(기본 30초)</i>: 숨기기 ON일 때 노출 → 페이드아웃 → 자동 진행까지 걸리는 총 시간.</li>
           <li><b>난이도 레벨</b> <i>(기본 Lv.1)</i>: Lv.1(10%) ~ Lv.10(100%). 단어 중 해당 비율이 빈칸으로 바뀜.</li>
           <li><b>연속 정답 횟수</b> <i>(기본 1회)</i>: 이 횟수만큼 연속 정답해야 다음 구절로 이동.</li>
+          <li><b>낭독 음성</b>: 🔊 낭독에 사용할 TTS 음성. 자동 모드는 신경망/클라우드 음성을 우선 고르며, ⭐ 표시는 신경망/Natural/Premium 계열 고품질 음성입니다.</li>
+          <li><b>낭독 속도</b>: 0.5(느림) ~ 1.5(빠름), 기본 0.95.</li>
           <li><b>설정 초기화</b>: 저장된 설정을 모두 삭제하고 페이지를 새로고침해 기본값으로 복원.</li>
         </ul>
+
+        <h3>🎙 고품질 낭독 음성 가이드</h3>
+        <p>가장 자연스러운 한국어 음성을 원한다면 다음 환경을 권장합니다:</p>
+        <ul>
+          <li><b>Microsoft Edge</b>: "Microsoft SunHi/InJoon <b>Online (Natural)</b>" 음성 — 가장 자연스러움</li>
+          <li><b>macOS / iOS Safari</b>: 설정 → 손쉬운 사용 → 음성에서 <b>Yuna (고급/Premium)</b> 다운로드</li>
+          <li><b>Android Chrome</b>: Google TTS 엔진의 "한국어 (대한민국)" 음성 (WaveNet 계열)</li>
+          <li><b>Windows</b>: 설정 → 시간 및 언어 → 음성 → 한국어 "향상된 자연스러운 음성" 설치</li>
+        </ul>
+        <p>설치 후 페이지를 새로고침하면 "낭독 음성" 드롭다운에서 ⭐ 표시로 자동 인식됩니다.</p>
 
         <h3>📝 테스트 화면 버튼</h3>
         <ul>
@@ -62,6 +74,8 @@
           <li><kbd>End</kbd> — 힌트 (셔플 큐 다음 빈칸)</li>
           <li><kbd>PageDown</kbd> / <kbd>+</kbd> · <kbd>=</kbd> / 마우스 휠 ↓ — 다음 구절</li>
           <li><kbd>PageUp</kbd> / <kbd>-</kbd> · <kbd>_</kbd> / 마우스 휠 ↑ — 이전 구절</li>
+          <li><kbd>→</kbd> / <kbd>←</kbd> — 다음 / 이전 구절 (입력 OFF이거나 입력 칸에 포커스 없을 때)</li>
+          <li><kbd>Enter</kbd> (설정 화면) — 테스트 시작</li>
           <li><kbd>Esc</kbd> — 이 도움말 창 닫기</li>
         </ul>
 
@@ -125,6 +139,17 @@
       <div class="form-row">
         <label for="continuousCount">연속 정답 횟수 <span class="hint">다음 구절 이동 기준</span></label>
         <input type="number" id="continuousCount" min="1" max="10" value="1">
+      </div>
+
+      <div class="form-row full-width">
+        <label for="ttsVoice">낭독 음성 <span class="hint">⭐ = 신경망/고품질 음성</span></label>
+        <select id="ttsVoice">
+          <option value="">자동 (고품질 우선 선택)</option>
+        </select>
+      </div>
+      <div class="form-row full-width">
+        <label for="ttsRate">낭독 속도 <span class="hint">0.5 ~ 1.5 (기본 0.95)</span></label>
+        <input type="number" id="ttsRate" min="0.5" max="1.5" step="0.05" value="0.95">
       </div>
     </div>
     <button id="startBtn" class="primary big-btn">테스트 시작하기</button>
