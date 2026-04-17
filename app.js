@@ -1,3 +1,6 @@
+const APP_VERSION = "0.0.2";
+const VERSION_KEY = "romans8_app_version";
+
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
 
 const state = {
@@ -10,6 +13,7 @@ const state = {
   currentBlankSet: new Set(),
   hintRevealTimer: null,
   revealAllTimer: null,
+  autoRevealTimer: null,
   hintQueue: [],
   hintQueueKey: "",
   hintShown: false,
@@ -85,6 +89,39 @@ function pickVoice() {
     if (found) return found;
   }
   return availableKoVoices[0] || null;
+}
+
+function parseVersion(v) {
+  if (!v || typeof v !== "string") return [0, 0, 0];
+  return v.replace(/^v/i, "").split(".").map(n => parseInt(n, 10) || 0);
+}
+
+function compareVersions(a, b) {
+  const av = parseVersion(a);
+  const bv = parseVersion(b);
+  const len = Math.max(av.length, bv.length);
+  for (let i = 0; i < len; i++) {
+    const x = av[i] || 0;
+    const y = bv[i] || 0;
+    if (x !== y) return x - y;
+  }
+  return 0;
+}
+
+function checkVersionAndMigrate() {
+  let stored = null;
+  try { stored = localStorage.getItem(VERSION_KEY); } catch (e) {}
+  if (stored === null) {
+    try { localStorage.setItem(VERSION_KEY, APP_VERSION); } catch (e) {}
+    return;
+  }
+  if (compareVersions(APP_VERSION, stored) > 0) {
+    try {
+      localStorage.removeItem(SETTINGS_KEY);
+      localStorage.setItem(VERSION_KEY, APP_VERSION);
+    } catch (e) {}
+    console.info(`[romans8] version ${stored} → ${APP_VERSION}: settings reset`);
+  }
 }
 
 function saveSettings() {
@@ -225,6 +262,7 @@ function clearTimers() {
   if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
   if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
   if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
+  if (state.autoRevealTimer) { clearTimeout(state.autoRevealTimer); state.autoRevealTimer = null; }
 }
 
 function updateProgress() {
@@ -294,6 +332,23 @@ function showQuestion(fadeIn = false) {
 
   if (state.config.autoRevealOnMove) {
     showAll();
+    const previewMs = (state.config.revealSeconds || 30) * 1000;
+    state.autoRevealTimer = setTimeout(() => {
+      state.autoRevealTimer = null;
+      state.hintShown = false;
+      const nBox = $("questionBox");
+      const nQt = $("questionText");
+      nQt.style.transition = "none";
+      nQt.style.transitionDuration = "0s";
+      nBox.classList.remove("reveal-all", "wrong", "correct", "hidden-state");
+      renderQuestionBody();
+      void nQt.offsetWidth;
+      nQt.style.transition = "";
+      nQt.style.transitionDuration = "";
+      updateHintBtn();
+      updateViewToggleBtn();
+      if (state.config.hideEnabled) startHideTimer();
+    }, previewMs);
     return;
   }
 
@@ -408,13 +463,6 @@ function toggleAutoReveal() {
   $("autoRevealOnMove").checked = state.config.autoRevealOnMove;
   saveSettings();
   updateAutoRevealBtn();
-  const box = $("questionBox");
-  if (!box) return;
-  if (state.config.autoRevealOnMove) {
-    if (!box.classList.contains("reveal-all")) showAll();
-  } else {
-    if (box.classList.contains("reveal-all") && !box.classList.contains("correct") && !box.classList.contains("wrong")) hideAll();
-  }
 }
 
 function speakCurrentVerse() {
@@ -678,6 +726,9 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshVoiceList();
     window.speechSynthesis.onvoiceschanged = refreshVoiceList;
   }
+  checkVersionAndMigrate();
+  const vEl = $("appVersion");
+  if (vEl) vEl.textContent = "v" + APP_VERSION;
   loadSettings();
   applyBookRangeToInputs(true);
   $("bookKey").addEventListener("change", () => {

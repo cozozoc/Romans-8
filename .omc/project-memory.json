@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1776347365024,
+  "lastScanned": 1776468695065,
   "projectRoot": "f:\\Project\\claude_code\\Romans8_memorization",
   "techStack": {
     "languages": [
@@ -37,54 +37,43 @@
     "gitBranches": null
   },
   "customNotes": [],
-  "directoryMap": {},
+  "directoryMap": {
+    "신약": {
+      "path": "신약",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1776468695026,
+      "keyFiles": [
+        "고린도전서_13장.txt",
+        "로마서_8장.txt",
+        "시편_1편.txt"
+      ]
+    },
+    "data": {
+      "path": "data",
+      "purpose": "Data files",
+      "fileCount": 0,
+      "lastAccessed": 1776468695026,
+      "keyFiles": []
+    }
+  },
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 195,
-      "lastAccessed": 1776467884358,
+      "accessCount": 2,
+      "lastAccessed": 1776468725240,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 64,
-      "lastAccessed": 1776467765717,
-      "type": "file"
-    },
-    {
-      "path": "style.css",
-      "accessCount": 26,
-      "lastAccessed": 1776467830719,
-      "type": "file"
-    },
-    {
-      "path": "",
-      "accessCount": 17,
-      "lastAccessed": 1776466812860,
-      "type": "directory"
-    },
-    {
-      "path": "requirements.txt",
-      "accessCount": 8,
-      "lastAccessed": 1776347577177,
-      "type": "file"
-    },
-    {
-      "path": "verses.js",
       "accessCount": 2,
-      "lastAccessed": 1776467194039,
+      "lastAccessed": 1776468726426,
       "type": "file"
     },
     {
-      "path": "신약\\고린도전서_13장.txt",
+      "path": "C:\\Users\\thomas\\.claude\\projects\\f--Project-claude-code-Romans8-memorization\\memory\\feedback_version_bump.md",
       "accessCount": 1,
-      "lastAccessed": 1776466989283,
-      "type": "file"
-    },
-    {
-      "path": "data\\bible\\1corinthians.json",
-      "accessCount": 1,
-      "lastAccessed": 1776467029464,
+      "lastAccessed": 1776468705594,
       "type": "file"
     }
   ],
