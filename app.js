@@ -18,9 +18,9 @@ const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level
 const DEFAULT_SETTINGS = {
   startVerse: "1",
   endVerse: "39",
-  hideEnabled: true,
+  hideEnabled: false,
   inputEnabled: true,
-  revealSeconds: "20",
+  revealSeconds: "30",
   level: "5",
   continuousCount: "1",
 };
@@ -114,7 +114,7 @@ function startTest() {
     inputEnabled: $("inputEnabled").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 5)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
-    revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 20),
+    revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 30),
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -409,7 +409,7 @@ function revealAllThenAdvance() {
   $("submitBtn").disabled = true;
   $("answerInput").disabled = true;
 
-  const delay = Math.max(500, (state.config.revealSeconds || 20) * 1000);
+  const delay = Math.max(500, (state.config.revealSeconds || 30) * 1000);
   console.log("[reveal] scheduling advance in", delay, "ms");
   state.revealAllTimer = setTimeout(() => {
     console.log("[reveal] timer fired -> handleCorrectAdvance");
