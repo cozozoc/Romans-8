@@ -1,0 +1,20 @@
+{
+  "name": "로마서 8장 암송 테스트",
+  "short_name": "롬8 암송",
+  "description": "개역개정 로마서 8장을 빈칸 맞추기로 암송하는 학습 도구",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#667eea",
+  "theme_color": "#5568d3",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -9,17 +9,40 @@ const state = {
   currentBlankSet: new Set(),
   hintRevealTimer: null,
   revealAllTimer: null,
+  hintQueue: [],
+  hintQueueKey: "",
 };
 
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
+const THEME_KEY = "romans8_theme";
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  const btn = $("themeBtn");
+  if (btn) btn.textContent = theme === "dark" ? "☀" : "🌙";
+}
+function loadTheme() {
+  let theme;
+  try { theme = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (!theme) {
+    theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  applyTheme(theme);
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  const next = cur === "dark" ? "light" : "dark";
+  applyTheme(next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+}
 const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds"];
 const DEFAULT_SETTINGS = {
   startVerse: "1",
   endVerse: "39",
   hideEnabled: false,
-  inputEnabled: true,
+  inputEnabled: false,
   revealSeconds: "30",
   level: "5",
   continuousCount: "1",
@@ -242,7 +265,7 @@ function hideAll() {
   qt.style.transitionDuration = "0s";
   box.classList.remove("reveal-all", "wrong", "correct");
   renderQuestionBody();
-  box.classList.add("hidden-state");
+  if (state.config && state.config.hideEnabled) box.classList.add("hidden-state");
   void qt.offsetWidth;
   qt.style.transition = "";
   qt.style.transitionDuration = "";
@@ -285,6 +308,28 @@ function toggleInputEnabled() {
   applyInputVisibility();
 }
 
+function speakCurrentVerse() {
+  const synth = window.speechSynthesis;
+  if (!synth) { alert("이 브라우저는 음성 합성을 지원하지 않습니다."); return; }
+  const btn = $("speakBtn");
+  if (synth.speaking) {
+    synth.cancel();
+    if (btn) btn.textContent = "🔊 낭독";
+    return;
+  }
+  const verse = ROMANS_8[state.currentVerse];
+  if (!verse) return;
+  const u = new SpeechSynthesisUtterance(verse);
+  u.lang = "ko-KR";
+  u.rate = 0.95;
+  const koVoice = synth.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith("ko"));
+  if (koVoice) u.voice = koVoice;
+  u.onend = () => { if (btn) btn.textContent = "🔊 낭독"; };
+  u.onerror = () => { if (btn) btn.textContent = "🔊 낭독"; };
+  synth.speak(u);
+  if (btn) btn.textContent = "⏹ 중지";
+}
+
 function useHint() {
   const box = $("questionBox");
   // 이미 전체 보기 상태면 힌트 무시
@@ -295,7 +340,22 @@ function useHint() {
 
   const blanks = [...state.currentBlankSet];
   if (blanks.length === 0) return;
-  const idx = blanks[Math.floor(Math.random() * blanks.length)];
+  const key = state.currentVerse + ":" + blanks.slice().sort((a, b) => a - b).join(",");
+  if (key !== state.hintQueueKey || state.hintQueue.length === 0) {
+    const shuffled = blanks.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    // 새 싸이클 첫 항목이 직전 노출과 같으면 두 번째와 스왑하여 즉시 반복 방지
+    if (state.hintLastIdx != null && shuffled.length > 1 && shuffled[0] === state.hintLastIdx) {
+      [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+    }
+    state.hintQueue = shuffled;
+    state.hintQueueKey = key;
+  }
+  const idx = state.hintQueue.shift();
+  state.hintLastIdx = idx;
 
   // 힌트 한 단어만 revealed 처리 (매번 새로운 랜덤 위치)
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
@@ -303,6 +363,8 @@ function useHint() {
   $("questionText").innerHTML = labelHtml + body;
 
   if (state.hintRevealTimer) clearTimeout(state.hintRevealTimer);
+  // 숨기기 기능이 꺼져 있으면 힌트 자동 되돌림 타이머도 동작하지 않음
+  if (!state.config.hideEnabled) return;
   state.hintRevealTimer = setTimeout(() => {
     state.hintRevealTimer = null;
     // 사용자가 수동으로 전체 보기/오답/정답 상태로 바꿨다면 그 상태를 존중
@@ -346,9 +408,11 @@ function showWrongReveal(expected, actual) {
   const total = state.config.revealSeconds;
   const fadeSec = Math.max(0.5, total - 2);
   qt.style.transitionDuration = fadeSec + "s";
-  state.hideTimer = setTimeout(() => {
-    box.classList.add("hidden-state");
-  }, 2000);
+  if (state.config.hideEnabled) {
+    state.hideTimer = setTimeout(() => {
+      box.classList.add("hidden-state");
+    }, 2000);
+  }
   state.revealAllTimer = setTimeout(() => {
     state.revealAllTimer = null;
     showQuestion(true);
@@ -459,11 +523,19 @@ function finishAll() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadTheme();
+  $("themeBtn").addEventListener("click", toggleTheme);
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
   loadSettings();
   $("startBtn").addEventListener("click", startTest);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
+  $("speakBtn").addEventListener("click", speakCurrentVerse);
   $("viewToggleBtn").addEventListener("click", toggleViewAll);
   $("inputToggleBtn").addEventListener("click", toggleInputEnabled);
   $("nextBtn").addEventListener("click", forceNextVerse);

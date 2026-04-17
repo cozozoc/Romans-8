@@ -4,11 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>로마서 8장 암송 테스트</title>
+<meta name="theme-color" content="#5568d3">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="style.css">
+<script>
+  (function() {
+    try {
+      var t = localStorage.getItem("romans8_theme");
+      if (!t) t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 <div class="container">
   <header class="app-header">
+    <button id="themeBtn" class="help-btn theme-btn" aria-label="테마 전환" title="라이트/다크 전환">🌙</button>
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>로마서 8장 암송 테스트</h1>
     <p class="subtitle">개역개정 · 직접 입력 하면서 외우기</p>
@@ -39,6 +53,8 @@
         <ul>
           <li><b>제출</b>: 입력한 전체 구절을 채점 — 일치하면 파란색으로 표시 후 다음 단계로 이동</li>
           <li><b>💡 힌트</b>: 누를 때마다 빈칸 중 하나를 랜덤 위치로 즉시 공개 (숨김 ON/OFF 무관하게 계속 누를 수 있음)</li>
+          <li><b>🔊 낭독</b>: 현재 구절을 한국어 음성으로 읽어줍니다. 다시 누르면 중지</li>
+          <li><b>🌙 / ☀ 테마 버튼 (우측 상단)</b>: 라이트/다크 모드 전환</li>
           <li><b>👁 전체 보기 / 🙈 전체 숨기기</b>: 빈칸을 포함한 구절 전체 토글</li>
           <li><b>⌨ 입력 ON/OFF</b>: 타이핑 영역 표시 여부 토글</li>
           <li><b>◀ Prev / Next ▶</b>: 구절 수동 이동 (연속 카운트 초기화)</li>
@@ -84,7 +100,7 @@
       <div class="form-row toggle-row">
         <label for="inputEnabled">텍스트 입력</label>
         <label class="switch">
-          <input type="checkbox" id="inputEnabled" checked>
+          <input type="checkbox" id="inputEnabled">
           <span class="slider"></span>
         </label>
       </div>
@@ -155,6 +171,7 @@
       <div class="button-row">
         <button id="submitBtn" class="primary">제출</button>
         <button id="hintBtn" class="secondary">💡 힌트</button>
+        <button id="speakBtn" class="secondary" title="현재 구절 낭독">🔊 낭독</button>
         <button id="viewToggleBtn" class="secondary">👁 전체 보기</button>
         <button id="inputToggleBtn" class="secondary">⌨ 입력 ON</button>
         <button id="prevBtn" class="secondary">◀ Prev</button>
