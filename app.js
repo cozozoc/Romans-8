@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.2";
+const APP_VERSION = "0.0.3";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -329,28 +329,6 @@ function showQuestion(fadeIn = false) {
   updateViewToggleBtn();
   updateAutoRevealBtn();
   applyInputVisibility();
-
-  if (state.config.autoRevealOnMove) {
-    showAll();
-    const previewMs = (state.config.revealSeconds || 30) * 1000;
-    state.autoRevealTimer = setTimeout(() => {
-      state.autoRevealTimer = null;
-      state.hintShown = false;
-      const nBox = $("questionBox");
-      const nQt = $("questionText");
-      nQt.style.transition = "none";
-      nQt.style.transitionDuration = "0s";
-      nBox.classList.remove("reveal-all", "wrong", "correct", "hidden-state");
-      renderQuestionBody();
-      void nQt.offsetWidth;
-      nQt.style.transition = "";
-      nQt.style.transitionDuration = "";
-      updateHintBtn();
-      updateViewToggleBtn();
-      if (state.config.hideEnabled) startHideTimer();
-    }, previewMs);
-    return;
-  }
 
   const startHideIfNeeded = () => {
     if (state.config.hideEnabled) startHideTimer();
@@ -688,7 +666,7 @@ function handleCorrectAdvance() {
   showQuestion();
 }
 
-function forceNextVerse() {
+function advanceNext() {
   clearTimers();
   const { endVerse } = state.config;
   if (state.currentVerse >= endVerse) {
@@ -700,13 +678,56 @@ function forceNextVerse() {
   showQuestion();
 }
 
-function forcePrevVerse() {
+function advancePrev() {
   clearTimers();
   const { startVerse } = state.config;
   if (state.currentVerse <= startVerse) return;
   state.currentVerse--;
   state.correctStreak = 0;
   showQuestion();
+}
+
+function previewThenRun(fn) {
+  const canPreview = state.config
+    && state.config.autoRevealOnMove
+    && state.currentWords
+    && state.currentWords.length
+    && state.currentBlankSet
+    && state.currentBlankSet.size > 0;
+  if (!canPreview) { fn(); return; }
+  if (state.autoRevealTimer) {
+    clearTimeout(state.autoRevealTimer);
+    state.autoRevealTimer = null;
+    fn();
+    return;
+  }
+  clearTimers();
+  state.hintShown = false;
+  const box = $("questionBox");
+  const qt = $("questionText");
+  qt.style.transition = "none";
+  qt.style.transitionDuration = "0s";
+  box.classList.remove("hidden-state", "wrong", "correct");
+  box.classList.add("reveal-all");
+  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
+  $("questionText").innerHTML = labelHtml + body;
+  void qt.offsetWidth;
+  qt.style.transition = "";
+  qt.style.transitionDuration = "";
+  updateViewToggleBtn();
+  state.autoRevealTimer = setTimeout(() => {
+    state.autoRevealTimer = null;
+    fn();
+  }, 2000);
+}
+
+function forceNextVerse() {
+  previewThenRun(advanceNext);
+}
+
+function forcePrevVerse() {
+  previewThenRun(advancePrev);
 }
 
 function finishAll() {
