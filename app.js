@@ -36,13 +36,8 @@ function saveSettings() {
 }
 function resetSettings() {
   if (!confirm("모든 설정을 기본값으로 초기화할까요?")) return;
-  Object.entries(DEFAULT_SETTINGS).forEach(([id, val]) => {
-    const el = $(id);
-    if (!el) return;
-    if (el.type === "checkbox") el.checked = val;
-    else el.value = val;
-  });
   try { localStorage.removeItem(SETTINGS_KEY); } catch (e) {}
+  location.reload();
 }
 
 function loadSettings() {
