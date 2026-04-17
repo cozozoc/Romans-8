@@ -41,32 +41,50 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 168,
-      "lastAccessed": 1776379436298,
+      "accessCount": 195,
+      "lastAccessed": 1776467884358,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 55,
-      "lastAccessed": 1776379423536,
+      "accessCount": 64,
+      "lastAccessed": 1776467765717,
       "type": "file"
     },
     {
       "path": "style.css",
-      "accessCount": 25,
-      "lastAccessed": 1776378621164,
+      "accessCount": 26,
+      "lastAccessed": 1776467830719,
       "type": "file"
     },
     {
       "path": "",
-      "accessCount": 16,
-      "lastAccessed": 1776355472274,
+      "accessCount": 17,
+      "lastAccessed": 1776466812860,
       "type": "directory"
     },
     {
       "path": "requirements.txt",
       "accessCount": 8,
       "lastAccessed": 1776347577177,
+      "type": "file"
+    },
+    {
+      "path": "verses.js",
+      "accessCount": 2,
+      "lastAccessed": 1776467194039,
+      "type": "file"
+    },
+    {
+      "path": "신약\\고린도전서_13장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776466989283,
+      "type": "file"
+    },
+    {
+      "path": "data\\bible\\1corinthians.json",
+      "accessCount": 1,
+      "lastAccessed": 1776467029464,
       "type": "file"
     }
   ],

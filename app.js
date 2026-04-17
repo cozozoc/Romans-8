@@ -2,6 +2,7 @@ const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8:
 
 const state = {
   config: null,
+  book: null,
   currentVerse: 1,
   correctStreak: 0,
   hideTimer: null,
@@ -11,17 +12,20 @@ const state = {
   revealAllTimer: null,
   hintQueue: [],
   hintQueueKey: "",
+  hintShown: false,
 };
 
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["startVerse","endVerse","hideEnabled","inputEnabled","level","continuousCount","revealSeconds","ttsVoice","ttsRate"];
+const SETTING_IDS = ["bookKey","startVerse","endVerse","hideEnabled","inputEnabled","autoRevealOnMove","level","continuousCount","revealSeconds","ttsVoice","ttsRate"];
 const DEFAULT_SETTINGS = {
+  bookKey: DEFAULT_BOOK_KEY,
   startVerse: "1",
   endVerse: "39",
   hideEnabled: false,
   inputEnabled: false,
+  autoRevealOnMove: false,
   revealSeconds: "30",
   level: "1",
   continuousCount: "1",
@@ -159,12 +163,47 @@ function pickBlankIndices(wordCount, level) {
   return new Set(indices.slice(0, blankCount));
 }
 
+function getSelectedBook() {
+  const key = ($("bookKey") && $("bookKey").value) || DEFAULT_BOOK_KEY;
+  return BIBLE_LIBRARY[key] || BIBLE_LIBRARY[DEFAULT_BOOK_KEY];
+}
+
+function applyBookRangeToInputs(clamp = true) {
+  const book = getSelectedBook();
+  const sv = $("startVerse");
+  const ev = $("endVerse");
+  const sh = $("startVerseHint");
+  const eh = $("endVerseHint");
+  if (!sv || !ev) return;
+  sv.min = String(book.startVerse);
+  sv.max = String(book.endVerse);
+  ev.min = String(book.startVerse);
+  ev.max = String(book.endVerse);
+  const rangeText = `${book.startVerse}~${book.endVerse}`;
+  if (sh) sh.textContent = rangeText;
+  if (eh) eh.textContent = rangeText;
+  if (clamp) {
+    let s = parseInt(sv.value) || book.startVerse;
+    let e = parseInt(ev.value) || book.endVerse;
+    s = Math.max(book.startVerse, Math.min(book.endVerse, s));
+    e = Math.max(book.startVerse, Math.min(book.endVerse, e));
+    if (s > e) { s = book.startVerse; e = book.endVerse; }
+    sv.value = String(s);
+    ev.value = String(e);
+  }
+}
+
 function startTest() {
+  const book = getSelectedBook();
+  const min = book.startVerse;
+  const max = book.endVerse;
   const cfg = {
-    startVerse: Math.max(1, Math.min(39, parseInt($("startVerse").value) || 1)),
-    endVerse: Math.max(1, Math.min(39, parseInt($("endVerse").value) || 39)),
+    bookKey: book.key,
+    startVerse: Math.max(min, Math.min(max, parseInt($("startVerse").value) || min)),
+    endVerse: Math.max(min, Math.min(max, parseInt($("endVerse").value) || max)),
     hideEnabled: $("hideEnabled").checked,
     inputEnabled: $("inputEnabled").checked,
+    autoRevealOnMove: $("autoRevealOnMove").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
     revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 30),
@@ -173,6 +212,7 @@ function startTest() {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
     return;
   }
+  state.book = book;
   state.config = cfg;
   saveSettings();
   state.currentVerse = cfg.startVerse;
@@ -216,7 +256,7 @@ function startHideTimer() {
 
 function showQuestion(fadeIn = false) {
   clearTimers();
-  const verse = ROMANS_8[state.currentVerse];
+  const verse = state.book.verses[state.currentVerse];
   const words = splitWords(verse);
   state.currentWords = words;
   const level = state.config.level;
@@ -230,6 +270,7 @@ function showQuestion(fadeIn = false) {
 
   updateProgress();
 
+  state.hintShown = false;
   const box = $("questionBox");
   const qt = $("questionText");
   qt.style.transition = "none";
@@ -246,8 +287,15 @@ function showQuestion(fadeIn = false) {
   $("answerInput").disabled = false;
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
+  updateHintBtn();
   updateViewToggleBtn();
+  updateAutoRevealBtn();
   applyInputVisibility();
+
+  if (state.config.autoRevealOnMove) {
+    showAll();
+    return;
+  }
 
   const startHideIfNeeded = () => {
     if (state.config.hideEnabled) startHideTimer();
@@ -273,6 +321,7 @@ function showAll() {
   const qt = $("questionText");
   clearTimers();
 
+  state.hintShown = false;
   qt.style.transition = "none";
   qt.style.transitionDuration = "0s";
   box.classList.remove("hidden-state", "wrong", "correct");
@@ -287,6 +336,7 @@ function showAll() {
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
   $("answerInput").disabled = false;
+  updateHintBtn();
   updateViewToggleBtn();
   $("answerInput").focus();
 }
@@ -296,6 +346,7 @@ function hideAll() {
   const qt = $("questionText");
   clearTimers();
 
+  state.hintShown = false;
   qt.style.transition = "none";
   qt.style.transitionDuration = "0s";
   box.classList.remove("reveal-all", "wrong", "correct");
@@ -308,6 +359,7 @@ function hideAll() {
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
   $("answerInput").disabled = false;
+  updateHintBtn();
   updateViewToggleBtn();
   $("answerInput").focus();
 }
@@ -343,6 +395,28 @@ function toggleInputEnabled() {
   applyInputVisibility();
 }
 
+function updateAutoRevealBtn() {
+  const btn = $("autoRevealBtn");
+  if (!btn) return;
+  const on = !!(state.config && state.config.autoRevealOnMove);
+  btn.textContent = on ? "📖 자동보기 ON" : "📖 자동보기 OFF";
+}
+
+function toggleAutoReveal() {
+  if (!state.config) return;
+  state.config.autoRevealOnMove = !state.config.autoRevealOnMove;
+  $("autoRevealOnMove").checked = state.config.autoRevealOnMove;
+  saveSettings();
+  updateAutoRevealBtn();
+  const box = $("questionBox");
+  if (!box) return;
+  if (state.config.autoRevealOnMove) {
+    if (!box.classList.contains("reveal-all")) showAll();
+  } else {
+    if (box.classList.contains("reveal-all") && !box.classList.contains("correct") && !box.classList.contains("wrong")) hideAll();
+  }
+}
+
 function speakCurrentVerse() {
   const synth = window.speechSynthesis;
   if (!synth) { alert("이 브라우저는 음성 합성을 지원하지 않습니다."); return; }
@@ -352,7 +426,7 @@ function speakCurrentVerse() {
     if (btn) btn.textContent = "🔊 낭독";
     return;
   }
-  const verse = ROMANS_8[state.currentVerse];
+  const verse = state.book.verses[state.currentVerse];
   if (!verse) return;
   if (availableKoVoices.length === 0) refreshVoiceList();
   const voice = pickVoice();
@@ -370,13 +444,38 @@ function speakCurrentVerse() {
   if (btn) btn.textContent = "⏹ 중지";
 }
 
-function useHint() {
+function updateHintBtn() {
+  const btn = $("hintBtn");
+  if (!btn) return;
+  btn.textContent = state.hintShown ? "💡 힌트 숨기기" : "💡 힌트 보기";
+}
+
+function hideHint() {
+  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
   const box = $("questionBox");
-  // 이미 전체 보기 상태면 힌트 무시
+  const qt = $("questionText");
+  qt.style.transition = "none";
+  qt.style.transitionDuration = "0s";
+  renderQuestionBody();
+  if (state.config && state.config.hideEnabled
+      && !box.classList.contains("reveal-all")
+      && !box.classList.contains("wrong")
+      && !box.classList.contains("correct")) {
+    box.classList.add("hidden-state");
+  }
+  void qt.offsetWidth;
+  qt.style.transition = "";
+  qt.style.transitionDuration = "";
+  state.hintShown = false;
+  updateHintBtn();
+  updateViewToggleBtn();
+}
+
+function showHint() {
+  const box = $("questionBox");
   if (box.classList.contains("reveal-all")) return;
-  // 숨김 상태 일시 해제
-  const wasHidden = box.classList.contains("hidden-state");
-  if (wasHidden) box.classList.remove("hidden-state");
+  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
+  if (box.classList.contains("hidden-state")) box.classList.remove("hidden-state");
 
   const blanks = [...state.currentBlankSet];
   if (blanks.length === 0) return;
@@ -387,7 +486,6 @@ function useHint() {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    // 새 싸이클 첫 항목이 직전 노출과 같으면 두 번째와 스왑하여 즉시 반복 방지
     if (state.hintLastIdx != null && shuffled.length > 1 && shuffled[0] === state.hintLastIdx) {
       [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
     }
@@ -397,30 +495,33 @@ function useHint() {
   const idx = state.hintQueue.shift();
   state.hintLastIdx = idx;
 
-  // 힌트 한 단어만 revealed 처리 (매번 새로운 랜덤 위치)
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set([idx]));
   $("questionText").innerHTML = labelHtml + body;
 
+  state.hintShown = true;
+  updateHintBtn();
+  updateViewToggleBtn();
+
   if (state.hintRevealTimer) clearTimeout(state.hintRevealTimer);
-  // 숨기기 기능이 꺼져 있으면 힌트 자동 되돌림 타이머도 동작하지 않음
   if (!state.config.hideEnabled) return;
   state.hintRevealTimer = setTimeout(() => {
     state.hintRevealTimer = null;
-    // 사용자가 수동으로 전체 보기/오답/정답 상태로 바꿨다면 그 상태를 존중
     if (box.classList.contains("reveal-all")
         || box.classList.contains("wrong")
         || box.classList.contains("correct")) return;
-    renderQuestionBody();
-    // 현재 숨김 상태가 아닐 때만, 그리고 최초에 숨김이었던 경우에만 복구
-    if (wasHidden && !box.classList.contains("hidden-state")) {
-      box.classList.add("hidden-state");
-    }
+    hideHint();
   }, state.config.revealSeconds * 1000);
+}
+
+function useHint() {
+  if (state.hintShown) hideHint();
+  else showHint();
 }
 
 function showWrongReveal(expected, actual) {
   clearTimers();
+  state.hintShown = false;
   const box = $("questionBox");
   const qt = $("questionText");
   qt.style.transition = "none";
@@ -434,6 +535,8 @@ function showWrongReveal(expected, actual) {
   $("answerInput").disabled = false;
   $("answerInput").value = "";
   $("answerInput").focus();
+  updateHintBtn();
+  updateViewToggleBtn();
 
   const ew = splitWords(expected);
   const aw = splitWords(actual);
@@ -477,7 +580,7 @@ function renderDiff(expected, actual) {
 }
 
 function submit() {
-  const verse = ROMANS_8[state.currentVerse];
+  const verse = state.book.verses[state.currentVerse];
   const userInput = $("answerInput").value;
   if (!userInput.trim()) return;
 
@@ -500,6 +603,7 @@ function submit() {
 function revealAllThenAdvance() {
   // 모든 타이머 중지 후, 같은 위치에서 빈칸을 채워 2초간 표시
   clearTimers();
+  state.hintShown = false;
   const box = $("questionBox");
   box.classList.remove("hidden-state");
   box.classList.add("reveal-all", "correct");
@@ -509,6 +613,8 @@ function revealAllThenAdvance() {
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
   $("answerInput").disabled = true;
+  updateHintBtn();
+  updateViewToggleBtn();
 
   const delay = Math.max(500, (state.config.revealSeconds || 30) * 1000);
   console.log("[reveal] scheduling advance in", delay, "ms");
@@ -558,7 +664,7 @@ function forcePrevVerse() {
 function finishAll() {
   clearTimers();
   $("doneMessage").textContent =
-    `로마서 8장 ${state.config.startVerse}절부터 ${state.config.endVerse}절까지 암송을 완료하셨습니다!`;
+    `${state.book.name} ${state.config.startVerse}절부터 ${state.config.endVerse}절까지 암송을 완료하셨습니다!`;
   showScreen("done-screen");
 }
 
@@ -573,6 +679,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.speechSynthesis.onvoiceschanged = refreshVoiceList;
   }
   loadSettings();
+  applyBookRangeToInputs(true);
+  $("bookKey").addEventListener("change", () => {
+    applyBookRangeToInputs(true);
+    saveSettings();
+  });
   $("startBtn").addEventListener("click", startTest);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("submitBtn").addEventListener("click", submit);
@@ -580,6 +691,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("speakBtn").addEventListener("click", speakCurrentVerse);
   $("viewToggleBtn").addEventListener("click", toggleViewAll);
   $("inputToggleBtn").addEventListener("click", toggleInputEnabled);
+  $("autoRevealBtn").addEventListener("click", toggleAutoReveal);
   $("nextBtn").addEventListener("click", forceNextVerse);
   $("prevBtn").addEventListener("click", forcePrevVerse);
   $("quitBtn").addEventListener("click", () => {

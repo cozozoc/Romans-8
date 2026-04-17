@@ -27,13 +27,15 @@
       </div>
       <div class="modal-body">
         <h3>🎯 개요</h3>
-        <p>개역개정 로마서 8장(1~39절)을 구절 단위로 반복 학습하며 암송하는 도구입니다. 각 구절에서 난이도에 따라 일부 단어가 빈칸으로 가려지고, 힌트·낭독·전체보기 등을 활용해 구절을 익힙니다.</p>
+        <p>개역개정 성경의 선택한 본문(현재 로마서 8장, 고린도전서 13장)을 구절 단위로 반복 학습하며 암송하는 도구입니다. 각 구절에서 난이도에 따라 일부 단어가 빈칸으로 가려지고, 힌트·낭독·전체보기 등을 활용해 구절을 익힙니다.</p>
 
         <h3>⚙️ 설정 화면</h3>
         <ul>
-          <li><b>시작 / 끝 구절</b>: 학습할 범위 (1~39절)</li>
+          <li><b>본문 선택</b>: 학습할 성경 본문(장 단위). 선택에 따라 시작/끝 구절의 허용 범위가 자동 조정됩니다.</li>
+          <li><b>시작 / 끝 구절</b>: 선택한 본문 내에서 학습할 범위.</li>
           <li><b>숨기기 기능</b> <i>(기본 OFF)</i>: ON일 때 문제가 2초 노출 후 서서히 흐려져 사라짐. OFF면 전체·힌트·오답 화면도 자동 숨김 동작이 모두 멈춥니다.</li>
           <li><b>텍스트 입력</b> <i>(기본 OFF)</i>: 키보드로 전체 구절을 타이핑하여 제출할지 여부. OFF면 입력 영역과 제출 버튼이 숨겨지고 힌트·전체 보기·낭독으로만 연습.</li>
+          <li><b>구절 이동 시 자동 전체보기</b> <i>(기본 OFF)</i>: ON이면 구절이 바뀔 때마다 빈칸 없이 전체 본문이 바로 표시됨. 문제풀이 화면의 <b>📖 자동보기</b> 버튼으로도 즉시 토글 가능.</li>
           <li><b>문제 보는 시간</b> <i>(기본 30초)</i>: 숨기기 ON일 때 노출 → 페이드아웃 → 자동 진행까지 걸리는 총 시간.</li>
           <li><b>난이도 레벨</b> <i>(기본 Lv.1)</i>: Lv.1(10%) ~ Lv.10(100%). 단어 중 해당 비율이 빈칸으로 바뀜.</li>
           <li><b>연속 정답 횟수</b> <i>(기본 1회)</i>: 이 횟수만큼 연속 정답해야 다음 구절로 이동.</li>
@@ -55,9 +57,10 @@
         <h3>📝 테스트 화면 버튼</h3>
         <ul>
           <li><b>제출</b>: 입력한 전체 구절을 채점. 정답이면 구절 전체가 파랗게 강조된 뒤 자동으로 다음 단계로 이동, 오답이면 틀린 단어가 표시됩니다.</li>
-          <li><b>💡 힌트</b>: 빈칸들을 셔플 큐 방식으로 <b>한 싸이클 동안 각 1회씩 균등</b>하게 공개. 싸이클이 끝나면 다시 셔플해서 새 싸이클 시작.</li>
+          <li><b>💡 힌트 보기 / 힌트 숨기기</b>: 토글 버튼. "보기"를 누르면 셔플 큐의 다음 빈칸 하나를 공개하고, "숨기기"를 누르면 즉시 감춥니다. 셔플 큐는 한 싸이클 동안 각 빈칸이 1회씩 균등하게 공개되도록 동작합니다.</li>
           <li><b>🔊 낭독</b>: 현재 구절을 한국어 음성으로 읽어줍니다. 재클릭 시 중지 (브라우저/OS 음성 지원 필요).</li>
           <li><b>👁 전체 보기 / 🙈 전체 숨기기</b>: 빈칸 포함 여부 토글. 숨기기 OFF 상태에서는 "전체 숨기기"가 빈칸 있는 원래 상태로 복귀.</li>
+          <li><b>📖 자동보기 ON / OFF</b>: 구절 이동 시 자동으로 전체 본문을 보여줄지 토글. ON 상태면 이동 즉시 전체 문장이 표시되고, 힌트/제출/빈칸 모드로 돌아가려면 "🙈 전체 숨기기"를 누르거나 OFF로 전환.</li>
           <li><b>⌨ 입력 ON / OFF</b>: 타이핑 영역과 제출 버튼의 표시 여부 토글.</li>
           <li><b>◀ Prev / Next ▶</b>: 구절 수동 이동 (연속 정답 카운트 초기화).</li>
           <li><b>종료</b>: 진행 중인 테스트를 중단하고 설정 화면으로 복귀.</li>
@@ -92,12 +95,19 @@
   <section id="setup-screen" class="screen">
     <h2>테스트 설정</h2>
     <div class="settings-grid">
+      <div class="form-row full-width">
+        <label for="bookKey">본문 선택</label>
+        <select id="bookKey">
+          <option value="romans-8">로마서 8장 (1~39절)</option>
+          <option value="1corinthians-13">고린도전서 13장 (1~13절)</option>
+        </select>
+      </div>
       <div class="form-row">
-        <label for="startVerse">시작 구절 <span class="hint">1~39</span></label>
+        <label for="startVerse">시작 구절 <span id="startVerseHint" class="hint">1~39</span></label>
         <input type="number" id="startVerse" min="1" max="39" value="1">
       </div>
       <div class="form-row">
-        <label for="endVerse">끝 구절 <span class="hint">1~39</span></label>
+        <label for="endVerse">끝 구절 <span id="endVerseHint" class="hint">1~39</span></label>
         <input type="number" id="endVerse" min="1" max="39" value="39">
       </div>
 
@@ -112,6 +122,13 @@
         <label for="inputEnabled">텍스트 입력</label>
         <label class="switch">
           <input type="checkbox" id="inputEnabled">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="form-row toggle-row">
+        <label for="autoRevealOnMove">구절 이동 시 자동 전체보기</label>
+        <label class="switch">
+          <input type="checkbox" id="autoRevealOnMove">
           <span class="slider"></span>
         </label>
       </div>
@@ -192,9 +209,10 @@
       </div>
       <div class="button-row">
         <button id="submitBtn" class="primary">제출</button>
-        <button id="hintBtn" class="secondary">💡 힌트</button>
+        <button id="hintBtn" class="secondary">💡 힌트 보기</button>
         <button id="speakBtn" class="secondary" title="현재 구절 낭독">🔊 낭독</button>
         <button id="viewToggleBtn" class="secondary">👁 전체 보기</button>
+        <button id="autoRevealBtn" class="secondary" title="구절 이동 시 자동 전체보기 토글">📖 자동보기 OFF</button>
         <button id="inputToggleBtn" class="secondary">⌨ 입력 ON</button>
         <button id="prevBtn" class="secondary">◀ Prev</button>
         <button id="nextBtn" class="secondary">Next ▶</button>
