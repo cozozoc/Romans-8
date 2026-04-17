@@ -409,7 +409,7 @@ button.ghost:hover { background: #f8fafc; }
   border-radius: 14px;
   padding: 28px 28px 32px;
   font-size: 18px;
-  line-height: 2;
+  line-height: 2.4;
   transition: all 0.3s;
 }
 #questionText {
@@ -435,11 +435,12 @@ button.ghost:hover { background: #f8fafc; }
   display: inline-block;
   min-width: 48px;
   padding: 0 6px;
-  margin: 0 2px;
+  margin: 2px 2px;
   background: rgba(255,255,255,0.75);
   border-radius: 4px;
   color: transparent;
   user-select: none;
+  vertical-align: baseline;
   transition: all 0.25s;
 }
 .blank.revealed {
