@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.41";
+const APP_VERSION = "0.0.42";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,7 +22,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","blankAllExceptFirstTwo","mergeBlanks","level","continuousCount","bookmarkedOnly"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -32,8 +32,7 @@ const DEFAULT_SETTINGS = {
   endVerse: "39",
   inputEnabled: false,
   autoRevealOnMove: false,
-  forceFirstTwoBlanks: false,
-  blankAllExceptFirstTwo: false,
+  firstTwoMode: "none",
   mergeBlanks: false,
   level: "1",
   continuousCount: "1",
@@ -258,21 +257,36 @@ function secureRandomInt(maxExclusive) {
   return v % maxExclusive;
 }
 
-function pickBlankIndices(words, level, forceFirstTwo, blankAllExceptFirstTwo) {
+function pickBlankIndices(words, level, mode) {
   const eligible = words.map((w, i) => w === "/" ? -1 : i).filter(i => i >= 0);
-  if (blankAllExceptFirstTwo) {
+  const first = eligible[0];
+  const second = eligible[1];
+
+  if (mode === "showOnly") {
     const keep = new Set();
-    if (eligible.length >= 1) keep.add(eligible[0]);
-    if (eligible.length >= 2) keep.add(eligible[1]);
+    if (first !== undefined) keep.add(first);
+    if (second !== undefined) keep.add(second);
     return new Set(eligible.filter(i => !keep.has(i)));
   }
+  if (mode === "hideOnly") {
+    const out = new Set();
+    if (first !== undefined) out.add(first);
+    if (second !== undefined) out.add(second);
+    return out;
+  }
+
   let blankCount = Math.round(eligible.length * LEVEL_RATIO[level]);
   const forced = [];
-  if (forceFirstTwo) {
-    if (eligible.length >= 1) forced.push(eligible[0]);
-    if (eligible.length >= 2) forced.push(eligible[1]);
+
+  if (mode === "preferFirst") {
+    if (blankCount >= 1 && first !== undefined) forced.push(first);
+    if (blankCount >= 2 && second !== undefined) forced.push(second);
+  } else if (mode === "forceFirst") {
+    if (first !== undefined) forced.push(first);
+    if (second !== undefined) forced.push(second);
+    blankCount = Math.max(blankCount, forced.length);
   }
-  blankCount = Math.max(blankCount, forced.length);
+
   const pool = eligible.filter(i => !forced.includes(i));
   for (let i = pool.length - 1; i > 0; i--) {
     const j = secureRandomInt(i + 1);
@@ -375,8 +389,7 @@ function startTest() {
     endVerse: Math.max(min, Math.min(max, parseInt($("endVerse").value) || max)),
     inputEnabled: $("inputEnabled").checked,
     autoRevealOnMove: $("autoRevealOnMove").checked,
-    forceFirstTwoBlanks: $("forceFirstTwoBlanks").checked,
-    blankAllExceptFirstTwo: $("blankAllExceptFirstTwo").checked,
+    firstTwoMode: $("firstTwoMode").value || "none",
     mergeBlanks: $("mergeBlanks").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
@@ -446,7 +459,7 @@ function showQuestion() {
   const words = splitWords(verse);
   state.currentWords = words;
   const level = state.config.level;
-  state.currentBlankSet = pickBlankIndices(words, level, state.config.forceFirstTwoBlanks, state.config.blankAllExceptFirstTwo);
+  state.currentBlankSet = pickBlankIndices(words, level, state.config.firstTwoMode);
 
   const unit = verseUnit();
   const totalInList = (state.verseList && state.verseList.length) || 1;
@@ -494,7 +507,7 @@ function reshuffleBlanks() {
   if (!state.currentWords || !state.currentWords.length) return;
   clearTimers();
   const level = state.config.level;
-  state.currentBlankSet = pickBlankIndices(state.currentWords, level, state.config.forceFirstTwoBlanks, state.config.blankAllExceptFirstTwo);
+  state.currentBlankSet = pickBlankIndices(state.currentWords, level, state.config.firstTwoMode);
   state.hintShown = false;
   const box = $("questionBox");
   box.classList.remove("reveal-all", "wrong", "correct");
@@ -954,19 +967,8 @@ document.addEventListener("DOMContentLoaded", () => {
     applyBookRangeToInputs(true);
     saveSettings();
   });
-  const firstTwoEl = $("forceFirstTwoBlanks");
-  const exceptFirstTwoEl = $("blankAllExceptFirstTwo");
-  if (firstTwoEl && exceptFirstTwoEl) {
-    if (firstTwoEl.checked && exceptFirstTwoEl.checked) exceptFirstTwoEl.checked = false;
-    firstTwoEl.addEventListener("change", () => {
-      if (firstTwoEl.checked) exceptFirstTwoEl.checked = false;
-      saveSettings();
-    });
-    exceptFirstTwoEl.addEventListener("change", () => {
-      if (exceptFirstTwoEl.checked) firstTwoEl.checked = false;
-      saveSettings();
-    });
-  }
+  const firstTwoModeEl = $("firstTwoMode");
+  if (firstTwoModeEl) firstTwoModeEl.addEventListener("change", saveSettings);
   $("startBtn").addEventListener("click", startTest);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("clearBookmarksBtn").addEventListener("click", () => {
