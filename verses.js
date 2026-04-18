@@ -206,6 +206,7 @@ const BIBLE_LIBRARY = {
     key: "romans-8",
     category: "training",
     name: "로마서 8장",
+    prefix: "사역훈련 1과",
     startVerse: 1,
     endVerse: 39,
     verses: ROMANS_8,

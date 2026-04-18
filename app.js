@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.43";
+const APP_VERSION = "0.0.44";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -51,7 +51,9 @@ function populateBookOptions(category, preserveKey) {
     if (b.chapters) rangeText = `전 ${b.chapterCount}장`;
     else if (b.verseLabels) rangeText = `${b.endVerse}과`;
     else rangeText = `${b.startVerse}~${b.endVerse}절`;
-    opt.textContent = `${b.name} (${rangeText})`;
+    opt.textContent = b.prefix
+      ? `${b.prefix} (${b.name} ${rangeText})`
+      : `${b.name} (${rangeText})`;
     sel.appendChild(opt);
   });
   if (preserveKey && entries.some(b => b.key === preserveKey)) {
