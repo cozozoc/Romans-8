@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.13";
+const APP_VERSION = "0.0.14";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -20,7 +20,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","level","continuousCount","ttsVoice","ttsRate"];
+const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","level","continuousCount","ttsVoice","ttsRate"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   bookKey: DEFAULT_BOOK_KEY,
@@ -28,6 +28,7 @@ const DEFAULT_SETTINGS = {
   endVerse: "39",
   inputEnabled: false,
   autoRevealOnMove: false,
+  forceFirstTwoBlanks: false,
   level: "1",
   continuousCount: "1",
   ttsVoice: "",
@@ -198,14 +199,21 @@ function secureRandomInt(maxExclusive) {
   return v % maxExclusive;
 }
 
-function pickBlankIndices(wordCount, level) {
-  const blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
-  const indices = [...Array(wordCount).keys()];
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = secureRandomInt(i + 1);
-    [indices[i], indices[j]] = [indices[j], indices[i]];
+function pickBlankIndices(wordCount, level, forceFirstTwo) {
+  let blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
+  const forced = [];
+  if (forceFirstTwo) {
+    if (wordCount >= 1) forced.push(0);
+    if (wordCount >= 2) forced.push(1);
   }
-  return new Set(indices.slice(0, blankCount));
+  blankCount = Math.max(blankCount, forced.length);
+  const pool = [...Array(wordCount).keys()].filter(i => !forced.includes(i));
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = secureRandomInt(i + 1);
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const need = Math.max(0, blankCount - forced.length);
+  return new Set([...forced, ...pool.slice(0, need)]);
 }
 
 function getSelectedBook() {
@@ -248,6 +256,7 @@ function startTest() {
     endVerse: Math.max(min, Math.min(max, parseInt($("endVerse").value) || max)),
     inputEnabled: $("inputEnabled").checked,
     autoRevealOnMove: $("autoRevealOnMove").checked,
+    forceFirstTwoBlanks: $("forceFirstTwoBlanks").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
   };
@@ -291,7 +300,7 @@ function showQuestion() {
   const words = splitWords(verse);
   state.currentWords = words;
   const level = state.config.level;
-  state.currentBlankSet = pickBlankIndices(words.length, level);
+  state.currentBlankSet = pickBlankIndices(words.length, level, state.config.forceFirstTwoBlanks);
 
   $("verseInfo").innerHTML = `${state.currentVerse}절 <span class="sub">/ ${state.config.endVerse}절까지</span>`;
   $("levelInfo").innerHTML = `Lv.${level} <span class="sub">(${Math.round(LEVEL_RATIO[level]*100)}%)</span>`;
@@ -321,7 +330,7 @@ function reshuffleBlanks() {
   if (!state.currentWords || !state.currentWords.length) return;
   clearTimers();
   const level = state.config.level;
-  state.currentBlankSet = pickBlankIndices(state.currentWords.length, level);
+  state.currentBlankSet = pickBlankIndices(state.currentWords.length, level, state.config.forceFirstTwoBlanks);
   state.hintShown = false;
   const box = $("questionBox");
   box.classList.remove("reveal-all", "wrong", "correct");
