@@ -119,7 +119,7 @@ const EXPOSED_BIBLE_BOOKS = ["all"];
 const BIBLE_LIBRARY = {
   "romans-8": {
     key: "romans-8",
-    category: "bible",
+    category: "training",
     name: "로마서 8장",
     startVerse: 1,
     endVerse: 39,
@@ -127,7 +127,7 @@ const BIBLE_LIBRARY = {
   },
   "1corinthians-13": {
     key: "1corinthians-13",
-    category: "bible",
+    category: "training",
     name: "고린도전서 13장",
     startVerse: 1,
     endVerse: 13,
@@ -135,7 +135,7 @@ const BIBLE_LIBRARY = {
   },
   "psalms-1": {
     key: "psalms-1",
-    category: "bible",
+    category: "training",
     name: "시편 1편",
     startVerse: 1,
     endVerse: 6,
