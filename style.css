@@ -532,12 +532,21 @@ textarea::placeholder { color: #a0aec0; }
 .button-row {
   margin-top: 14px;
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  align-items: stretch;
 }
-.button-row .spacer { flex: 1; }
-.button-row.nav-row { flex-wrap: nowrap; }
-.button-row.nav-row > button { white-space: nowrap; }
+.button-row > button {
+  flex: 1 1 130px;
+  white-space: nowrap;
+  padding: 11px 14px;
+}
+.button-row .spacer { display: none; }
+.button-row #quitBtn {
+  margin-left: auto;
+  flex-grow: 0;
+  flex-basis: auto;
+}
 
 /* === Feedback === */
 .feedback {
@@ -614,4 +623,15 @@ textarea::placeholder { color: #a0aec0; }
   .settings-grid { grid-template-columns: 1fr; gap: 10px; }
   .status-bar { grid-template-columns: 1fr; gap: 8px; }
   .question-box { padding: 22px 18px; font-size: 16px; }
+  .button-row { gap: 6px; }
+  .button-row > button {
+    flex: 1 1 calc(50% - 3px);
+    font-size: 13px;
+    padding: 12px 8px;
+  }
+  .button-row #submitBtn,
+  .button-row #quitBtn {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
 }

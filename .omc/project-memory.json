@@ -60,20 +60,20 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 193,
-      "lastAccessed": 1776494028053,
+      "accessCount": 200,
+      "lastAccessed": 1776496885183,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 113,
-      "lastAccessed": 1776494029280,
+      "accessCount": 117,
+      "lastAccessed": 1776496898054,
       "type": "file"
     },
     {
       "path": "style.css",
-      "accessCount": 19,
-      "lastAccessed": 1776494023232,
+      "accessCount": 24,
+      "lastAccessed": 1776496889964,
       "type": "file"
     },
     {
@@ -84,8 +84,8 @@
     },
     {
       "path": "",
-      "accessCount": 10,
-      "lastAccessed": 1776492630033,
+      "accessCount": 11,
+      "lastAccessed": 1776497126946,
       "type": "directory"
     },
     {
@@ -107,21 +107,33 @@
       "type": "file"
     },
     {
-      "path": "성경\\시편_1편.txt",
-      "accessCount": 2,
-      "lastAccessed": 1776471109672,
+      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
+      "accessCount": 3,
+      "lastAccessed": 1776495065163,
       "type": "file"
     },
     {
-      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
-      "accessCount": 2,
-      "lastAccessed": 1776489368737,
+      "path": "성경\\시편_1편.txt",
+      "accessCount": 3,
+      "lastAccessed": 1776495068330,
       "type": "file"
     },
     {
       "path": "data\\bible\\1corinthians.json",
       "accessCount": 2,
       "lastAccessed": 1776490626751,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\thomas\\.claude",
+      "accessCount": 2,
+      "lastAccessed": 1776497125542,
+      "type": "directory"
+    },
+    {
+      "path": ".claude\\skills\\auto-commit\\SKILL.md",
+      "accessCount": 2,
+      "lastAccessed": 1776497216613,
       "type": "file"
     },
     {
@@ -206,6 +218,30 @@
       "path": "sw.js",
       "accessCount": 1,
       "lastAccessed": 1776492602146,
+      "type": "file"
+    },
+    {
+      "path": "성경\\로마서_8장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776495067948,
+      "type": "file"
+    },
+    {
+      "path": "성경\\고린도전서_13장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776495068707,
+      "type": "file"
+    },
+    {
+      "path": "scrape_bible.py",
+      "accessCount": 1,
+      "lastAccessed": 1776495843862,
+      "type": "file"
+    },
+    {
+      "path": "성경\\_smoketest_시편_23편.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776496004467,
       "type": "file"
     }
   ],

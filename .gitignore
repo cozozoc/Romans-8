@@ -1,1 +1,10 @@
 .claude/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Bible scraper outputs (logs, scratch HTML)
+scrape_bible.log
+scrape_failures.txt
+test_gen1.html
