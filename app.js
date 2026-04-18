@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.15";
+const APP_VERSION = "0.0.17";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -365,6 +365,19 @@ function showQuestion() {
   updateViewToggleBtn();
   updateAutoRevealBtn();
   applyInputVisibility();
+}
+
+function changeLevel(delta) {
+  if (!state.currentWords || !state.currentWords.length) return;
+  const current = parseInt(state.config.level) || 1;
+  const next = Math.max(1, Math.min(10, current + delta));
+  if (next === current) return;
+  state.config.level = next;
+  const lvInput = $("level");
+  if (lvInput) lvInput.value = String(next);
+  saveSettings();
+  $("levelInfo").innerHTML = `Lv.${next} <span class="sub">(${Math.round(LEVEL_RATIO[next]*100)}%)</span>`;
+  reshuffleBlanks();
 }
 
 function reshuffleBlanks() {
@@ -746,6 +759,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $("autoRevealBtn").addEventListener("click", toggleAutoReveal);
   $("nextBtn").addEventListener("click", forceNextVerse);
   $("prevBtn").addEventListener("click", forcePrevVerse);
+  $("levelUpBtn").addEventListener("click", () => changeLevel(+1));
+  $("levelDownBtn").addEventListener("click", () => changeLevel(-1));
   $("quitBtn").addEventListener("click", () => {
     if (confirm("테스트를 종료하고 설정 화면으로 돌아갈까요?")) {
       clearTimers();
@@ -829,6 +844,12 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if ((!inInput || inputOff) && e.key === "ArrowLeft") {
       e.preventDefault();
       forcePrevVerse();
+    } else if ((!inInput || inputOff) && e.key === "ArrowUp") {
+      e.preventDefault();
+      changeLevel(+1);
+    } else if ((!inInput || inputOff) && e.key === "ArrowDown") {
+      e.preventDefault();
+      changeLevel(-1);
     } else if (!inInput && (e.key === "+" || e.key === "=")) {
       e.preventDefault();
       forceNextVerse();

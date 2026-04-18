@@ -38,8 +38,8 @@
   },
   "customNotes": [],
   "directoryMap": {
-    "신약": {
-      "path": "신약",
+    "성경": {
+      "path": "성경",
       "purpose": null,
       "fileCount": 3,
       "lastAccessed": 1776468695026,
@@ -60,33 +60,33 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 111,
-      "lastAccessed": 1776488830035,
+      "accessCount": 123,
+      "lastAccessed": 1776489708766,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 67,
-      "lastAccessed": 1776488831263,
+      "accessCount": 84,
+      "lastAccessed": 1776489731190,
       "type": "file"
     },
     {
       "path": "verses.js",
-      "accessCount": 11,
-      "lastAccessed": 1776488442666,
+      "accessCount": 14,
+      "lastAccessed": 1776489450949,
       "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 9,
+      "lastAccessed": 1776490230592,
+      "type": "directory"
     },
     {
       "path": "style.css",
       "accessCount": 8,
       "lastAccessed": 1776488614035,
       "type": "file"
-    },
-    {
-      "path": "",
-      "accessCount": 5,
-      "lastAccessed": 1776472390512,
-      "type": "directory"
     },
     {
       "path": "data\\bible\\psalms.json",
@@ -107,9 +107,15 @@
       "type": "file"
     },
     {
-      "path": "신약\\시편_1편.txt",
+      "path": "성경\\시편_1편.txt",
       "accessCount": 2,
       "lastAccessed": 1776471109672,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
+      "accessCount": 2,
+      "lastAccessed": 1776489368737,
       "type": "file"
     },
     {
@@ -122,12 +128,6 @@
       "path": "data\\bible\\1corinthians.json",
       "accessCount": 1,
       "lastAccessed": 1776471110074,
-      "type": "file"
-    },
-    {
-      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
-      "accessCount": 1,
-      "lastAccessed": 1776487499842,
       "type": "file"
     },
     {
@@ -170,6 +170,36 @@
       "path": "사역훈련2권_교회와_평신도의_자화상\\10_벧전2_9.txt",
       "accessCount": 1,
       "lastAccessed": 1776487535303,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련3권_소그룹_환경과_리더십\\02_살전2_7-8.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776489400261,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련3권_소그룹_환경과_리더십\\04_사34_16.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776489403733,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련3권_소그룹_환경과_리더십\\05_약1_5.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776489406050,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련3권_소그룹_환경과_리더십\\06_히3_13.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776489408845,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련3권_소그룹_환경과_리더십\\07_잠18_13.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776489410260,
       "type": "file"
     }
   ],
