@@ -213,7 +213,7 @@ const BIBLE_LIBRARY = {
   },
   "1corinthians-13": {
     key: "1corinthians-13",
-    category: "training",
+    category: "bible-memory",
     name: "고린도전서 13장",
     startVerse: 1,
     endVerse: 13,
@@ -221,7 +221,7 @@ const BIBLE_LIBRARY = {
   },
   "psalms-1": {
     key: "psalms-1",
-    category: "training",
+    category: "bible-memory",
     name: "시편 1편",
     startVerse: 1,
     endVerse: 6,
