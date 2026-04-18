@@ -658,6 +658,23 @@ textarea::placeholder { color: #a0aec0; }
   .settings-grid { grid-template-columns: 1fr; gap: 10px; }
   .status-bar { grid-template-columns: 1fr; gap: 8px; }
   .question-box { padding: 22px 18px; font-size: 16px; }
+  /* 좁은 화면: 본문 제목이 길어도 잘리지 않도록 진행률을 다음 줄로 내림 */
+  .progress-labels {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .passage-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: keep-all;
+    line-height: 1.35;
+    flex: 0 1 auto;
+  }
+  .progress-right {
+    align-self: flex-end;
+  }
   .button-row { gap: 6px; }
   .button-row > button {
     flex: 1 1 calc(50% - 3px);
