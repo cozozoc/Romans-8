@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.4";
+const APP_VERSION = "0.0.5";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -8,10 +8,8 @@ const state = {
   book: null,
   currentVerse: 1,
   correctStreak: 0,
-  hideTimer: null,
   currentWords: [],
   currentBlankSet: new Set(),
-  hintRevealTimer: null,
   revealAllTimer: null,
   autoRevealTimer: null,
   hintQueue: [],
@@ -22,12 +20,11 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["bookKey","startVerse","endVerse","hideEnabled","inputEnabled","autoRevealOnMove","level","continuousCount","revealSeconds","ttsVoice","ttsRate"];
+const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","level","continuousCount","revealSeconds","ttsVoice","ttsRate"];
 const DEFAULT_SETTINGS = {
   bookKey: DEFAULT_BOOK_KEY,
   startVerse: "1",
   endVerse: "39",
-  hideEnabled: false,
   inputEnabled: false,
   autoRevealOnMove: false,
   revealSeconds: "30",
@@ -238,7 +235,6 @@ function startTest() {
     bookKey: book.key,
     startVerse: Math.max(min, Math.min(max, parseInt($("startVerse").value) || min)),
     endVerse: Math.max(min, Math.min(max, parseInt($("endVerse").value) || max)),
-    hideEnabled: $("hideEnabled").checked,
     inputEnabled: $("inputEnabled").checked,
     autoRevealOnMove: $("autoRevealOnMove").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
@@ -259,8 +255,6 @@ function startTest() {
 }
 
 function clearTimers() {
-  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
   if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
   if (state.autoRevealTimer) { clearTimeout(state.autoRevealTimer); state.autoRevealTimer = null; }
 }
@@ -281,18 +275,7 @@ function renderQuestionBody() {
   $("questionText").innerHTML = labelHtml + body;
 }
 
-function startHideTimer() {
-  const box = $("questionBox");
-  const qt = $("questionText");
-  const total = state.config.revealSeconds;
-  const fadeSec = Math.max(0.5, total - 2);
-  qt.style.transitionDuration = fadeSec + "s";
-  state.hideTimer = setTimeout(() => {
-    box.classList.add("hidden-state");
-  }, 2000);
-}
-
-function showQuestion(fadeIn = false) {
+function showQuestion() {
   clearTimers();
   const verse = state.book.verses[state.currentVerse];
   const words = splitWords(verse);
@@ -310,14 +293,7 @@ function showQuestion(fadeIn = false) {
 
   state.hintShown = false;
   const box = $("questionBox");
-  const qt = $("questionText");
-  qt.style.transition = "none";
-  qt.style.transitionDuration = "";
   box.classList.remove("reveal-all", "wrong", "correct");
-  if (fadeIn) box.classList.add("hidden-state");
-  else box.classList.remove("hidden-state");
-  void qt.offsetWidth;
-  qt.style.transition = "";
   renderQuestionBody();
   $("feedback").textContent = "";
   $("feedback").className = "feedback";
@@ -329,42 +305,18 @@ function showQuestion(fadeIn = false) {
   updateViewToggleBtn();
   updateAutoRevealBtn();
   applyInputVisibility();
-
-  const startHideIfNeeded = () => {
-    if (state.config.hideEnabled) startHideTimer();
-    else { qt.style.transitionDuration = ""; }
-  };
-
-  if (fadeIn) {
-    const fadeInSec = 1;
-    qt.style.transitionDuration = fadeInSec + "s";
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        box.classList.remove("hidden-state");
-      });
-    });
-    state.hideTimer = setTimeout(startHideIfNeeded, fadeInSec * 1000 + 50);
-  } else {
-    startHideIfNeeded();
-  }
 }
 
 function showAll() {
   const box = $("questionBox");
-  const qt = $("questionText");
   clearTimers();
 
   state.hintShown = false;
-  qt.style.transition = "none";
-  qt.style.transitionDuration = "0s";
-  box.classList.remove("hidden-state", "wrong", "correct");
+  box.classList.remove("wrong", "correct");
   box.classList.add("reveal-all");
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
-  void qt.offsetWidth;
-  qt.style.transition = "";
-  qt.style.transitionDuration = "";
 
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
@@ -376,18 +328,11 @@ function showAll() {
 
 function hideAll() {
   const box = $("questionBox");
-  const qt = $("questionText");
   clearTimers();
 
   state.hintShown = false;
-  qt.style.transition = "none";
-  qt.style.transitionDuration = "0s";
   box.classList.remove("reveal-all", "wrong", "correct");
   renderQuestionBody();
-  if (state.config && state.config.hideEnabled) box.classList.add("hidden-state");
-  void qt.offsetWidth;
-  qt.style.transition = "";
-  qt.style.transitionDuration = "";
 
   $("hintBtn").disabled = false;
   $("submitBtn").disabled = false;
@@ -477,21 +422,7 @@ function updateHintBtn() {
 }
 
 function hideHint() {
-  if (state.hintRevealTimer) { clearTimeout(state.hintRevealTimer); state.hintRevealTimer = null; }
-  const box = $("questionBox");
-  const qt = $("questionText");
-  qt.style.transition = "none";
-  qt.style.transitionDuration = "0s";
   renderQuestionBody();
-  if (state.config && state.config.hideEnabled
-      && !box.classList.contains("reveal-all")
-      && !box.classList.contains("wrong")
-      && !box.classList.contains("correct")) {
-    box.classList.add("hidden-state");
-  }
-  void qt.offsetWidth;
-  qt.style.transition = "";
-  qt.style.transitionDuration = "";
   state.hintShown = false;
   updateHintBtn();
   updateViewToggleBtn();
@@ -500,8 +431,6 @@ function hideHint() {
 function showHint() {
   const box = $("questionBox");
   if (box.classList.contains("reveal-all")) return;
-  if (state.hideTimer) { clearTimeout(state.hideTimer); state.hideTimer = null; }
-  if (box.classList.contains("hidden-state")) box.classList.remove("hidden-state");
 
   const blanks = [...state.currentBlankSet];
   if (blanks.length === 0) return;
@@ -528,16 +457,6 @@ function showHint() {
   state.hintShown = true;
   updateHintBtn();
   updateViewToggleBtn();
-
-  if (state.hintRevealTimer) clearTimeout(state.hintRevealTimer);
-  if (!state.config.hideEnabled) return;
-  state.hintRevealTimer = setTimeout(() => {
-    state.hintRevealTimer = null;
-    if (box.classList.contains("reveal-all")
-        || box.classList.contains("wrong")
-        || box.classList.contains("correct")) return;
-    hideHint();
-  }, state.config.revealSeconds * 1000);
 }
 
 function useHint() {
@@ -550,11 +469,7 @@ function showWrongReveal(expected, actual) {
   state.hintShown = false;
   const box = $("questionBox");
   const qt = $("questionText");
-  qt.style.transition = "none";
-  qt.style.transitionDuration = "";
-  box.classList.remove("hidden-state", "reveal-all");
-  void qt.offsetWidth;
-  qt.style.transition = "";
+  box.classList.remove("reveal-all");
   box.classList.add("wrong");
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
@@ -575,16 +490,9 @@ function showWrongReveal(expected, actual) {
   qt.innerHTML = labelHtml + body;
 
   const total = state.config.revealSeconds;
-  const fadeSec = Math.max(0.5, total - 2);
-  qt.style.transitionDuration = fadeSec + "s";
-  if (state.config.hideEnabled) {
-    state.hideTimer = setTimeout(() => {
-      box.classList.add("hidden-state");
-    }, 2000);
-  }
   state.revealAllTimer = setTimeout(() => {
     state.revealAllTimer = null;
-    showQuestion(true);
+    showQuestion();
   }, total * 1000 + 100);
 }
 
@@ -627,11 +535,9 @@ function submit() {
 }
 
 function revealAllThenAdvance() {
-  // 모든 타이머 중지 후, 같은 위치에서 빈칸을 채워 2초간 표시
   clearTimers();
   state.hintShown = false;
   const box = $("questionBox");
-  box.classList.remove("hidden-state");
   box.classList.add("reveal-all", "correct");
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
@@ -643,9 +549,7 @@ function revealAllThenAdvance() {
   updateViewToggleBtn();
 
   const delay = Math.max(500, (state.config.revealSeconds || 30) * 1000);
-  console.log("[reveal] scheduling advance in", delay, "ms");
   state.revealAllTimer = setTimeout(() => {
-    console.log("[reveal] timer fired -> handleCorrectAdvance");
     state.revealAllTimer = null;
     handleCorrectAdvance();
   }, delay);
@@ -704,19 +608,13 @@ function previewThenRun(fn) {
   clearTimers();
   state.hintShown = false;
   const box = $("questionBox");
-  const qt = $("questionText");
-  qt.style.transition = "none";
-  qt.style.transitionDuration = "0s";
-  box.classList.remove("hidden-state", "wrong", "correct");
+  box.classList.remove("wrong", "correct");
   box.classList.add("reveal-all");
   const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
-  void qt.offsetWidth;
-  qt.style.transition = "";
-  qt.style.transitionDuration = "";
   updateViewToggleBtn();
-  const previewMs = state.currentBlankSet.size * 1000;
+  const previewMs = state.currentWords.length * 1000;
   state.autoRevealTimer = setTimeout(() => {
     state.autoRevealTimer = null;
     fn();
@@ -728,7 +626,7 @@ function forceNextVerse() {
 }
 
 function forcePrevVerse() {
-  previewThenRun(advancePrev);
+  advancePrev();
 }
 
 function finishAll() {

@@ -408,13 +408,6 @@ button.ghost:hover { background: #f8fafc; }
   line-height: 2.4;
   transition: all 0.3s;
 }
-#questionText {
-  opacity: 1;
-  transition: opacity 2s ease;
-}
-.question-box.hidden-state #questionText {
-  opacity: 0;
-}
 .verse-label {
   display: inline-block;
   background: var(--primary);

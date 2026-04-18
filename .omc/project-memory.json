@@ -60,20 +60,56 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 9,
-      "lastAccessed": 1776469517501,
+      "accessCount": 33,
+      "lastAccessed": 1776471259845,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 8,
-      "lastAccessed": 1776469518705,
+      "accessCount": 25,
+      "lastAccessed": 1776471499314,
+      "type": "file"
+    },
+    {
+      "path": "verses.js",
+      "accessCount": 4,
+      "lastAccessed": 1776471136467,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 4,
+      "lastAccessed": 1776471144729,
+      "type": "directory"
+    },
+    {
+      "path": "data\\bible\\psalms.json",
+      "accessCount": 3,
+      "lastAccessed": 1776471144746,
+      "type": "file"
+    },
+    {
+      "path": "style.css",
+      "accessCount": 2,
+      "lastAccessed": 1776470350258,
+      "type": "file"
+    },
+    {
+      "path": "신약\\시편_1편.txt",
+      "accessCount": 2,
+      "lastAccessed": 1776471109672,
       "type": "file"
     },
     {
       "path": "C:\\Users\\thomas\\.claude\\projects\\f--Project-claude-code-Romans8-memorization\\memory\\feedback_version_bump.md",
       "accessCount": 1,
       "lastAccessed": 1776468705594,
+      "type": "file"
+    },
+    {
+      "path": "data\\bible\\1corinthians.json",
+      "accessCount": 1,
+      "lastAccessed": 1776471110074,
       "type": "file"
     }
   ],
