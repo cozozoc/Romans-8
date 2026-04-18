@@ -387,12 +387,10 @@ button.ghost:hover { background: #f8fafc; }
 }
 .passage-blank {
   display: inline-block;
-  min-width: 48px;
   padding: 0 4px;
   margin: 0 2px;
   border-bottom: 2px dashed var(--primary);
   color: transparent;
-  letter-spacing: 2px;
   vertical-align: baseline;
 }
 button.secondary.bookmark-active {
@@ -455,7 +453,6 @@ button.secondary.bookmark-active:hover { background: #ffe9a8; }
 
 .blank {
   display: inline-block;
-  min-width: 48px;
   padding: 0 6px;
   margin: 2px 2px;
   background: rgba(255,255,255,0.75);
@@ -463,7 +460,7 @@ button.secondary.bookmark-active:hover { background: #ffe9a8; }
   color: transparent;
   user-select: none;
   vertical-align: baseline;
-  transition: all 0.25s;
+  transition: background 0.25s, color 0.25s;
 }
 .blank.revealed {
   color: var(--primary);
@@ -479,9 +476,6 @@ button.secondary.bookmark-active:hover { background: #ffe9a8; }
   font-weight: 700;
 }
 
-.question-box.reveal-all .blank {
-  min-width: 0;
-}
 
 .question-box.correct,
 .question-box.correct #questionText {

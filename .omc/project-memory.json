@@ -60,26 +60,26 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 177,
-      "lastAccessed": 1776493141684,
+      "accessCount": 193,
+      "lastAccessed": 1776494028053,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 108,
-      "lastAccessed": 1776493142923,
-      "type": "file"
-    },
-    {
-      "path": "verses.js",
-      "accessCount": 15,
-      "lastAccessed": 1776490627195,
+      "accessCount": 113,
+      "lastAccessed": 1776494029280,
       "type": "file"
     },
     {
       "path": "style.css",
-      "accessCount": 14,
-      "lastAccessed": 1776492587262,
+      "accessCount": 19,
+      "lastAccessed": 1776494023232,
+      "type": "file"
+    },
+    {
+      "path": "verses.js",
+      "accessCount": 16,
+      "lastAccessed": 1776493617534,
       "type": "file"
     },
     {

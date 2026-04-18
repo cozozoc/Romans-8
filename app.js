@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.23";
+const APP_VERSION = "0.0.25";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,9 +22,10 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","mergeBlanks","level","continuousCount","bookmarkedOnly"];
+const SETTING_IDS = ["category","bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","mergeBlanks","level","continuousCount","bookmarkedOnly"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
+  category: "bible",
   bookKey: DEFAULT_BOOK_KEY,
   startVerse: "1",
   endVerse: "39",
@@ -36,6 +37,25 @@ const DEFAULT_SETTINGS = {
   continuousCount: "1",
   bookmarkedOnly: false,
 };
+
+function populateBookOptions(category, preserveKey) {
+  const sel = $("bookKey");
+  if (!sel) return;
+  sel.innerHTML = "";
+  const entries = Object.values(BIBLE_LIBRARY).filter(b => (b.category || "bible") === category);
+  entries.forEach(b => {
+    const opt = document.createElement("option");
+    opt.value = b.key;
+    const rangeText = b.verseLabels ? `${b.endVerse}과` : `${b.startVerse}~${b.endVerse}절`;
+    opt.textContent = `${b.name} (${rangeText})`;
+    sel.appendChild(opt);
+  });
+  if (preserveKey && entries.some(b => b.key === preserveKey)) {
+    sel.value = preserveKey;
+  } else if (entries.length > 0) {
+    sel.value = entries[0].key;
+  }
+}
 
 const BOOKMARKS_KEY = "romans8_bookmarks_v1";
 function loadBookmarks() {
@@ -123,6 +143,10 @@ function loadSettings() {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (!raw) return;
     const obj = JSON.parse(raw);
+    const cat = obj.category || "bible";
+    const catEl = $("category");
+    if (catEl) catEl.value = cat;
+    populateBookOptions(cat, obj.bookKey);
     SETTING_IDS.forEach(id => {
       if (!(id in obj)) return;
       const el = $(id);
@@ -188,9 +212,8 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
         j++;
       }
       if (group.length >= 2) {
-        const totalLen = group.reduce((s, k) => s + words[k].length, 0);
-        const placeholder = "＿".repeat(Math.max(4, Math.min(totalLen, 12)));
-        parts.push(`<span class="blank blank-merged" data-idx="${group.join(',')}">${placeholder}</span>`);
+        const groupText = group.map(k => words[k]).join(" ");
+        parts.push(`<span class="blank blank-merged" data-idx="${group.join(',')}">${escapeHtml(groupText)}</span>`);
         i = j;
         continue;
       }
@@ -202,8 +225,7 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
       } else if (revealedSet.has(i)) {
         parts.push(`<span class="blank revealed" data-idx="${i}">${escapeHtml(w)}</span>`);
       } else {
-        const placeholder = "＿".repeat(Math.max(2, Math.min(w.length, 6)));
-        parts.push(`<span class="blank" data-idx="${i}">${placeholder}</span>`);
+        parts.push(`<span class="blank" data-idx="${i}">${escapeHtml(w)}</span>`);
       }
     } else {
       parts.push(escapeHtml(w));
@@ -486,9 +508,8 @@ function renderPassageTitle() {
   const pm = titlePart.match(/^(\d+\.\s*)(.*)$/);
   const prefix = pm ? pm[1] : "";
   const titleBody = pm ? pm[2] : titlePart;
-  const blank = `<span class="passage-blank">＿＿＿＿</span>`;
-  const titleHtml = hideTitle ? blank : escapeHtml(titleBody);
-  const refHtml = hideRef ? blank : escapeHtml(refPart);
+  const titleHtml = hideTitle ? `<span class="passage-blank">${escapeHtml(titleBody)}</span>` : escapeHtml(titleBody);
+  const refHtml = hideRef ? `<span class="passage-blank">${escapeHtml(refPart)}</span>` : escapeHtml(refPart);
   pt.innerHTML = `${escapeHtml(prefix)}${titleHtml} (${refHtml})`;
 }
 
@@ -835,7 +856,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const vEl = $("appVersion");
   if (vEl) vEl.textContent = "v" + APP_VERSION;
   loadSettings();
+  if ($("bookKey").options.length === 0) {
+    populateBookOptions($("category").value || "bible");
+  }
   applyBookRangeToInputs(true);
+  $("category").addEventListener("change", () => {
+    populateBookOptions($("category").value);
+    const book = getSelectedBook();
+    $("startVerse").value = String(book.startVerse);
+    $("endVerse").value = String(book.endVerse);
+    applyBookRangeToInputs(true);
+    saveSettings();
+  });
   $("bookKey").addEventListener("change", () => {
     const book = getSelectedBook();
     $("startVerse").value = String(book.startVerse);

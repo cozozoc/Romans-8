@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.23</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.25</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -94,14 +94,15 @@
     <h2>테스트 설정</h2>
     <div class="settings-grid">
       <div class="form-row full-width">
-        <label for="bookKey">본문 선택</label>
-        <select id="bookKey">
-          <option value="romans-8">로마서 8장 (1~39절)</option>
-          <option value="1corinthians-13">고린도전서 13장 (1~13절)</option>
-          <option value="psalms-1">시편 1편 (1~6절)</option>
-          <option value="ministry-training-2">사역훈련 2권 (교회와 평신도의 자화상, 10과)</option>
-          <option value="ministry-training-3">사역훈련 3권 (소그룹 환경과 리더십, 5과)</option>
+        <label for="category">분류</label>
+        <select id="category">
+          <option value="bible">성경</option>
+          <option value="training">훈련 교재</option>
         </select>
+      </div>
+      <div class="form-row full-width">
+        <label for="bookKey">본문 선택</label>
+        <select id="bookKey"></select>
       </div>
       <div class="form-row">
         <label for="startVerse">시작 <span id="startVerseUnit">구절</span> <span id="startVerseHint" class="hint">1~39</span></label>

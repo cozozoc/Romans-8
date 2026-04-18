@@ -115,6 +115,7 @@ const MINISTRY_TRAINING_3_LABELS = {
 const BIBLE_LIBRARY = {
   "romans-8": {
     key: "romans-8",
+    category: "bible",
     name: "로마서 8장",
     startVerse: 1,
     endVerse: 39,
@@ -122,6 +123,7 @@ const BIBLE_LIBRARY = {
   },
   "1corinthians-13": {
     key: "1corinthians-13",
+    category: "bible",
     name: "고린도전서 13장",
     startVerse: 1,
     endVerse: 13,
@@ -129,6 +131,7 @@ const BIBLE_LIBRARY = {
   },
   "psalms-1": {
     key: "psalms-1",
+    category: "bible",
     name: "시편 1편",
     startVerse: 1,
     endVerse: 6,
@@ -136,6 +139,7 @@ const BIBLE_LIBRARY = {
   },
   "ministry-training-2": {
     key: "ministry-training-2",
+    category: "training",
     name: "사역훈련 2권 (교회와 평신도의 자화상)",
     startVerse: 1,
     endVerse: 10,
@@ -144,6 +148,7 @@ const BIBLE_LIBRARY = {
   },
   "ministry-training-3": {
     key: "ministry-training-3",
+    category: "training",
     name: "사역훈련 3권 (소그룹 환경과 리더십)",
     startVerse: 1,
     endVerse: 5,
