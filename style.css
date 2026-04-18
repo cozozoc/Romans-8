@@ -509,6 +509,8 @@ textarea::placeholder { color: #a0aec0; }
   flex-wrap: wrap;
 }
 .button-row .spacer { flex: 1; }
+.button-row.nav-row { flex-wrap: nowrap; }
+.button-row.nav-row > button { white-space: nowrap; }
 
 /* === Feedback === */
 .feedback {

@@ -60,14 +60,26 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 33,
-      "lastAccessed": 1776471259845,
+      "accessCount": 44,
+      "lastAccessed": 1776474021363,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 25,
-      "lastAccessed": 1776471499314,
+      "accessCount": 28,
+      "lastAccessed": 1776474022948,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 5,
+      "lastAccessed": 1776472390512,
+      "type": "directory"
+    },
+    {
+      "path": "style.css",
+      "accessCount": 5,
+      "lastAccessed": 1776472418580,
       "type": "file"
     },
     {
@@ -77,21 +89,9 @@
       "type": "file"
     },
     {
-      "path": "",
-      "accessCount": 4,
-      "lastAccessed": 1776471144729,
-      "type": "directory"
-    },
-    {
       "path": "data\\bible\\psalms.json",
       "accessCount": 3,
       "lastAccessed": 1776471144746,
-      "type": "file"
-    },
-    {
-      "path": "style.css",
-      "accessCount": 2,
-      "lastAccessed": 1776470350258,
       "type": "file"
     },
     {

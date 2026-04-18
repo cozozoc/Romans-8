@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.5";
+const APP_VERSION = "0.0.6";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -262,7 +262,7 @@ function clearTimers() {
 function updateProgress() {
   const { startVerse, endVerse } = state.config;
   const total = endVerse - startVerse + 1;
-  const done = state.currentVerse - startVerse;
+  const done = state.currentVerse - startVerse + 1;
   const pct = Math.round((done / total) * 100);
   $("progressLabel").textContent = `진행률 · ${done} / ${total} 구절`;
   $("progressPercent").textContent = `${pct}%`;
@@ -474,8 +474,8 @@ function showWrongReveal(expected, actual) {
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
   $("answerInput").disabled = false;
-  $("answerInput").value = "";
   $("answerInput").focus();
+  $("answerInput").select();
   updateHintBtn();
   updateViewToggleBtn();
 
@@ -652,6 +652,9 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSettings();
   applyBookRangeToInputs(true);
   $("bookKey").addEventListener("change", () => {
+    const book = getSelectedBook();
+    $("startVerse").value = String(book.startVerse);
+    $("endVerse").value = String(book.endVerse);
     applyBookRangeToInputs(true);
     saveSettings();
   });
