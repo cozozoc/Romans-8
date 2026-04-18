@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.36";
+const APP_VERSION = "0.0.38";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -283,6 +283,7 @@ function getSelectedBookRaw() {
 function getSelectedBook() {
   const raw = getSelectedBookRaw();
   if (!raw.chapters) return raw;
+  const unit = raw.chapterUnit || "장";
   const chSel = $("chapterNum");
   let ch = parseInt(chSel && chSel.value, 10);
   if (!Number.isFinite(ch) || ch < 1 || ch > raw.chapterCount) ch = 1;
@@ -294,8 +295,9 @@ function getSelectedBook() {
     key: `${raw.key}-${ch}`,
     parentKey: raw.key,
     chapter: ch,
+    chapterUnit: unit,
     category: raw.category,
-    name: `${raw.name} ${ch}장`,
+    name: `${raw.name} ${ch}${unit}`,
     startVerse,
     endVerse,
     verses,
@@ -311,12 +313,15 @@ function populateChapterOptions(rawBook, preserveCh) {
     sel.innerHTML = "";
     return;
   }
+  const unit = rawBook.chapterUnit || "장";
+  const labelEl = $("chapterUnitLabel");
+  if (labelEl) labelEl.textContent = unit;
   row.classList.remove("hidden");
   sel.innerHTML = "";
   for (let i = 1; i <= rawBook.chapterCount; i++) {
     const opt = document.createElement("option");
     opt.value = String(i);
-    opt.textContent = `${i}장`;
+    opt.textContent = `${i}${unit}`;
     sel.appendChild(opt);
   }
   const target = (preserveCh && preserveCh >= 1 && preserveCh <= rawBook.chapterCount) ? String(preserveCh) : "1";

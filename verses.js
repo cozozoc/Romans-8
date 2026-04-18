@@ -112,14 +112,11 @@ const MINISTRY_TRAINING_3_LABELS = {
   5: "7. 소그룹 커뮤니케이션: 질문과 경청 (잠18:13)"
 };
 
+// 본문 풀(다중-장 책)을 노출하려면 이 배열에 키를 추가하세요.
+// "all" 한 항목이면 BIBLE_MANIFEST의 모든 책이 등록됩니다.
+const EXPOSED_BIBLE_BOOKS = ["all"];
+
 const BIBLE_LIBRARY = {
-  "genesis": {
-    key: "genesis",
-    category: "bible",
-    name: "창세기",
-    chapters: typeof GENESIS !== "undefined" ? GENESIS : {},
-    chapterCount: 50,
-  },
   "romans-8": {
     key: "romans-8",
     category: "bible",
@@ -165,3 +162,25 @@ const BIBLE_LIBRARY = {
 };
 
 const DEFAULT_BOOK_KEY = "romans-8";
+
+// 자동 등록: build_bible.py가 만든 BIBLE_DATA + BIBLE_MANIFEST에서
+// EXPOSED_BIBLE_BOOKS에 지정된 책을 BIBLE_LIBRARY에 추가한다.
+(function autoRegisterFullBooks() {
+  if (typeof BIBLE_MANIFEST === "undefined" || typeof BIBLE_DATA === "undefined") return;
+  const expose = (EXPOSED_BIBLE_BOOKS.length === 1 && EXPOSED_BIBLE_BOOKS[0] === "all")
+    ? BIBLE_MANIFEST.map(m => m.key)
+    : EXPOSED_BIBLE_BOOKS;
+  const exposeSet = new Set(expose);
+  BIBLE_MANIFEST.forEach(m => {
+    if (!exposeSet.has(m.key)) return;
+    if (!BIBLE_DATA[m.key]) return;
+    BIBLE_LIBRARY[m.key] = {
+      key: m.key,
+      category: "bible",
+      name: m.name,
+      chapters: BIBLE_DATA[m.key],
+      chapterCount: m.chapterCount,
+      chapterUnit: m.unit || "장",
+    };
+  });
+})();

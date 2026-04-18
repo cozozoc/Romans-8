@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.36</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.37</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -105,7 +105,7 @@
         <select id="bookKey"></select>
       </div>
       <div class="form-row full-width hidden" id="chapterRow">
-        <label for="chapterNum">장 선택</label>
+        <label for="chapterNum"><span id="chapterUnitLabel">장</span> 선택</label>
         <select id="chapterNum"></select>
       </div>
       <div class="form-row">
@@ -252,7 +252,7 @@
   </section>
 </div>
 
-<script src="bible-genesis.js"></script>
+<script src="bible-all.js"></script>
 <script src="verses.js"></script>
 <script src="app.js"></script>
 </body>
