@@ -536,10 +536,45 @@ textarea::placeholder { color: #a0aec0; }
   gap: 8px;
   align-items: stretch;
 }
-.button-row > button {
+.button-row > button,
+.button-row > .btn-pair {
   flex: 1 1 130px;
+  min-width: 0;
+}
+.button-row > button {
   white-space: nowrap;
   padding: 11px 14px;
+}
+.btn-pair {
+  display: flex;
+  gap: 8px;
+}
+.btn-pair > button {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  padding: 11px 14px;
+}
+/* Prev/Next 전용 행 — 가장 자주 쓰는 버튼이라 따로 한 줄, 두툼하게 */
+.button-row.prev-next-row {
+  margin-top: 12px;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+.button-row.prev-next-row > button {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 22px 18px;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary-light);
+  border-radius: 12px;
+}
+.button-row.prev-next-row > button:hover {
+  background: var(--primary);
+  color: white;
 }
 .button-row .spacer { display: none; }
 .button-row #quitBtn {
@@ -629,7 +664,20 @@ textarea::placeholder { color: #a0aec0; }
     font-size: 13px;
     padding: 12px 8px;
   }
+  .button-row > .btn-pair {
+    flex: 1 1 100%;
+    gap: 6px;
+  }
+  .btn-pair > button {
+    font-size: 13px;
+    padding: 12px 8px;
+  }
+  .button-row.prev-next-row > button {
+    padding: 24px 10px;
+    font-size: 17px;
+  }
   .button-row #submitBtn,
+  .button-row #inputToggleBtn,
   .button-row #quitBtn {
     flex-basis: 100%;
     margin-left: 0;
