@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.9";
+const APP_VERSION = "0.0.10";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -718,7 +718,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (wasCombo) return;
     if (!helpModal.classList.contains("hidden")) return;
     if ($("test-screen").classList.contains("hidden")) return;
-    if (e.location === 2) forceNextVerse();
+    if (e.location === 2) advanceNext();
     else reshuffleBlanks();
   });
 
