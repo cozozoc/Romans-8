@@ -60,20 +60,20 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 123,
-      "lastAccessed": 1776489708766,
+      "accessCount": 126,
+      "lastAccessed": 1776490851559,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 84,
-      "lastAccessed": 1776489731190,
+      "accessCount": 89,
+      "lastAccessed": 1776490844890,
       "type": "file"
     },
     {
       "path": "verses.js",
-      "accessCount": 14,
-      "lastAccessed": 1776489450949,
+      "accessCount": 15,
+      "lastAccessed": 1776490627195,
       "type": "file"
     },
     {
@@ -90,8 +90,8 @@
     },
     {
       "path": "data\\bible\\psalms.json",
-      "accessCount": 3,
-      "lastAccessed": 1776471144746,
+      "accessCount": 4,
+      "lastAccessed": 1776490626162,
       "type": "file"
     },
     {
@@ -119,15 +119,15 @@
       "type": "file"
     },
     {
-      "path": "C:\\Users\\thomas\\.claude\\projects\\f--Project-claude-code-Romans8-memorization\\memory\\feedback_version_bump.md",
-      "accessCount": 1,
-      "lastAccessed": 1776468705594,
+      "path": "data\\bible\\1corinthians.json",
+      "accessCount": 2,
+      "lastAccessed": 1776490626751,
       "type": "file"
     },
     {
-      "path": "data\\bible\\1corinthians.json",
+      "path": "C:\\Users\\thomas\\.claude\\projects\\f--Project-claude-code-Romans8-memorization\\memory\\feedback_version_bump.md",
       "accessCount": 1,
-      "lastAccessed": 1776471110074,
+      "lastAccessed": 1776468705594,
       "type": "file"
     },
     {
