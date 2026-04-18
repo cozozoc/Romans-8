@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.8</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.9</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -35,7 +35,6 @@
           <li><b>시작 / 끝 구절</b>: 선택한 본문 내에서 학습할 범위.</li>
           <li><b>텍스트 입력</b> <i>(기본 OFF)</i>: 키보드로 전체 구절을 타이핑하여 제출할지 여부. OFF면 입력 영역과 제출 버튼이 숨겨지고 힌트·전체 보기·낭독으로만 연습.</li>
           <li><b>구절 이동 시 자동 전체보기</b> <i>(기본 OFF)</i>: ON이면 수동으로 구절을 이동할 때(◀/▶ 버튼, 화살표, 휠, PageUp/Down) 현재 구절의 빈칸을 <b>전체 단어 수 × 1초</b> 동안 정답으로 채워 미리보고 난 뒤 다음 구절로 넘어감 (예: 단어 12개 → 12초). 정답/오답으로 자동 이동할 때는 이미 답이 공개되므로 별도 미리보기 없음.</li>
-          <li><b>문제 보는 시간</b> <i>(기본 30초)</i>: 정답 시 전체 정답 표시, 오답 시 정답 하이라이트 화면을 유지한 뒤 자동으로 다음 단계로 진행하기까지의 대기 시간.</li>
           <li><b>난이도 레벨</b> <i>(기본 Lv.1)</i>: Lv.1(10%) ~ Lv.10(100%). 단어 중 해당 비율이 빈칸으로 바뀜.</li>
           <li><b>연속 정답 횟수</b> <i>(기본 1회)</i>: 이 횟수만큼 연속 정답해야 다음 구절로 이동.</li>
           <li><b>낭독 음성</b>: 🔊 낭독에 사용할 TTS 음성. 자동 모드는 신경망/클라우드 음성을 우선 고르며, ⭐ 표시는 신경망/Natural/Premium 계열 고품질 음성입니다.</li>
@@ -66,8 +65,8 @@
         </ul>
 
         <h3>🟢 정답 / 오답 직후 동작</h3>
-        <p><b>정답</b>: 구절 전체 단어가 파랗게 강조된 상태로 <b>문제 보는 시간</b>만큼 유지된 뒤, <b>연속 정답 횟수</b>를 만족하면 다음 구절로 넘어갑니다.</p>
-        <p><b>오답</b>: 정답 구절이 표시되고 틀린 단어에 빨간 밑줄이 그려집니다. <b>입력창은 즉시 다시 활성화</b>되므로 대기 시간 동안에도 바로 다음 시도를 입력할 수 있고, 자동 재시도 화면으로의 이동은 <b>문제 보는 시간</b> 이후에 일어납니다.</p>
+        <p><b>정답</b>: 구절 전체 단어가 파랗게 강조된 상태로 30초간 유지된 뒤, <b>연속 정답 횟수</b>를 만족하면 다음 구절로 넘어갑니다.</p>
+        <p><b>오답</b>: 정답 구절이 표시되고 틀린 단어에 빨간 밑줄이 그려집니다. <b>입력창은 즉시 다시 활성화</b>되므로 대기 시간 동안에도 바로 다음 시도를 입력할 수 있고, 자동 재시도 화면으로의 이동은 30초 뒤에 일어납니다.</p>
 
         <h3>⌨ 키보드 / 마우스 단축키</h3>
         <ul>
@@ -78,7 +77,8 @@
           <li><kbd>PageDown</kbd> / <kbd>+</kbd> · <kbd>=</kbd> / 마우스 휠 ↓ — 다음 구절</li>
           <li><kbd>PageUp</kbd> / <kbd>-</kbd> · <kbd>_</kbd> / 마우스 휠 ↑ — 이전 구절</li>
           <li><kbd>→</kbd> / <kbd>←</kbd> — 다음 / 이전 구절 (입력 OFF이거나 입력 칸에 포커스 없을 때)</li>
-          <li><kbd>Ctrl</kbd> (단독 탭) — 현재 구절 빈칸 위치 다시 뽑기</li>
+          <li><kbd>Ctrl</kbd> (왼쪽 단독 탭) — 현재 구절 빈칸 위치 다시 뽑기</li>
+          <li><kbd>Ctrl</kbd> (오른쪽 단독 탭) — 다음 구절 이동</li>
           <li><kbd>Enter</kbd> (설정 화면) — 테스트 시작</li>
           <li><kbd>Esc</kbd> — 이 도움말 창 닫기</li>
         </ul>
@@ -128,11 +128,6 @@
           <span class="slider"></span>
         </label>
       </div>
-      <div class="form-row">
-        <label for="revealSeconds">문제 보는 시간 <span class="hint">초 (정답/오답 후 자동 진행 대기)</span></label>
-        <input type="number" id="revealSeconds" min="2" max="60" value="30">
-      </div>
-
       <div class="form-row">
         <label for="level">난이도 레벨 <span class="hint">빈칸 비율</span></label>
         <select id="level">

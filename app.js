@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.8";
+const APP_VERSION = "0.0.9";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -20,14 +20,14 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","level","continuousCount","revealSeconds","ttsVoice","ttsRate"];
+const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","level","continuousCount","ttsVoice","ttsRate"];
+const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   bookKey: DEFAULT_BOOK_KEY,
   startVerse: "1",
   endVerse: "39",
   inputEnabled: false,
   autoRevealOnMove: false,
-  revealSeconds: "30",
   level: "1",
   continuousCount: "1",
   ttsVoice: "",
@@ -239,7 +239,6 @@ function startTest() {
     autoRevealOnMove: $("autoRevealOnMove").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
-    revealSeconds: Math.max(2, parseInt($("revealSeconds").value) || 30),
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -504,11 +503,10 @@ function showWrongReveal(expected, actual) {
   }).join(" ");
   qt.innerHTML = labelHtml + body;
 
-  const total = state.config.revealSeconds;
   state.revealAllTimer = setTimeout(() => {
     state.revealAllTimer = null;
     showQuestion();
-  }, total * 1000 + 100);
+  }, REVEAL_SECONDS * 1000 + 100);
 }
 
 function renderDiff(expected, actual) {
@@ -563,11 +561,10 @@ function revealAllThenAdvance() {
   updateHintBtn();
   updateViewToggleBtn();
 
-  const delay = Math.max(500, (state.config.revealSeconds || 30) * 1000);
   state.revealAllTimer = setTimeout(() => {
     state.revealAllTimer = null;
     handleCorrectAdvance();
-  }, delay);
+  }, REVEAL_SECONDS * 1000);
 }
 
 function handleCorrectAdvance() {
@@ -721,7 +718,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (wasCombo) return;
     if (!helpModal.classList.contains("hidden")) return;
     if ($("test-screen").classList.contains("hidden")) return;
-    reshuffleBlanks();
+    if (e.location === 2) forceNextVerse();
+    else reshuffleBlanks();
   });
 
   document.addEventListener("keydown", (e) => {
