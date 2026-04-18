@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.30";
+const APP_VERSION = "0.0.32";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -115,6 +115,8 @@ function checkVersionAndMigrate() {
     return;
   }
   if (compareVersions(APP_VERSION, stored) > 0) {
+    // 버전 bump 시: 설정만 초기화하고, 북마크는 반드시 보존한다.
+    // 북마크는 오직 사용자가 '북마크 전체 삭제' 버튼을 눌렀을 때만 사라져야 한다.
     let bookmarksBackup = null;
     try { bookmarksBackup = localStorage.getItem(BOOKMARKS_KEY); } catch (e) {}
     try {
@@ -136,7 +138,8 @@ function saveSettings() {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); } catch (e) {}
 }
 function resetSettings() {
-  if (!confirm("모든 설정을 기본값으로 초기화할까요?")) return;
+  if (!confirm("모든 설정을 기본값으로 초기화할까요?\n\n(북마크는 영향받지 않고 그대로 유지됩니다. 북마크를 지우려면 '북마크 전체 삭제' 버튼을 사용하세요.)")) return;
+  // 의도적으로 BOOKMARKS_KEY는 건드리지 않는다 — 북마크는 오직 clearAllBookmarks()로만 삭제
   try { localStorage.removeItem(SETTINGS_KEY); } catch (e) {}
   location.reload();
 }

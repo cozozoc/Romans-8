@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.30</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.32</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -40,8 +40,8 @@
           <li><b>난이도 레벨</b> <i>(기본 Lv.1)</i>: Lv.1(10%) ~ Lv.10(100%). 단어 중 해당 비율이 빈칸으로 바뀜.</li>
           <li><b>연속 정답 횟수</b> <i>(기본 1회)</i>: 이 횟수만큼 연속 정답해야 다음 구절로 이동.</li>
           <li><b>북마크된 구절만</b> <i>(기본 OFF)</i>: ON이면 현재 본문에서 북마크된(⭐) 구절만 모아 번호 순서대로 테스트. 북마크가 없으면 알림 후 시작되지 않습니다.</li>
-          <li><b>북마크 전체 삭제</b>: 모든 본문의 저장된 북마크를 일괄 삭제. 강제 삭제는 이 버튼(설정 화면)에서만 가능합니다.</li>
-          <li><b>설정 초기화</b>: 저장된 설정을 모두 삭제하고 페이지를 새로고침해 기본값으로 복원.</li>
+          <li><b>북마크 전체 삭제</b>: 모든 본문의 저장된 북마크를 일괄 삭제. <b>북마크는 오직 이 버튼으로만 삭제 가능</b>하며, 설정 초기화·앱 버전 업데이트와 무관하게 영구 보존됩니다.</li>
+          <li><b>설정 초기화</b>: 저장된 설정을 모두 삭제하고 페이지를 새로고침해 기본값으로 복원. <b>북마크는 영향받지 않습니다.</b></li>
         </ul>
 
         <h3>📝 테스트 화면 버튼</h3>
@@ -84,7 +84,7 @@
 
         <h3>💾 저장 및 버전 관리</h3>
         <p>설정값은 브라우저 localStorage에 자동 저장되어 다음 방문 시 복원됩니다. 초기화하려면 설정 화면의 <b>설정 초기화</b> 버튼을 눌러주세요.</p>
-        <p>앱 버전이 올라가면 기본값/스키마 충돌을 막기 위해 저장된 설정이 자동으로 초기화됩니다 — 새 버전이 로드되면 저장된 값은 버려지고 기본값으로 시작합니다.</p>
+        <p>앱 버전이 올라가면 기본값/스키마 충돌을 막기 위해 저장된 설정이 자동으로 초기화됩니다 — 새 버전이 로드되면 저장된 값은 버려지고 기본값으로 시작합니다. <b>단, 북마크(⭐)는 버전 업데이트에도 영구 보존</b>되며, 오직 설정 화면의 <b>북마크 전체 삭제</b> 버튼으로만 지울 수 있습니다.</p>
       </div>
     </div>
   </div>
@@ -212,6 +212,10 @@
       <div class="input-hint">
         <kbd>Enter</kbd> 제출 · <kbd>Shift</kbd>+<kbd>Enter</kbd> 줄바꿈
       </div>
+      <div class="button-row prev-next-row">
+        <button id="prevBtn" class="secondary">◀ Prev</button>
+        <button id="nextBtn" class="secondary">Next ▶</button>
+      </div>
       <div class="button-row">
         <button id="submitBtn" class="primary">제출</button>
         <button id="hintBtn" class="secondary">💡 힌트 보기</button>
@@ -229,10 +233,6 @@
         <button id="inputToggleBtn" class="secondary">⌨ 입력 ON</button>
         <div class="spacer"></div>
         <button id="quitBtn" class="ghost">종료</button>
-      </div>
-      <div class="button-row prev-next-row">
-        <button id="prevBtn" class="secondary">◀ Prev</button>
-        <button id="nextBtn" class="secondary">Next ▶</button>
       </div>
     </div>
 
