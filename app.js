@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.34";
+const APP_VERSION = "0.0.36";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,11 +22,12 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","mergeBlanks","level","continuousCount","bookmarkedOnly"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","mergeBlanks","level","continuousCount","bookmarkedOnly"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
   bookKey: DEFAULT_BOOK_KEY,
+  chapterNum: "1",
   startVerse: "1",
   endVerse: "39",
   inputEnabled: false,
@@ -46,7 +47,10 @@ function populateBookOptions(category, preserveKey) {
   entries.forEach(b => {
     const opt = document.createElement("option");
     opt.value = b.key;
-    const rangeText = b.verseLabels ? `${b.endVerse}과` : `${b.startVerse}~${b.endVerse}절`;
+    let rangeText;
+    if (b.chapters) rangeText = `전 ${b.chapterCount}장`;
+    else if (b.verseLabels) rangeText = `${b.endVerse}과`;
+    else rangeText = `${b.startVerse}~${b.endVerse}절`;
     opt.textContent = `${b.name} (${rangeText})`;
     sel.appendChild(opt);
   });
@@ -153,6 +157,7 @@ function loadSettings() {
     const catEl = $("category");
     if (catEl) catEl.value = cat;
     populateBookOptions(cat, obj.bookKey);
+    populateChapterOptions(getSelectedBookRaw(), parseInt(obj.chapterNum, 10));
     SETTING_IDS.forEach(id => {
       if (!(id in obj)) return;
       const el = $(id);
@@ -270,9 +275,52 @@ function pickBlankIndices(words, level, forceFirstTwo) {
   return new Set([...forced, ...pool.slice(0, need)]);
 }
 
-function getSelectedBook() {
+function getSelectedBookRaw() {
   const key = ($("bookKey") && $("bookKey").value) || DEFAULT_BOOK_KEY;
   return BIBLE_LIBRARY[key] || BIBLE_LIBRARY[DEFAULT_BOOK_KEY];
+}
+
+function getSelectedBook() {
+  const raw = getSelectedBookRaw();
+  if (!raw.chapters) return raw;
+  const chSel = $("chapterNum");
+  let ch = parseInt(chSel && chSel.value, 10);
+  if (!Number.isFinite(ch) || ch < 1 || ch > raw.chapterCount) ch = 1;
+  const verses = raw.chapters[ch] || raw.chapters[String(ch)] || {};
+  const nums = Object.keys(verses).map(n => parseInt(n, 10)).filter(Number.isFinite).sort((a, b) => a - b);
+  const startVerse = nums[0] || 1;
+  const endVerse = nums[nums.length - 1] || 1;
+  return {
+    key: `${raw.key}-${ch}`,
+    parentKey: raw.key,
+    chapter: ch,
+    category: raw.category,
+    name: `${raw.name} ${ch}장`,
+    startVerse,
+    endVerse,
+    verses,
+  };
+}
+
+function populateChapterOptions(rawBook, preserveCh) {
+  const sel = $("chapterNum");
+  const row = $("chapterRow");
+  if (!sel || !row) return;
+  if (!rawBook || !rawBook.chapters) {
+    row.classList.add("hidden");
+    sel.innerHTML = "";
+    return;
+  }
+  row.classList.remove("hidden");
+  sel.innerHTML = "";
+  for (let i = 1; i <= rawBook.chapterCount; i++) {
+    const opt = document.createElement("option");
+    opt.value = String(i);
+    opt.textContent = `${i}장`;
+    sel.appendChild(opt);
+  }
+  const target = (preserveCh && preserveCh >= 1 && preserveCh <= rawBook.chapterCount) ? String(preserveCh) : "1";
+  sel.value = target;
 }
 
 function applyBookRangeToInputs(clamp = true) {
@@ -865,9 +913,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if ($("bookKey").options.length === 0) {
     populateBookOptions($("category").value || "bible");
   }
+  if (!$("chapterNum").options.length) {
+    populateChapterOptions(getSelectedBookRaw(), 1);
+  }
   applyBookRangeToInputs(true);
   $("category").addEventListener("change", () => {
     populateBookOptions($("category").value);
+    populateChapterOptions(getSelectedBookRaw(), 1);
     const book = getSelectedBook();
     $("startVerse").value = String(book.startVerse);
     $("endVerse").value = String(book.endVerse);
@@ -875,6 +927,14 @@ document.addEventListener("DOMContentLoaded", () => {
     saveSettings();
   });
   $("bookKey").addEventListener("change", () => {
+    populateChapterOptions(getSelectedBookRaw(), 1);
+    const book = getSelectedBook();
+    $("startVerse").value = String(book.startVerse);
+    $("endVerse").value = String(book.endVerse);
+    applyBookRangeToInputs(true);
+    saveSettings();
+  });
+  $("chapterNum").addEventListener("change", () => {
     const book = getSelectedBook();
     $("startVerse").value = String(book.startVerse);
     $("endVerse").value = String(book.endVerse);
@@ -919,18 +979,6 @@ document.addEventListener("DOMContentLoaded", () => {
   helpModal.addEventListener("click", (e) => {
     if (e.target === helpModal) closeHelp();
   });
-
-  let wheelLock = false;
-  window.addEventListener("wheel", (e) => {
-    if (!helpModal.classList.contains("hidden")) return;
-    if ($("test-screen").classList.contains("hidden")) return;
-    if (wheelLock) return;
-    if (Math.abs(e.deltaY) < 10) return;
-    wheelLock = true;
-    setTimeout(() => { wheelLock = false; }, 350);
-    if (e.deltaY > 0) forceNextVerse();
-    else forcePrevVerse();
-  }, { passive: true });
 
   let ctrlComboUsed = false;
   let shiftComboUsed = false;

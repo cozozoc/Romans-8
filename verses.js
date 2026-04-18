@@ -113,6 +113,13 @@ const MINISTRY_TRAINING_3_LABELS = {
 };
 
 const BIBLE_LIBRARY = {
+  "genesis": {
+    key: "genesis",
+    category: "bible",
+    name: "창세기",
+    chapters: typeof GENESIS !== "undefined" ? GENESIS : {},
+    chapterCount: 50,
+  },
   "romans-8": {
     key: "romans-8",
     category: "bible",

@@ -60,14 +60,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 213,
-      "lastAccessed": 1776499098369,
+      "accessCount": 230,
+      "lastAccessed": 1776500759203,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 132,
-      "lastAccessed": 1776499099596,
+      "accessCount": 144,
+      "lastAccessed": 1776500736160,
       "type": "file"
     },
     {
@@ -78,8 +78,8 @@
     },
     {
       "path": "verses.js",
-      "accessCount": 16,
-      "lastAccessed": 1776493617534,
+      "accessCount": 18,
+      "lastAccessed": 1776500683996,
       "type": "file"
     },
     {
@@ -119,6 +119,12 @@
       "type": "file"
     },
     {
+      "path": ".claude\\skills\\auto-commit\\SKILL.md",
+      "accessCount": 3,
+      "lastAccessed": 1776501095213,
+      "type": "file"
+    },
+    {
       "path": "data\\bible\\1corinthians.json",
       "accessCount": 2,
       "lastAccessed": 1776490626751,
@@ -131,9 +137,15 @@
       "type": "directory"
     },
     {
-      "path": ".claude\\skills\\auto-commit\\SKILL.md",
+      "path": "scrape_bible.py",
       "accessCount": 2,
-      "lastAccessed": 1776497216613,
+      "lastAccessed": 1776500190120,
+      "type": "file"
+    },
+    {
+      "path": "성경\\말라기_4장.txt",
+      "accessCount": 2,
+      "lastAccessed": 1776500258139,
       "type": "file"
     },
     {
@@ -233,15 +245,21 @@
       "type": "file"
     },
     {
-      "path": "scrape_bible.py",
-      "accessCount": 1,
-      "lastAccessed": 1776495843862,
-      "type": "file"
-    },
-    {
       "path": "성경\\_smoketest_시편_23편.txt",
       "accessCount": 1,
       "lastAccessed": 1776496004467,
+      "type": "file"
+    },
+    {
+      "path": "성경\\요엘_3장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776500229479,
+      "type": "file"
+    },
+    {
+      "path": "성경\\창세기_1장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776500493574,
       "type": "file"
     }
   ],
