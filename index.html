@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.14</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.15</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -27,7 +27,7 @@
       </div>
       <div class="modal-body">
         <h3>🎯 개요</h3>
-        <p>개역개정 성경의 선택한 본문(현재 로마서 8장, 고린도전서 13장, 시편 1편)을 구절 단위로 반복 학습하며 암송하는 도구입니다. 각 구절에서 난이도에 따라 일부 단어가 빈칸으로 가려지고, 힌트·낭독·전체보기 등을 활용해 구절을 익힙니다. 빈칸 위치는 매 테스트 시작마다 암호학적 난수로 새로 추첨됩니다.</p>
+        <p>개역개정 성경의 선택한 본문(현재 로마서 8장, 고린도전서 13장, 시편 1편, 사역훈련 2권 10과)을 구절 단위로 반복 학습하며 암송하는 도구입니다. 각 구절에서 난이도에 따라 일부 단어가 빈칸으로 가려지고, 힌트·낭독·전체보기 등을 활용해 구절을 익힙니다. 빈칸 위치는 매 테스트 시작마다 암호학적 난수로 새로 추첨됩니다.</p>
 
         <h3>⚙️ 설정 화면</h3>
         <ul>
@@ -104,14 +104,15 @@
           <option value="romans-8">로마서 8장 (1~39절)</option>
           <option value="1corinthians-13">고린도전서 13장 (1~13절)</option>
           <option value="psalms-1">시편 1편 (1~6절)</option>
+          <option value="ministry-training-2">사역훈련 2권 (교회와 평신도의 자화상, 10과)</option>
         </select>
       </div>
       <div class="form-row">
-        <label for="startVerse">시작 구절 <span id="startVerseHint" class="hint">1~39</span></label>
+        <label for="startVerse">시작 <span id="startVerseUnit">구절</span> <span id="startVerseHint" class="hint">1~39</span></label>
         <input type="number" id="startVerse" min="1" max="39" value="1">
       </div>
       <div class="form-row">
-        <label for="endVerse">끝 구절 <span id="endVerseHint" class="hint">1~39</span></label>
+        <label for="endVerse">끝 <span id="endVerseUnit">구절</span> <span id="endVerseHint" class="hint">1~39</span></label>
         <input type="number" id="endVerse" min="1" max="39" value="39">
       </div>
 
@@ -191,8 +192,11 @@
 
     <div class="progress-wrap">
       <div class="progress-labels">
-        <span id="progressLabel">진행률</span>
-        <span id="progressPercent">0%</span>
+        <span id="passageTitle" class="passage-title"></span>
+        <span class="progress-right">
+          <span id="progressLabel">진행률</span>
+          <span id="progressPercent">0%</span>
+        </span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>

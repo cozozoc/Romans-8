@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.14";
+const APP_VERSION = "0.0.15";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -159,7 +159,29 @@ function showScreen(id) {
 }
 
 function normalize(s) {
-  return s.replace(/\s+/g, " ").replace(/[.,!?，。！？]/g, "").trim();
+  return s.replace(/[\/.,!?，。！？]/g, "").replace(/\s+/g, " ").trim();
+}
+
+function lcsMatched(expectedWords, actualWords) {
+  const m = expectedWords.length;
+  const n = actualWords.length;
+  const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+  const en = expectedWords.map(normalize);
+  const an = actualWords.map(normalize);
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (en[i - 1] === an[j - 1]) dp[i][j] = dp[i - 1][j - 1] + 1;
+      else dp[i][j] = dp[i - 1][j] >= dp[i][j - 1] ? dp[i - 1][j] : dp[i][j - 1];
+    }
+  }
+  const matched = new Set();
+  let i = m, j = n;
+  while (i > 0 && j > 0) {
+    if (en[i - 1] === an[j - 1]) { matched.add(i - 1); i--; j--; }
+    else if (dp[i - 1][j] >= dp[i][j - 1]) i--;
+    else j--;
+  }
+  return matched;
 }
 
 function splitWords(s) {
@@ -199,15 +221,16 @@ function secureRandomInt(maxExclusive) {
   return v % maxExclusive;
 }
 
-function pickBlankIndices(wordCount, level, forceFirstTwo) {
-  let blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
+function pickBlankIndices(words, level, forceFirstTwo) {
+  const eligible = words.map((w, i) => w === "/" ? -1 : i).filter(i => i >= 0);
+  let blankCount = Math.round(eligible.length * LEVEL_RATIO[level]);
   const forced = [];
   if (forceFirstTwo) {
-    if (wordCount >= 1) forced.push(0);
-    if (wordCount >= 2) forced.push(1);
+    if (eligible.length >= 1) forced.push(eligible[0]);
+    if (eligible.length >= 2) forced.push(eligible[1]);
   }
   blankCount = Math.max(blankCount, forced.length);
-  const pool = [...Array(wordCount).keys()].filter(i => !forced.includes(i));
+  const pool = eligible.filter(i => !forced.includes(i));
   for (let i = pool.length - 1; i > 0; i--) {
     const j = secureRandomInt(i + 1);
     [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -235,6 +258,11 @@ function applyBookRangeToInputs(clamp = true) {
   const rangeText = `${book.startVerse}~${book.endVerse}`;
   if (sh) sh.textContent = rangeText;
   if (eh) eh.textContent = rangeText;
+  const unit = book.verseLabels ? "과" : "구절";
+  const su = $("startVerseUnit");
+  const eu = $("endVerseUnit");
+  if (su) su.textContent = unit;
+  if (eu) eu.textContent = unit;
   if (clamp) {
     let s = parseInt(sv.value) || book.startVerse;
     let e = parseInt(ev.value) || book.endVerse;
@@ -283,15 +311,27 @@ function updateProgress() {
   const total = endVerse - startVerse + 1;
   const done = state.currentVerse - startVerse + 1;
   const pct = Math.round((done / total) * 100);
-  $("progressLabel").textContent = `진행률 · ${done} / ${total} 구절`;
+  const customLabel = state.book && state.book.verseLabels && state.book.verseLabels[state.currentVerse];
+  const unitText = verseUnit() === "과" ? "과" : "구절";
+  const pt = $("passageTitle");
+  if (pt) pt.textContent = customLabel || "";
+  $("progressLabel").textContent = `진행률 · ${done} / ${total} ${unitText}`;
   $("progressPercent").textContent = `${pct}%`;
   $("progressFill").style.width = `${pct}%`;
 }
 
+function verseUnit() {
+  return (state.book && state.book.verseLabels) ? "과" : "절";
+}
+
+function verseLabelHtml() {
+  if (state.book && state.book.verseLabels) return "";
+  return `<span class="verse-label">${state.currentVerse}절</span>`;
+}
+
 function renderQuestionBody() {
-  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet);
-  $("questionText").innerHTML = labelHtml + body;
+  $("questionText").innerHTML = verseLabelHtml() + body;
 }
 
 function showQuestion() {
@@ -300,9 +340,10 @@ function showQuestion() {
   const words = splitWords(verse);
   state.currentWords = words;
   const level = state.config.level;
-  state.currentBlankSet = pickBlankIndices(words.length, level, state.config.forceFirstTwoBlanks);
+  state.currentBlankSet = pickBlankIndices(words, level, state.config.forceFirstTwoBlanks);
 
-  $("verseInfo").innerHTML = `${state.currentVerse}절 <span class="sub">/ ${state.config.endVerse}절까지</span>`;
+  const unit = verseUnit();
+  $("verseInfo").innerHTML = `${state.currentVerse}${unit} <span class="sub">/ ${state.config.endVerse}${unit}까지</span>`;
   $("levelInfo").innerHTML = `Lv.${level} <span class="sub">(${Math.round(LEVEL_RATIO[level]*100)}%)</span>`;
 
   $("streakInfo").innerHTML =
@@ -330,7 +371,7 @@ function reshuffleBlanks() {
   if (!state.currentWords || !state.currentWords.length) return;
   clearTimers();
   const level = state.config.level;
-  state.currentBlankSet = pickBlankIndices(state.currentWords.length, level, state.config.forceFirstTwoBlanks);
+  state.currentBlankSet = pickBlankIndices(state.currentWords, level, state.config.forceFirstTwoBlanks);
   state.hintShown = false;
   const box = $("questionBox");
   box.classList.remove("reveal-all", "wrong", "correct");
@@ -348,7 +389,7 @@ function showAll() {
   state.hintShown = false;
   box.classList.remove("wrong", "correct");
   box.classList.add("reveal-all");
-  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const labelHtml = verseLabelHtml();
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
 
@@ -435,7 +476,7 @@ function speakCurrentVerse() {
   if (!verse) return;
   if (availableKoVoices.length === 0) refreshVoiceList();
   const voice = pickVoice();
-  const u = new SpeechSynthesisUtterance(verse);
+  const u = new SpeechSynthesisUtterance(verse.replace(/\s*\/\s*/g, " "));
   u.lang = voice ? voice.lang : "ko-KR";
   const rateEl = $("ttsRate");
   const rate = rateEl ? parseFloat(rateEl.value) : 0.95;
@@ -484,7 +525,7 @@ function showHint() {
   const idx = state.hintQueue.shift();
   state.hintLastIdx = idx;
 
-  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const labelHtml = verseLabelHtml();
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set([idx]));
   $("questionText").innerHTML = labelHtml + body;
 
@@ -515,10 +556,14 @@ function showWrongReveal(expected, actual) {
 
   const ew = splitWords(expected);
   const aw = splitWords(actual);
-  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
-  const body = ew.map((w, i) => {
-    const a = aw[i];
-    const ok = a !== undefined && normalize(a) === normalize(w);
+  const ewNonSep = ew.filter(w => w !== "/");
+  const matched = lcsMatched(ewNonSep, aw);
+  const labelHtml = verseLabelHtml();
+  let nonSepIdx = 0;
+  const body = ew.map(w => {
+    if (w === "/") return `<span class="verse-sep">/</span>`;
+    const ok = matched.has(nonSepIdx);
+    nonSepIdx++;
     return ok ? escapeHtml(w) : `<span class="wrong-word">${escapeHtml(w)}</span>`;
   }).join(" ");
   qt.innerHTML = labelHtml + body;
@@ -572,7 +617,7 @@ function revealAllThenAdvance() {
   state.hintShown = false;
   const box = $("questionBox");
   box.classList.add("reveal-all", "correct");
-  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const labelHtml = verseLabelHtml();
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
   $("hintBtn").disabled = true;
@@ -642,7 +687,7 @@ function previewThenRun(fn) {
   const box = $("questionBox");
   box.classList.remove("wrong", "correct");
   box.classList.add("reveal-all");
-  const labelHtml = `<span class="verse-label">${state.currentVerse}절</span>`;
+  const labelHtml = verseLabelHtml();
   const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
   $("questionText").innerHTML = labelHtml + body;
   updateViewToggleBtn();

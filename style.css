@@ -375,8 +375,25 @@ button.ghost:hover { background: #f8fafc; }
 .progress-wrap {
   margin-bottom: 20px;
 }
+.passage-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.progress-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
 .progress-labels {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font-size: 12px;
   color: var(--text-muted);

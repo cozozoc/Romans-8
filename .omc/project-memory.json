@@ -60,14 +60,26 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 84,
-      "lastAccessed": 1776485973899,
+      "accessCount": 111,
+      "lastAccessed": 1776488830035,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 57,
-      "lastAccessed": 1776485975093,
+      "accessCount": 67,
+      "lastAccessed": 1776488831263,
+      "type": "file"
+    },
+    {
+      "path": "verses.js",
+      "accessCount": 11,
+      "lastAccessed": 1776488442666,
+      "type": "file"
+    },
+    {
+      "path": "style.css",
+      "accessCount": 8,
+      "lastAccessed": 1776488614035,
       "type": "file"
     },
     {
@@ -77,21 +89,21 @@
       "type": "directory"
     },
     {
-      "path": "style.css",
-      "accessCount": 5,
-      "lastAccessed": 1776472418580,
-      "type": "file"
-    },
-    {
-      "path": "verses.js",
-      "accessCount": 4,
-      "lastAccessed": 1776471136467,
-      "type": "file"
-    },
-    {
       "path": "data\\bible\\psalms.json",
       "accessCount": 3,
       "lastAccessed": 1776471144746,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\04_벧전2_11-12.txt",
+      "accessCount": 3,
+      "lastAccessed": 1776488503540,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\05_눅14_26-27_33.txt",
+      "accessCount": 3,
+      "lastAccessed": 1776488505124,
       "type": "file"
     },
     {
@@ -110,6 +122,54 @@
       "path": "data\\bible\\1corinthians.json",
       "accessCount": 1,
       "lastAccessed": 1776471110074,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487499842,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\02_요4_23-24.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487504192,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\03_엡4_11-13.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487509039,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\06_눅24_46-48.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487521897,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\07_고후4_5.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487523195,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\08_골3_16-17.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487527879,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\09_벧전4_10.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487530175,
+      "type": "file"
+    },
+    {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\10_벧전2_9.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776487535303,
       "type": "file"
     }
   ],
