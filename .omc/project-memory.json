@@ -60,14 +60,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 230,
-      "lastAccessed": 1776500759203,
+      "accessCount": 236,
+      "lastAccessed": 1776503248292,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 144,
-      "lastAccessed": 1776500736160,
+      "accessCount": 147,
+      "lastAccessed": 1776503130704,
       "type": "file"
     },
     {
@@ -78,8 +78,8 @@
     },
     {
       "path": "verses.js",
-      "accessCount": 18,
-      "lastAccessed": 1776500683996,
+      "accessCount": 22,
+      "lastAccessed": 1776503242367,
       "type": "file"
     },
     {
@@ -146,6 +146,18 @@
       "path": "성경\\말라기_4장.txt",
       "accessCount": 2,
       "lastAccessed": 1776500258139,
+      "type": "file"
+    },
+    {
+      "path": ".claude\\agents\\bible-curator.md",
+      "accessCount": 2,
+      "lastAccessed": 1776501734959,
+      "type": "file"
+    },
+    {
+      "path": ".claude\\skills\\bible\\SKILL.md",
+      "accessCount": 2,
+      "lastAccessed": 1776503113846,
       "type": "file"
     },
     {
@@ -260,6 +272,12 @@
       "path": "성경\\창세기_1장.txt",
       "accessCount": 1,
       "lastAccessed": 1776500493574,
+      "type": "file"
+    },
+    {
+      "path": ".claude\\skills\\expose-bible-books\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776503117632,
       "type": "file"
     }
   ],
