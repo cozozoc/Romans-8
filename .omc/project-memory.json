@@ -60,14 +60,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 256,
-      "lastAccessed": 1776510994016,
+      "accessCount": 271,
+      "lastAccessed": 1776513091623,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 153,
-      "lastAccessed": 1776510979627,
+      "accessCount": 159,
+      "lastAccessed": 1776512980301,
       "type": "file"
     },
     {
@@ -278,6 +278,24 @@
       "path": ".claude\\skills\\expose-bible-books\\SKILL.md",
       "accessCount": 1,
       "lastAccessed": 1776503117632,
+      "type": "file"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "accessCount": 1,
+      "lastAccessed": 1776512343918,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\thomas\\.claude\\plans\\abstract-cooking-bear.md",
+      "accessCount": 1,
+      "lastAccessed": 1776512887955,
+      "type": "file"
+    },
+    {
+      "path": ".first-two-mode.smoke.cjs",
+      "accessCount": 1,
+      "lastAccessed": 1776513125150,
       "type": "file"
     }
   ],
