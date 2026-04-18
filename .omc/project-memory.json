@@ -60,14 +60,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 271,
-      "lastAccessed": 1776513091623,
+      "accessCount": 273,
+      "lastAccessed": 1776520567360,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 159,
-      "lastAccessed": 1776512980301,
+      "accessCount": 161,
+      "lastAccessed": 1776520549017,
       "type": "file"
     },
     {
@@ -78,8 +78,8 @@
     },
     {
       "path": "verses.js",
-      "accessCount": 24,
-      "lastAccessed": 1776510990452,
+      "accessCount": 28,
+      "lastAccessed": 1776520544326,
       "type": "file"
     },
     {
@@ -95,6 +95,18 @@
       "type": "file"
     },
     {
+      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
+      "accessCount": 4,
+      "lastAccessed": 1776518574255,
+      "type": "file"
+    },
+    {
+      "path": "성경\\시편_1편.txt",
+      "accessCount": 4,
+      "lastAccessed": 1776519674545,
+      "type": "file"
+    },
+    {
       "path": "사역훈련2권_교회와_평신도의_자화상\\04_벧전2_11-12.txt",
       "accessCount": 3,
       "lastAccessed": 1776488503540,
@@ -107,21 +119,15 @@
       "type": "file"
     },
     {
-      "path": "사역훈련2권_교회와_평신도의_자화상\\01_엡2_19-20.txt",
-      "accessCount": 3,
-      "lastAccessed": 1776495065163,
-      "type": "file"
-    },
-    {
-      "path": "성경\\시편_1편.txt",
-      "accessCount": 3,
-      "lastAccessed": 1776495068330,
-      "type": "file"
-    },
-    {
       "path": ".claude\\skills\\auto-commit\\SKILL.md",
       "accessCount": 3,
       "lastAccessed": 1776501095213,
+      "type": "file"
+    },
+    {
+      "path": "docx_lines.txt",
+      "accessCount": 3,
+      "lastAccessed": 1776519745156,
       "type": "file"
     },
     {
@@ -296,6 +302,54 @@
       "path": ".first-two-mode.smoke.cjs",
       "accessCount": 1,
       "lastAccessed": 1776513125150,
+      "type": "file"
+    },
+    {
+      "path": "docx_dump.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776518586745,
+      "type": "file"
+    },
+    {
+      "path": "discipleship_gen.js",
+      "accessCount": 1,
+      "lastAccessed": 1776519648634,
+      "type": "file"
+    },
+    {
+      "path": "성경\\요한복음_1장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776519673302,
+      "type": "file"
+    },
+    {
+      "path": "성경\\디모데후서_3장.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776519674047,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\thomas\\.claude\\plans\\temporal-questing-quill.md",
+      "accessCount": 1,
+      "lastAccessed": 1776520005009,
+      "type": "file"
+    },
+    {
+      "path": "verses_discipleship.js",
+      "accessCount": 1,
+      "lastAccessed": 1776520247879,
+      "type": "file"
+    },
+    {
+      "path": "제자훈련1권\\01_롬10_9-10_마16_16.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776521084190,
+      "type": "file"
+    },
+    {
+      "path": "제자훈련2권\\02_롬11_36상_렘31_3하.txt",
+      "accessCount": 1,
+      "lastAccessed": 1776521084275,
       "type": "file"
     }
   ],
