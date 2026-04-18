@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.6</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.7</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -78,6 +78,7 @@
           <li><kbd>PageDown</kbd> / <kbd>+</kbd> · <kbd>=</kbd> / 마우스 휠 ↓ — 다음 구절</li>
           <li><kbd>PageUp</kbd> / <kbd>-</kbd> · <kbd>_</kbd> / 마우스 휠 ↑ — 이전 구절</li>
           <li><kbd>→</kbd> / <kbd>←</kbd> — 다음 / 이전 구절 (입력 OFF이거나 입력 칸에 포커스 없을 때)</li>
+          <li><kbd>Ctrl</kbd> (단독 탭) — 현재 구절 빈칸 위치 다시 뽑기</li>
           <li><kbd>Enter</kbd> (설정 화면) — 테스트 시작</li>
           <li><kbd>Esc</kbd> — 이 도움말 창 닫기</li>
         </ul>
@@ -207,6 +208,7 @@
         <button id="hintBtn" class="secondary">💡 힌트 보기</button>
         <button id="speakBtn" class="secondary" title="현재 구절 낭독">🔊 낭독</button>
         <button id="viewToggleBtn" class="secondary">👁 전체 보기</button>
+        <button id="reshuffleBtn" class="secondary" title="현재 구절 빈칸 위치 다시 뽑기">🔀 빈칸 섞기</button>
         <button id="autoRevealBtn" class="secondary" title="구절 이동 시 자동 전체보기 토글">📖 자동보기 OFF</button>
         <button id="inputToggleBtn" class="secondary">⌨ 입력 ON</button>
       </div>

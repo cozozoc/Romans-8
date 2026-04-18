@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.6";
+const APP_VERSION = "0.0.7";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -305,6 +305,21 @@ function showQuestion() {
   updateViewToggleBtn();
   updateAutoRevealBtn();
   applyInputVisibility();
+}
+
+function reshuffleBlanks() {
+  if (!state.currentWords || !state.currentWords.length) return;
+  clearTimers();
+  const level = state.config.level;
+  state.currentBlankSet = pickBlankIndices(state.currentWords.length, level);
+  state.hintShown = false;
+  const box = $("questionBox");
+  box.classList.remove("reveal-all", "wrong", "correct");
+  renderQuestionBody();
+  $("feedback").textContent = "";
+  $("feedback").className = "feedback";
+  updateHintBtn();
+  updateViewToggleBtn();
 }
 
 function showAll() {
@@ -664,6 +679,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("hintBtn").addEventListener("click", useHint);
   $("speakBtn").addEventListener("click", speakCurrentVerse);
   $("viewToggleBtn").addEventListener("click", toggleViewAll);
+  $("reshuffleBtn").addEventListener("click", reshuffleBlanks);
   $("inputToggleBtn").addEventListener("click", toggleInputEnabled);
   $("autoRevealBtn").addEventListener("click", toggleAutoReveal);
   $("nextBtn").addEventListener("click", forceNextVerse);
@@ -697,7 +713,19 @@ document.addEventListener("DOMContentLoaded", () => {
     else forcePrevVerse();
   }, { passive: true });
 
+  let ctrlComboUsed = false;
+  document.addEventListener("keyup", (e) => {
+    if (e.key !== "Control") return;
+    const wasCombo = ctrlComboUsed;
+    ctrlComboUsed = false;
+    if (wasCombo) return;
+    if (!helpModal.classList.contains("hidden")) return;
+    if ($("test-screen").classList.contains("hidden")) return;
+    reshuffleBlanks();
+  });
+
   document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key !== "Control") ctrlComboUsed = true;
     const helpOpen = !helpModal.classList.contains("hidden");
     if (helpOpen) {
       if (e.key === "Escape") { e.preventDefault(); closeHelp(); }
