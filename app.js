@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.46";
+const APP_VERSION = "0.0.47";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1023,7 +1023,7 @@ function openPrintPractice() {
 <meta charset="UTF-8">
 <title>${escapeHtml(title)}</title>
 <style>
-  @page { size: A4; margin: 18mm 16mm; }
+  @page { size: A4; margin: 10mm 10mm; }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
@@ -1034,7 +1034,8 @@ function openPrintPractice() {
     padding: 16px;
   }
   .no-print {
-    display: flex; gap: 8px; justify-content: center;
+    display: flex; gap: 8px; justify-content: center; align-items: center;
+    flex-wrap: wrap;
     margin-bottom: 16px; padding-bottom: 12px;
     border-bottom: 1px dashed #bbb;
   }
@@ -1044,6 +1045,18 @@ function openPrintPractice() {
     font-family: inherit; font-weight: 600;
   }
   .no-print button.sec { background: #e2e8f0; color: #333; }
+  .print-guide {
+    flex-basis: 100%;
+    font-size: 12px;
+    color: #666;
+    background: #fff8dc;
+    border: 1px solid #f0d878;
+    padding: 8px 12px;
+    border-radius: 6px;
+    line-height: 1.55;
+    margin-top: 4px;
+  }
+  .print-guide b { color: #b8860b; }
   header.doc-head { text-align: center; margin-bottom: 12px; }
   header.doc-head h1 { font-size: 15pt; margin: 0 0 4px; }
   header.doc-head .meta { font-size: 10pt; color: #444; }
@@ -1088,6 +1101,11 @@ function openPrintPractice() {
 <div class="no-print">
   <button onclick="window.print()">🖨 인쇄 / PDF로 저장</button>
   <button class="sec" onclick="window.close()">닫기</button>
+  <div class="print-guide">
+    💡 <b>여백을 최대한 좁게 출력하세요.</b> 브라우저 인쇄 대화상자에서 <b>「여백」</b> 옵션을
+    <b>「없음」 / 「최소」 / 「좁게」</b> 중 하나로 선택하면 한 페이지에 더 많은 구절이 들어갑니다
+    (CSS 기본값은 10mm — 대화상자에서 override 가능). Chrome/Edge: 「추가 설정」 → 「여백」, Safari: 「여백」 드롭다운.
+  </div>
 </div>
 <header class="doc-head">
   <h1>${escapeHtml(book.name)}</h1>
