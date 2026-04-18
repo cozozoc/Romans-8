@@ -60,14 +60,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 126,
-      "lastAccessed": 1776490851559,
+      "accessCount": 177,
+      "lastAccessed": 1776493141684,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 89,
-      "lastAccessed": 1776490844890,
+      "accessCount": 108,
+      "lastAccessed": 1776493142923,
       "type": "file"
     },
     {
@@ -77,16 +77,16 @@
       "type": "file"
     },
     {
-      "path": "",
-      "accessCount": 9,
-      "lastAccessed": 1776490230592,
-      "type": "directory"
+      "path": "style.css",
+      "accessCount": 14,
+      "lastAccessed": 1776492587262,
+      "type": "file"
     },
     {
-      "path": "style.css",
-      "accessCount": 8,
-      "lastAccessed": 1776488614035,
-      "type": "file"
+      "path": "",
+      "accessCount": 10,
+      "lastAccessed": 1776492630033,
+      "type": "directory"
     },
     {
       "path": "data\\bible\\psalms.json",
@@ -200,6 +200,12 @@
       "path": "사역훈련3권_소그룹_환경과_리더십\\07_잠18_13.txt",
       "accessCount": 1,
       "lastAccessed": 1776489410260,
+      "type": "file"
+    },
+    {
+      "path": "sw.js",
+      "accessCount": 1,
+      "lastAccessed": 1776492602146,
       "type": "file"
     }
   ],

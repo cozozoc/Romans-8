@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.18</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.23</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -27,37 +27,29 @@
       </div>
       <div class="modal-body">
         <h3>🎯 개요</h3>
-        <p>개역개정 성경의 선택한 본문(현재 로마서 8장, 고린도전서 13장, 시편 1편, 사역훈련 2권 10과, 사역훈련 3권 5과)을 구절 단위로 반복 학습하며 암송하는 도구입니다. 각 구절에서 난이도에 따라 일부 단어가 빈칸으로 가려지고, 힌트·낭독·전체보기 등을 활용해 구절을 익힙니다. 빈칸 위치는 매 테스트 시작마다 암호학적 난수로 새로 추첨됩니다.</p>
+        <p>개역개정 성경의 선택한 본문(현재 로마서 8장, 고린도전서 13장, 시편 1편, 사역훈련 2권 10과, 사역훈련 3권 5과)을 구절 단위로 반복 학습하며 암송하는 도구입니다. 각 구절에서 난이도에 따라 일부 단어가 빈칸으로 가려지고, 힌트·전체보기·북마크 등을 활용해 구절을 익힙니다. 빈칸 위치는 매 테스트 시작마다 암호학적 난수로 새로 추첨됩니다.</p>
 
         <h3>⚙️ 설정 화면</h3>
         <ul>
           <li><b>본문 선택</b>: 학습할 성경 본문(장 단위). 선택에 따라 시작/끝 구절의 허용 범위가 자동 조정됩니다.</li>
           <li><b>시작 / 끝 구절</b>: 선택한 본문 내에서 학습할 범위.</li>
-          <li><b>텍스트 입력</b> <i>(기본 OFF)</i>: 키보드로 전체 구절을 타이핑하여 제출할지 여부. OFF면 입력 영역과 제출 버튼이 숨겨지고 힌트·전체 보기·낭독으로만 연습.</li>
+          <li><b>텍스트 입력</b> <i>(기본 OFF)</i>: 키보드로 전체 구절을 타이핑하여 제출할지 여부. OFF면 입력 영역과 제출 버튼이 숨겨지고 힌트·전체 보기로만 연습.</li>
           <li><b>구절 이동 시 자동 전체보기</b> <i>(기본 OFF)</i>: ON이면 수동으로 구절을 이동할 때(◀/▶ 버튼, 화살표, 휠, PageUp/Down) 현재 구절의 빈칸을 <b>전체 단어 수 × 1초</b> 동안 정답으로 채워 미리보고 난 뒤 다음 구절로 넘어감 (예: 단어 12개 → 12초). 정답/오답으로 자동 이동할 때는 이미 답이 공개되므로 별도 미리보기 없음.</li>
           <li><b>처음 두 단어 항상 빈칸</b> <i>(기본 OFF)</i>: ON이면 모든 구절의 첫 두 단어가 난이도와 무관하게 항상 빈칸으로 고정. 구절 도입부 암기를 강화하고 싶을 때 사용. 설정 화면에서만 전환 가능.</li>
+          <li><b>연속 빈칸 하나로 합치기</b> <i>(기본 OFF)</i>: ON이면 서로 인접한(공백만 사이에 둔) 빈칸들을 하나의 긴 빈칸으로 묶어 표시. 어디가 몇 단어인지까지 추측해야 하므로 난이도가 체감상 상승합니다. 힌트로 가운데 단어가 공개되면 해당 위치에서 자동으로 분할됩니다. 채점 로직은 동일(단어 단위).</li>
           <li><b>난이도 레벨</b> <i>(기본 Lv.1)</i>: Lv.1(10%) ~ Lv.10(100%). 단어 중 해당 비율이 빈칸으로 바뀜.</li>
           <li><b>연속 정답 횟수</b> <i>(기본 1회)</i>: 이 횟수만큼 연속 정답해야 다음 구절로 이동.</li>
-          <li><b>낭독 음성</b>: 🔊 낭독에 사용할 TTS 음성. 자동 모드는 신경망/클라우드 음성을 우선 고르며, ⭐ 표시는 신경망/Natural/Premium 계열 고품질 음성입니다.</li>
-          <li><b>낭독 속도</b>: 0.5(느림) ~ 1.5(빠름), 기본 0.95.</li>
+          <li><b>북마크된 구절만</b> <i>(기본 OFF)</i>: ON이면 현재 본문에서 북마크된(⭐) 구절만 모아 번호 순서대로 테스트. 북마크가 없으면 알림 후 시작되지 않습니다.</li>
+          <li><b>북마크 전체 삭제</b>: 모든 본문의 저장된 북마크를 일괄 삭제. 강제 삭제는 이 버튼(설정 화면)에서만 가능합니다.</li>
           <li><b>설정 초기화</b>: 저장된 설정을 모두 삭제하고 페이지를 새로고침해 기본값으로 복원.</li>
         </ul>
-
-        <h3>🎙 고품질 낭독 음성 가이드</h3>
-        <p>가장 자연스러운 한국어 음성을 원한다면 다음 환경을 권장합니다:</p>
-        <ul>
-          <li><b>Microsoft Edge</b>: "Microsoft SunHi/InJoon <b>Online (Natural)</b>" 음성 — 가장 자연스러움</li>
-          <li><b>macOS / iOS Safari</b>: 설정 → 손쉬운 사용 → 음성에서 <b>Yuna (고급/Premium)</b> 다운로드</li>
-          <li><b>Android Chrome</b>: Google TTS 엔진의 "한국어 (대한민국)" 음성 (WaveNet 계열)</li>
-          <li><b>Windows</b>: 설정 → 시간 및 언어 → 음성 → 한국어 "향상된 자연스러운 음성" 설치</li>
-        </ul>
-        <p>설치 후 페이지를 새로고침하면 "낭독 음성" 드롭다운에서 ⭐ 표시로 자동 인식됩니다.</p>
 
         <h3>📝 테스트 화면 버튼</h3>
         <ul>
           <li><b>제출</b>: 입력한 전체 구절을 채점. 정답이면 구절 전체가 파랗게 강조된 뒤 자동으로 다음 단계로 이동, 오답이면 틀린 단어가 표시됩니다.</li>
           <li><b>💡 힌트 보기 / 힌트 숨기기</b>: 토글 버튼. "보기"를 누르면 셔플 큐의 다음 빈칸 하나를 공개하고, "숨기기"를 누르면 즉시 감춥니다. 셔플 큐는 한 싸이클 동안 각 빈칸이 1회씩 균등하게 공개되도록 동작합니다.</li>
-          <li><b>🔊 낭독</b>: 현재 구절을 한국어 음성으로 읽어줍니다. 재클릭 시 중지 (브라우저/OS 음성 지원 필요).</li>
+          <li><b>☆ / ⭐ 북마크</b>: 현재 구절을 북마크에 추가/해제 (토글). 북마크는 본문별로 저장되며, 설정 화면의 <b>북마크된 구절만</b> ON 상태로 다시 시작하면 해당 구절만 모아 테스트할 수 있습니다. 테스트 중 <kbd>Shift</kbd> 단독 키로도 토글 가능.</li>
+          <li><b>🔖 북마크만 ON / OFF</b>: 테스트 도중 북마크 필터를 즉시 전환. ON으로 전환하면 현재 본문의 북마크 구절만 모은 목록으로 바뀌고, OFF로 돌리면 원래 시작·끝 구절 범위로 복귀합니다. 현재 구절이 새 목록에 없으면 가장 가까운 앞 구절로 이동합니다.</li>
           <li><b>👁 전체 보기 / 🙈 전체 숨기기</b>: 빈칸 포함 여부 토글. "전체 보기"는 모든 빈칸을 정답으로 채우고, "전체 숨기기"는 다시 빈칸 상태로 되돌립니다.</li>
           <li><b>🔀 빈칸 섞기</b>: 현재 구절의 빈칸 위치를 즉시 다시 추첨. 같은 난이도 내에서 다른 단어를 연습하고 싶을 때 사용 (<kbd>Ctrl</kbd> 단독 탭과 동일).</li>
           <li><b>📖 자동보기 ON / OFF</b>: 수동 구절 이동 직전 현재 구절의 전체 단어 수만큼(초) 정답을 미리 보여줄지 토글. 빠르게 다시 이동을 누르면 미리보기는 건너뛰고 바로 이동합니다. 이전 구절(◀ Prev)로 이동할 때는 자동보기가 동작하지 않습니다.</li>
@@ -81,6 +73,7 @@
           <li><kbd>PageUp</kbd> / <kbd>-</kbd> · <kbd>_</kbd> / 마우스 휠 ↑ — 이전 구절</li>
           <li><kbd>→</kbd> / <kbd>←</kbd> — 다음 / 이전 구절 (입력 OFF이거나 입력 칸에 포커스 없을 때)</li>
           <li><kbd>↑</kbd> / <kbd>↓</kbd> — 난이도 올리기 / 내리기 (입력 OFF이거나 입력 칸에 포커스 없을 때)</li>
+          <li><kbd>Shift</kbd> (단독) — 현재 구절 북마크 토글 (입력 칸에 포커스 없을 때)</li>
           <li><kbd>Ctrl</kbd> (단독 탭) — 현재 구절 빈칸 위치 다시 뽑기</li>
           <li><kbd>Enter</kbd> (설정 화면) — 테스트 시작</li>
           <li><kbd>Esc</kbd> — 이 도움말 창 닫기</li>
@@ -140,6 +133,13 @@
           <span class="slider"></span>
         </label>
       </div>
+      <div class="form-row toggle-row">
+        <label for="mergeBlanks">연속 빈칸 하나로 합치기</label>
+        <label class="switch">
+          <input type="checkbox" id="mergeBlanks">
+          <span class="slider"></span>
+        </label>
+      </div>
       <div class="form-row">
         <label for="level">난이도 레벨 <span class="hint">빈칸 비율</span></label>
         <select id="level">
@@ -161,18 +161,16 @@
         <input type="number" id="continuousCount" min="1" max="10" value="1">
       </div>
 
-      <div class="form-row full-width">
-        <label for="ttsVoice">낭독 음성 <span class="hint">⭐ = 신경망/고품질 음성</span></label>
-        <select id="ttsVoice">
-          <option value="">자동 (고품질 우선 선택)</option>
-        </select>
-      </div>
-      <div class="form-row full-width">
-        <label for="ttsRate">낭독 속도 <span class="hint">0.5 ~ 1.5 (기본 0.95)</span></label>
-        <input type="number" id="ttsRate" min="0.5" max="1.5" step="0.05" value="0.95">
+      <div class="form-row toggle-row">
+        <label for="bookmarkedOnly">북마크된 구절만 <span class="hint">⭐ 표시된 구절만 순서대로 테스트</span></label>
+        <label class="switch">
+          <input type="checkbox" id="bookmarkedOnly">
+          <span class="slider"></span>
+        </label>
       </div>
     </div>
     <button id="startBtn" class="primary big-btn">테스트 시작하기</button>
+    <button id="clearBookmarksBtn" class="ghost reset-btn" title="저장된 모든 북마크를 삭제">북마크 전체 삭제</button>
     <button id="resetSettingsBtn" class="ghost reset-btn">설정 초기화</button>
   </section>
 
@@ -216,7 +214,8 @@
       <div class="button-row">
         <button id="submitBtn" class="primary">제출</button>
         <button id="hintBtn" class="secondary">💡 힌트 보기</button>
-        <button id="speakBtn" class="secondary" title="현재 구절 낭독">🔊 낭독</button>
+        <button id="bookmarkBtn" class="secondary" title="현재 구절 북마크 (Shift 단독 키)">☆ 북마크</button>
+        <button id="bookmarkFilterBtn" class="secondary" title="북마크된 구절만 보기 토글">🔖 북마크만 OFF</button>
         <button id="viewToggleBtn" class="secondary">👁 전체 보기</button>
         <button id="reshuffleBtn" class="secondary" title="현재 구절 빈칸 위치 다시 뽑기">🔀 빈칸 섞기</button>
         <button id="autoRevealBtn" class="secondary" title="구절 이동 시 자동 전체보기 토글">📖 자동보기 OFF</button>

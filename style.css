@@ -385,6 +385,22 @@ button.ghost:hover { background: #f8fafc; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.passage-blank {
+  display: inline-block;
+  min-width: 48px;
+  padding: 0 4px;
+  margin: 0 2px;
+  border-bottom: 2px dashed var(--primary);
+  color: transparent;
+  letter-spacing: 2px;
+  vertical-align: baseline;
+}
+button.secondary.bookmark-active {
+  background: #fff7d6;
+  color: #b8860b;
+  border-color: #f1c40f;
+}
+button.secondary.bookmark-active:hover { background: #ffe9a8; }
 .progress-right {
   display: flex;
   gap: 10px;

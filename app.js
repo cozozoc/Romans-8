@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.18";
+const APP_VERSION = "0.0.23";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -7,6 +7,8 @@ const state = {
   config: null,
   book: null,
   currentVerse: 1,
+  verseList: [],
+  verseIdx: 0,
   correctStreak: 0,
   currentWords: [],
   currentBlankSet: new Set(),
@@ -20,7 +22,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","level","continuousCount","ttsVoice","ttsRate"];
+const SETTING_IDS = ["bookKey","startVerse","endVerse","inputEnabled","autoRevealOnMove","forceFirstTwoBlanks","mergeBlanks","level","continuousCount","bookmarkedOnly"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   bookKey: DEFAULT_BOOK_KEY,
@@ -29,64 +31,43 @@ const DEFAULT_SETTINGS = {
   inputEnabled: false,
   autoRevealOnMove: false,
   forceFirstTwoBlanks: false,
+  mergeBlanks: false,
   level: "1",
   continuousCount: "1",
-  ttsVoice: "",
-  ttsRate: "0.95",
+  bookmarkedOnly: false,
 };
 
-let availableKoVoices = [];
-function voiceQualityScore(v) {
-  const tag = ((v.name || "") + " " + (v.voiceURI || "")).toLowerCase();
-  let s = 0;
-  if (tag.includes("premium")) s += 40;
-  if (tag.includes("neural")) s += 35;
-  if (tag.includes("natural")) s += 35;
-  if (tag.includes("wavenet")) s += 35;
-  if (tag.includes("enhanced")) s += 25;
-  if (tag.includes("novel")) s += 20;
-  if (tag.includes("online")) s += 18;
-  if (tag.includes("google")) s += 12;
-  if (tag.includes("microsoft")) s += 8;
-  if (tag.includes("yuna")) s += 10; // macOS/iOS Korean
-  if (!v.localService) s += 15; // cloud voices usually higher quality
-  return s;
+const BOOKMARKS_KEY = "romans8_bookmarks_v1";
+function loadBookmarks() {
+  try {
+    const raw = localStorage.getItem(BOOKMARKS_KEY);
+    if (!raw) return {};
+    const obj = JSON.parse(raw);
+    return obj && typeof obj === "object" ? obj : {};
+  } catch (e) { return {}; }
 }
-function refreshVoiceList() {
-  const synth = window.speechSynthesis;
-  if (!synth) return;
-  const all = synth.getVoices();
-  availableKoVoices = all
-    .filter(v => v.lang && v.lang.toLowerCase().startsWith("ko"))
-    .sort((a, b) => voiceQualityScore(b) - voiceQualityScore(a));
-  const sel = $("ttsVoice");
-  if (!sel) return;
-  const prev = sel.value;
-  const saved = (function() { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}").ttsVoice || ""; } catch (e) { return ""; } })();
-  sel.innerHTML = "";
-  const auto = document.createElement("option");
-  auto.value = "";
-  auto.textContent = availableKoVoices.length
-    ? `자동 (추천: ${availableKoVoices[0].name})`
-    : "자동 (한국어 음성 없음)";
-  sel.appendChild(auto);
-  availableKoVoices.forEach(v => {
-    const opt = document.createElement("option");
-    opt.value = v.voiceURI || v.name;
-    const tag = voiceQualityScore(v) >= 25 ? " ⭐" : "";
-    opt.textContent = `${v.name}${tag}`;
-    sel.appendChild(opt);
-  });
-  sel.value = prev || saved || "";
+function saveBookmarks(obj) {
+  try { localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(obj)); } catch (e) {}
 }
-function pickVoice() {
-  const sel = $("ttsVoice");
-  const pref = sel ? sel.value : "";
-  if (pref) {
-    const found = availableKoVoices.find(v => (v.voiceURI || v.name) === pref);
-    if (found) return found;
-  }
-  return availableKoVoices[0] || null;
+function getBookmarksFor(bookKey) {
+  const all = loadBookmarks();
+  const arr = Array.isArray(all[bookKey]) ? all[bookKey] : [];
+  return new Set(arr.map(n => parseInt(n, 10)).filter(n => Number.isFinite(n)));
+}
+function isBookmarked(bookKey, verseNum) {
+  return getBookmarksFor(bookKey).has(parseInt(verseNum, 10));
+}
+function toggleBookmark(bookKey, verseNum) {
+  const all = loadBookmarks();
+  const set = new Set(Array.isArray(all[bookKey]) ? all[bookKey] : []);
+  const n = parseInt(verseNum, 10);
+  if (set.has(n)) set.delete(n); else set.add(n);
+  all[bookKey] = Array.from(set).sort((a, b) => a - b);
+  saveBookmarks(all);
+  return set.has(n);
+}
+function clearAllBookmarks() {
+  try { localStorage.removeItem(BOOKMARKS_KEY); } catch (e) {}
 }
 
 function parseVersion(v) {
@@ -195,19 +176,41 @@ function escapeHtml(s) {
 }
 
 function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = false) {
-  return words.map((w, i) => {
+  const merge = !revealAll && !!(state.config && state.config.mergeBlanks);
+  const parts = [];
+  let i = 0;
+  while (i < words.length) {
+    if (merge && blankSet.has(i) && !revealedSet.has(i)) {
+      let j = i;
+      const group = [];
+      while (j < words.length && blankSet.has(j) && !revealedSet.has(j)) {
+        group.push(j);
+        j++;
+      }
+      if (group.length >= 2) {
+        const totalLen = group.reduce((s, k) => s + words[k].length, 0);
+        const placeholder = "＿".repeat(Math.max(4, Math.min(totalLen, 12)));
+        parts.push(`<span class="blank blank-merged" data-idx="${group.join(',')}">${placeholder}</span>`);
+        i = j;
+        continue;
+      }
+    }
+    const w = words[i];
     if (blankSet.has(i)) {
       if (revealAll) {
-        return `<span class="blank revealed">${escapeHtml(w)}</span>`;
+        parts.push(`<span class="blank revealed">${escapeHtml(w)}</span>`);
+      } else if (revealedSet.has(i)) {
+        parts.push(`<span class="blank revealed" data-idx="${i}">${escapeHtml(w)}</span>`);
+      } else {
+        const placeholder = "＿".repeat(Math.max(2, Math.min(w.length, 6)));
+        parts.push(`<span class="blank" data-idx="${i}">${placeholder}</span>`);
       }
-      if (revealedSet.has(i)) {
-        return `<span class="blank revealed" data-idx="${i}">${escapeHtml(w)}</span>`;
-      }
-      const placeholder = "＿".repeat(Math.max(2, Math.min(w.length, 6)));
-      return `<span class="blank" data-idx="${i}">${placeholder}</span>`;
+    } else {
+      parts.push(escapeHtml(w));
     }
-    return escapeHtml(w);
-  }).join(" ");
+    i++;
+  }
+  return parts.join(" ");
 }
 
 function secureRandomInt(maxExclusive) {
@@ -285,17 +288,33 @@ function startTest() {
     inputEnabled: $("inputEnabled").checked,
     autoRevealOnMove: $("autoRevealOnMove").checked,
     forceFirstTwoBlanks: $("forceFirstTwoBlanks").checked,
+    mergeBlanks: $("mergeBlanks").checked,
     level: Math.max(1, Math.min(10, parseInt($("level").value) || 1)),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
+    bookmarkedOnly: $("bookmarkedOnly").checked,
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
     return;
   }
+  let verseList;
+  if (cfg.bookmarkedOnly) {
+    const marks = getBookmarksFor(book.key);
+    verseList = Array.from(marks).sort((a, b) => a - b);
+    if (verseList.length === 0) {
+      alert(`"${book.name}"에 북마크된 구절이 없습니다. 먼저 테스트 중 ☆ 북마크(또는 Shift) 로 구절을 추가해 주세요.`);
+      return;
+    }
+  } else {
+    verseList = [];
+    for (let v = cfg.startVerse; v <= cfg.endVerse; v++) verseList.push(v);
+  }
   state.book = book;
   state.config = cfg;
+  state.verseList = verseList;
+  state.verseIdx = 0;
   saveSettings();
-  state.currentVerse = cfg.startVerse;
+  state.currentVerse = verseList[0];
   state.correctStreak = 0;
   showScreen("test-screen");
   showQuestion();
@@ -307,15 +326,13 @@ function clearTimers() {
 }
 
 function updateProgress() {
-  const { startVerse, endVerse } = state.config;
-  const total = endVerse - startVerse + 1;
-  const done = state.currentVerse - startVerse + 1;
+  const total = (state.verseList && state.verseList.length) || 1;
+  const done = (state.verseIdx || 0) + 1;
   const pct = Math.round((done / total) * 100);
-  const customLabel = state.book && state.book.verseLabels && state.book.verseLabels[state.currentVerse];
   const unitText = verseUnit() === "과" ? "과" : "구절";
-  const pt = $("passageTitle");
-  if (pt) pt.textContent = customLabel || "";
-  $("progressLabel").textContent = `진행률 · ${done} / ${total} ${unitText}`;
+  const filterTag = state.config && state.config.bookmarkedOnly ? " · ⭐ 북마크" : "";
+  renderPassageTitle();
+  $("progressLabel").textContent = `진행률 · ${done} / ${total} ${unitText}${filterTag}`;
   $("progressPercent").textContent = `${pct}%`;
   $("progressFill").style.width = `${pct}%`;
 }
@@ -343,7 +360,9 @@ function showQuestion() {
   state.currentBlankSet = pickBlankIndices(words, level, state.config.forceFirstTwoBlanks);
 
   const unit = verseUnit();
-  $("verseInfo").innerHTML = `${state.currentVerse}${unit} <span class="sub">/ ${state.config.endVerse}${unit}까지</span>`;
+  const totalInList = (state.verseList && state.verseList.length) || 1;
+  const pos = (state.verseIdx || 0) + 1;
+  $("verseInfo").innerHTML = `${state.currentVerse}${unit} <span class="sub">(${pos}/${totalInList})</span>`;
   $("levelInfo").innerHTML = `Lv.${level} <span class="sub">(${Math.round(LEVEL_RATIO[level]*100)}%)</span>`;
 
   $("streakInfo").innerHTML =
@@ -364,6 +383,8 @@ function showQuestion() {
   updateHintBtn();
   updateViewToggleBtn();
   updateAutoRevealBtn();
+  updateBookmarkBtn();
+  updateBookmarkFilterBtn();
   applyInputVisibility();
 }
 
@@ -442,6 +463,33 @@ function updateViewToggleBtn() {
   if (!btn) return;
   if (box.classList.contains("reveal-all")) btn.textContent = "🙈 전체 숨기기";
   else btn.textContent = "👁 전체 보기";
+  renderPassageTitle();
+}
+
+function renderPassageTitle() {
+  const pt = $("passageTitle");
+  if (!pt) return;
+  const customLabel = state.book && state.book.verseLabels && state.book.verseLabels[state.currentVerse];
+  if (!customLabel) { pt.textContent = ""; return; }
+  const level = parseInt(state.config.level) || 1;
+  const box = $("questionBox");
+  const reveal = box && box.classList.contains("reveal-all");
+  const m = customLabel.match(/^(.*?)\s*\(([^()]+)\)\s*$/);
+  if (!m || reveal || level < 7) {
+    pt.textContent = customLabel;
+    return;
+  }
+  const titlePart = m[1];
+  const refPart = m[2];
+  const hideTitle = level === 7 || level >= 9;
+  const hideRef = level === 8 || level >= 9;
+  const pm = titlePart.match(/^(\d+\.\s*)(.*)$/);
+  const prefix = pm ? pm[1] : "";
+  const titleBody = pm ? pm[2] : titlePart;
+  const blank = `<span class="passage-blank">＿＿＿＿</span>`;
+  const titleHtml = hideTitle ? blank : escapeHtml(titleBody);
+  const refHtml = hideRef ? blank : escapeHtml(refPart);
+  pt.innerHTML = `${escapeHtml(prefix)}${titleHtml} (${refHtml})`;
 }
 
 function applyInputVisibility() {
@@ -476,31 +524,63 @@ function toggleAutoReveal() {
   updateAutoRevealBtn();
 }
 
-function speakCurrentVerse() {
-  const synth = window.speechSynthesis;
-  if (!synth) { alert("이 브라우저는 음성 합성을 지원하지 않습니다."); return; }
-  const btn = $("speakBtn");
-  if (synth.speaking) {
-    synth.cancel();
-    if (btn) btn.textContent = "🔊 낭독";
-    return;
+function updateBookmarkBtn() {
+  const btn = $("bookmarkBtn");
+  if (!btn) return;
+  const marked = state.book && isBookmarked(state.book.key, state.currentVerse);
+  btn.textContent = marked ? "⭐ 북마크" : "☆ 북마크";
+  btn.classList.toggle("bookmark-active", !!marked);
+}
+
+function toggleCurrentBookmark() {
+  if (!state.book || state.currentVerse == null) return;
+  toggleBookmark(state.book.key, state.currentVerse);
+  updateBookmarkBtn();
+}
+
+function updateBookmarkFilterBtn() {
+  const btn = $("bookmarkFilterBtn");
+  if (!btn) return;
+  const on = !!(state.config && state.config.bookmarkedOnly);
+  btn.textContent = on ? "🔖 북마크만 ON" : "🔖 북마크만 OFF";
+  btn.classList.toggle("bookmark-active", on);
+}
+
+function toggleBookmarkFilter() {
+  if (!state.book || !state.config) return;
+  const turningOn = !state.config.bookmarkedOnly;
+  let newList;
+  if (turningOn) {
+    const marks = getBookmarksFor(state.book.key);
+    newList = Array.from(marks).sort((a, b) => a - b);
+    if (newList.length === 0) {
+      alert(`"${state.book.name}"에 북마크된 구절이 없습니다. 먼저 ☆ 북마크(또는 Shift)로 구절을 추가해 주세요.`);
+      return;
+    }
+  } else {
+    newList = [];
+    for (let v = state.config.startVerse; v <= state.config.endVerse; v++) newList.push(v);
   }
-  const verse = state.book.verses[state.currentVerse];
-  if (!verse) return;
-  if (availableKoVoices.length === 0) refreshVoiceList();
-  const voice = pickVoice();
-  const u = new SpeechSynthesisUtterance(verse.replace(/\s*\/\s*/g, " "));
-  u.lang = voice ? voice.lang : "ko-KR";
-  const rateEl = $("ttsRate");
-  const rate = rateEl ? parseFloat(rateEl.value) : 0.95;
-  u.rate = isFinite(rate) ? Math.max(0.5, Math.min(1.5, rate)) : 0.95;
-  u.pitch = 1.0;
-  u.volume = 1.0;
-  if (voice) u.voice = voice;
-  u.onend = () => { if (btn) btn.textContent = "🔊 낭독"; };
-  u.onerror = () => { if (btn) btn.textContent = "🔊 낭독"; };
-  synth.speak(u);
-  if (btn) btn.textContent = "⏹ 중지";
+  const prev = state.currentVerse;
+  let idx = newList.indexOf(prev);
+  if (idx < 0) {
+    idx = 0;
+    for (let i = 0; i < newList.length; i++) {
+      if (newList[i] >= prev) { idx = i; break; }
+      idx = i;
+    }
+  }
+  state.config.bookmarkedOnly = turningOn;
+  state.verseList = newList;
+  state.verseIdx = idx;
+  state.currentVerse = newList[idx];
+  state.correctStreak = 0;
+  const cb = $("bookmarkedOnly");
+  if (cb) cb.checked = turningOn;
+  saveSettings();
+  clearTimers();
+  showQuestion();
+  updateBookmarkFilterBtn();
 }
 
 function updateHintBtn() {
@@ -646,14 +726,15 @@ function revealAllThenAdvance() {
 }
 
 function handleCorrectAdvance() {
-  const { continuousCount, endVerse } = state.config;
+  const { continuousCount } = state.config;
 
   if (state.correctStreak >= continuousCount) {
-    if (state.currentVerse >= endVerse) {
+    if (state.verseIdx >= state.verseList.length - 1) {
       finishAll();
       return;
     }
-    state.currentVerse++;
+    state.verseIdx++;
+    state.currentVerse = state.verseList[state.verseIdx];
     state.correctStreak = 0;
   }
 
@@ -662,21 +743,21 @@ function handleCorrectAdvance() {
 
 function advanceNext() {
   clearTimers();
-  const { endVerse } = state.config;
-  if (state.currentVerse >= endVerse) {
+  if (state.verseIdx >= state.verseList.length - 1) {
     finishAll();
     return;
   }
-  state.currentVerse++;
+  state.verseIdx++;
+  state.currentVerse = state.verseList[state.verseIdx];
   state.correctStreak = 0;
   showQuestion();
 }
 
 function advancePrev() {
   clearTimers();
-  const { startVerse } = state.config;
-  if (state.currentVerse <= startVerse) return;
-  state.currentVerse--;
+  if (state.verseIdx <= 0) return;
+  state.verseIdx--;
+  state.currentVerse = state.verseList[state.verseIdx];
   state.correctStreak = 0;
   showQuestion();
 }
@@ -721,9 +802,27 @@ function forcePrevVerse() {
 
 function finishAll() {
   clearTimers();
-  $("doneMessage").textContent =
-    `${state.book.name} ${state.config.startVerse}절부터 ${state.config.endVerse}절까지 암송을 완료하셨습니다!`;
+  const unit = verseUnit();
+  let rangeText;
+  if (state.config.bookmarkedOnly) {
+    rangeText = `${state.book.name} 북마크 ${state.verseList.length}개 ${unit}`;
+  } else {
+    rangeText = `${state.book.name} ${state.config.startVerse}${unit}부터 ${state.config.endVerse}${unit}까지`;
+  }
+  $("doneMessage").textContent = `${rangeText} 암송을 완료하셨습니다!`;
   showScreen("done-screen");
+  const currentLevel = parseInt(state.config.level) || 1;
+  if (currentLevel >= 10) return;
+  setTimeout(() => {
+    const nextLevel = currentLevel + 1;
+    if (confirm(`다음 레벨(Lv.${nextLevel})로 도전하시겠습니까?`)) {
+      const lvInput = $("level");
+      if (lvInput) lvInput.value = String(nextLevel);
+      startTest();
+    } else {
+      showScreen("setup-screen");
+    }
+  }, 300);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -731,10 +830,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("sw.js").catch(() => {});
     });
-  }
-  if (window.speechSynthesis) {
-    refreshVoiceList();
-    window.speechSynthesis.onvoiceschanged = refreshVoiceList;
   }
   checkVersionAndMigrate();
   const vEl = $("appVersion");
@@ -750,9 +845,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   $("startBtn").addEventListener("click", startTest);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
+  $("clearBookmarksBtn").addEventListener("click", () => {
+    const all = loadBookmarks();
+    const total = Object.values(all).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0);
+    if (total === 0) { alert("저장된 북마크가 없습니다."); return; }
+    if (!confirm(`저장된 북마크 ${total}개를 모두 삭제할까요?`)) return;
+    clearAllBookmarks();
+    alert("북마크가 모두 삭제되었습니다.");
+  });
   $("submitBtn").addEventListener("click", submit);
   $("hintBtn").addEventListener("click", useHint);
-  $("speakBtn").addEventListener("click", speakCurrentVerse);
+  $("bookmarkBtn").addEventListener("click", toggleCurrentBookmark);
+  $("bookmarkFilterBtn").addEventListener("click", toggleBookmarkFilter);
   $("viewToggleBtn").addEventListener("click", toggleViewAll);
   $("reshuffleBtn").addEventListener("click", reshuffleBlanks);
   $("inputToggleBtn").addEventListener("click", toggleInputEnabled);
@@ -791,18 +895,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
 
   let ctrlComboUsed = false;
+  let shiftComboUsed = false;
   document.addEventListener("keyup", (e) => {
-    if (e.key !== "Control") return;
-    const wasCombo = ctrlComboUsed;
-    ctrlComboUsed = false;
-    if (wasCombo) return;
-    if (!helpModal.classList.contains("hidden")) return;
-    if ($("test-screen").classList.contains("hidden")) return;
-    reshuffleBlanks();
+    if (e.key === "Control") {
+      const wasCombo = ctrlComboUsed;
+      ctrlComboUsed = false;
+      if (wasCombo) return;
+      if (!helpModal.classList.contains("hidden")) return;
+      if ($("test-screen").classList.contains("hidden")) return;
+      reshuffleBlanks();
+      return;
+    }
+    if (e.key === "Shift") {
+      const wasCombo = shiftComboUsed;
+      shiftComboUsed = false;
+      if (wasCombo) return;
+      if (!helpModal.classList.contains("hidden")) return;
+      if ($("test-screen").classList.contains("hidden")) return;
+      const inInput = document.activeElement === $("answerInput");
+      if (inInput) return;
+      toggleCurrentBookmark();
+    }
   });
 
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.key !== "Control") ctrlComboUsed = true;
+    if (e.shiftKey && e.key !== "Shift") shiftComboUsed = true;
     const helpOpen = !helpModal.classList.contains("hidden");
     if (helpOpen) {
       if (e.key === "Escape") { e.preventDefault(); closeHelp(); }
