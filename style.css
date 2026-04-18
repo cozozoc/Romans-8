@@ -339,6 +339,44 @@ button.ghost:hover { background: #f8fafc; }
   border-radius: 10px;
 }
 
+/* === PDF 연습지 섹션 (설정 화면 전용) === */
+.pdf-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f6f8ff;
+  border: 1px solid #dbe2ff;
+  border-radius: 10px;
+}
+.pdf-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.pdf-section-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+.pdf-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 14px;
+  margin-bottom: 12px;
+}
+.pdf-controls .form-row { background: white; }
+.pdf-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+@media (max-width: 640px) {
+  .pdf-controls { grid-template-columns: 1fr; gap: 8px; }
+}
+
 /* === Test screen === */
 .status-bar {
   display: grid;

@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.45";
+const APP_VERSION = "0.0.46";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,7 +22,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -37,6 +37,8 @@ const DEFAULT_SETTINGS = {
   level: "1",
   continuousCount: "1",
   bookmarkedOnly: false,
+  pdfSetCount: "3",
+  pdfBlankStyle: "word-width",
 };
 
 function populateBookOptions(category, preserveKey) {
@@ -928,6 +930,180 @@ function finishAll() {
   }, 300);
 }
 
+function renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle) {
+  const parts = [];
+  let i = 0;
+  while (i < words.length) {
+    const w = words[i];
+    if (w === "/") {
+      parts.push(`<span class="pdf-sep">/</span>`);
+      i++;
+      continue;
+    }
+    if (mergeBlanks && blankSet.has(i)) {
+      let j = i;
+      const group = [];
+      while (j < words.length && blankSet.has(j) && words[j] !== "/") {
+        group.push(j);
+        j++;
+      }
+      if (group.length >= 2) {
+        const groupText = group.map(k => words[k]).join(" ");
+        parts.push(`<span class="pdf-blank ${blankStyle} merged">${escapeHtml(groupText)}</span>`);
+        i = j;
+        continue;
+      }
+    }
+    if (blankSet.has(i)) {
+      parts.push(`<span class="pdf-blank ${blankStyle}">${escapeHtml(w)}</span>`);
+    } else {
+      parts.push(escapeHtml(w));
+    }
+    i++;
+  }
+  return parts.join(" ");
+}
+
+function openPrintPractice() {
+  const book = getSelectedBook();
+  const setCount = Math.max(1, Math.min(10, parseInt($("pdfSetCount").value) || 3));
+  const blankStyle = $("pdfBlankStyle").value === "fixed-width" ? "fixed-width" : "word-width";
+  const level = Math.max(1, Math.min(10, parseInt($("level").value) || 1));
+  const firstTwoMode = $("firstTwoMode").value || "none";
+  const mergeBlanks = $("mergeBlanks").checked;
+  const bookmarkedOnly = $("bookmarkedOnly").checked;
+
+  let verseList;
+  if (bookmarkedOnly) {
+    const marks = getBookmarksFor(book.key);
+    verseList = Array.from(marks).sort((a, b) => a - b);
+    if (verseList.length === 0) {
+      alert(`"${book.name}"에 북마크된 구절이 없습니다. 먼저 테스트 중 ☆ 북마크(또는 Shift) 로 구절을 추가해 주세요.`);
+      return;
+    }
+  } else {
+    const sv = Math.max(book.startVerse, Math.min(book.endVerse, parseInt($("startVerse").value) || book.startVerse));
+    const ev = Math.max(book.startVerse, Math.min(book.endVerse, parseInt($("endVerse").value) || book.endVerse));
+    if (sv > ev) { alert("시작 구절이 끝 구절보다 클 수 없습니다."); return; }
+    verseList = [];
+    for (let v = sv; v <= ev; v++) verseList.push(v);
+  }
+
+  const unit = book.verseLabels ? "과" : "절";
+  const rangeStr = bookmarkedOnly
+    ? `⭐ 북마크 ${verseList.length}${unit}`
+    : `${verseList[0]}${unit}~${verseList[verseList.length - 1]}${unit}`;
+
+  const setsHtml = [];
+  for (let s = 1; s <= setCount; s++) {
+    const verseBlocks = [];
+    for (const vnum of verseList) {
+      const verse = book.verses[vnum];
+      if (!verse) continue;
+      const words = splitWords(verse);
+      const blankSet = pickBlankIndices(words, level, firstTwoMode);
+      const body = renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle);
+      let labelHtml;
+      if (book.verseLabels && book.verseLabels[vnum]) {
+        labelHtml = `<div class="v-header">${escapeHtml(book.verseLabels[vnum])}</div>`;
+      } else {
+        labelHtml = `<span class="v-label">${vnum}</span>`;
+      }
+      verseBlocks.push(`<div class="verse">${labelHtml}<span class="v-body">${body}</span></div>`);
+    }
+    setsHtml.push(`<section class="pdf-set"><h2>Set ${s}</h2>${verseBlocks.join("")}</section>`);
+  }
+
+  saveSettings();
+
+  const title = `${book.name} ${rangeStr} · 암송 연습지 (${setCount} sets · Lv.${level})`;
+  const html = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>${escapeHtml(title)}</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Nanum Gothic", sans-serif;
+    color: #000;
+    line-height: 2.2;
+    font-size: 13pt;
+    padding: 16px;
+  }
+  .no-print {
+    display: flex; gap: 8px; justify-content: center;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 1px dashed #bbb;
+  }
+  .no-print button {
+    padding: 10px 18px; font-size: 14px; cursor: pointer;
+    background: #5568d3; color: white; border: 0; border-radius: 6px;
+    font-family: inherit; font-weight: 600;
+  }
+  .no-print button.sec { background: #e2e8f0; color: #333; }
+  header.doc-head { text-align: center; margin-bottom: 12px; }
+  header.doc-head h1 { font-size: 15pt; margin: 0 0 4px; }
+  header.doc-head .meta { font-size: 10pt; color: #444; }
+  .pdf-set { page-break-after: always; break-after: page; padding-top: 4px; }
+  .pdf-set:last-child { page-break-after: auto; break-after: auto; }
+  .pdf-set h2 {
+    font-size: 12pt; margin: 0 0 12px; padding: 4px 8px;
+    background: #eef1ff; border-left: 3px solid #5568d3;
+  }
+  .verse { margin: 0 0 10px; word-break: keep-all; }
+  .v-header {
+    font-weight: 700; font-size: 11pt; color: #333;
+    margin: 10px 0 4px;
+  }
+  .v-label {
+    display: inline-block; min-width: 1.8em;
+    font-weight: 700; color: #5568d3; margin-right: 6px;
+    text-align: right;
+  }
+  .v-body { }
+  .pdf-blank {
+    display: inline-block;
+    border-bottom: 1.2px solid #000;
+    color: transparent;
+    margin: 0 2px;
+    padding: 0 3px;
+    height: 1.5em;
+    line-height: 1.5em;
+    vertical-align: baseline;
+  }
+  .pdf-blank.word-width { min-width: 1.2em; }
+  .pdf-blank.fixed-width { min-width: 3.2em; }
+  .pdf-blank.merged.fixed-width { min-width: 6.5em; }
+  .pdf-sep { color: #999; margin: 0 4px; }
+  @media print {
+    body { padding: 0; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="no-print">
+  <button onclick="window.print()">🖨 인쇄 / PDF로 저장</button>
+  <button class="sec" onclick="window.close()">닫기</button>
+</div>
+<header class="doc-head">
+  <h1>${escapeHtml(book.name)}</h1>
+  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%)</div>
+</header>
+${setsHtml.join("")}
+</body>
+</html>`;
+
+  const w = window.open("", "_blank");
+  if (!w) { alert("팝업이 차단되었습니다. 브라우저에서 이 사이트의 팝업을 허용해 주세요."); return; }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
@@ -972,6 +1148,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const firstTwoModeEl = $("firstTwoMode");
   if (firstTwoModeEl) firstTwoModeEl.addEventListener("change", saveSettings);
   $("startBtn").addEventListener("click", startTest);
+  $("printPdfBtn").addEventListener("click", openPrintPractice);
+  $("pdfSetCount").addEventListener("change", saveSettings);
+  $("pdfBlankStyle").addEventListener("change", saveSettings);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("clearBookmarksBtn").addEventListener("click", () => {
     const all = loadBookmarks();

@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.45</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.46</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -178,6 +178,27 @@
         </label>
       </div>
     </div>
+
+    <!-- 오프라인 연습지 인쇄 (PDF) -->
+    <div class="pdf-section">
+      <div class="pdf-section-title">📄 오프라인 연습지 인쇄 (PDF)</div>
+      <div class="pdf-section-desc">현재 선택한 본문 범위(또는 🔖 북마크된 구절만) + 난이도·첫 두 단어 제약·병합 설정을 반영해 빈칸 위치가 Set마다 다른 인쇄용 PDF를 생성합니다.</div>
+      <div class="pdf-controls">
+        <div class="form-row">
+          <label for="pdfSetCount">Set 수 <span class="hint">1~10</span></label>
+          <input type="number" id="pdfSetCount" min="1" max="10" value="3">
+        </div>
+        <div class="form-row">
+          <label for="pdfBlankStyle">빈칸 스타일</label>
+          <select id="pdfBlankStyle">
+            <option value="word-width" selected>단어 길이 맞춤</option>
+            <option value="fixed-width">고정 길이</option>
+          </select>
+        </div>
+      </div>
+      <button id="printPdfBtn" class="secondary pdf-btn">🖨 연습지 생성 · 인쇄 / PDF 저장</button>
+    </div>
+
     <button id="startBtn" class="primary big-btn">테스트 시작하기</button>
     <button id="clearBookmarksBtn" class="ghost reset-btn" title="저장된 모든 북마크를 삭제">북마크 전체 삭제</button>
     <button id="resetSettingsBtn" class="ghost reset-btn">설정 초기화</button>

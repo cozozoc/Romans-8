@@ -60,32 +60,32 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 278,
-      "lastAccessed": 1776523444982,
+      "accessCount": 296,
+      "lastAccessed": 1776525759424,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 166,
-      "lastAccessed": 1776523449160,
-      "type": "file"
-    },
-    {
-      "path": "style.css",
-      "accessCount": 33,
-      "lastAccessed": 1776499027191,
+      "accessCount": 174,
+      "lastAccessed": 1776525783269,
       "type": "file"
     },
     {
       "path": "verses.js",
-      "accessCount": 33,
-      "lastAccessed": 1776523440425,
+      "accessCount": 37,
+      "lastAccessed": 1776525022716,
+      "type": "file"
+    },
+    {
+      "path": "style.css",
+      "accessCount": 36,
+      "lastAccessed": 1776525768254,
       "type": "file"
     },
     {
       "path": "",
-      "accessCount": 13,
-      "lastAccessed": 1776509003625,
+      "accessCount": 14,
+      "lastAccessed": 1776524977678,
       "type": "directory"
     },
     {
@@ -164,6 +164,12 @@
       "path": ".claude\\skills\\bible\\SKILL.md",
       "accessCount": 2,
       "lastAccessed": 1776503113846,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\thomas\\.claude\\plans\\temporal-questing-quill.md",
+      "accessCount": 2,
+      "lastAccessed": 1776524947862,
       "type": "file"
     },
     {
@@ -326,12 +332,6 @@
       "path": "성경\\디모데후서_3장.txt",
       "accessCount": 1,
       "lastAccessed": 1776519674047,
-      "type": "file"
-    },
-    {
-      "path": "C:\\Users\\thomas\\.claude\\plans\\temporal-questing-quill.md",
-      "accessCount": 1,
-      "lastAccessed": 1776520005009,
       "type": "file"
     },
     {
