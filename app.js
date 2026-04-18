@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.11";
+const APP_VERSION = "0.0.12";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -187,11 +187,22 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
   }).join(" ");
 }
 
+function secureRandomInt(maxExclusive) {
+  if (maxExclusive <= 1) return 0;
+  const cryptoObj = (typeof crypto !== "undefined" && crypto.getRandomValues) ? crypto : null;
+  if (!cryptoObj) return Math.floor(Math.random() * maxExclusive);
+  const limit = Math.floor(0x100000000 / maxExclusive) * maxExclusive;
+  const buf = new Uint32Array(1);
+  let v;
+  do { cryptoObj.getRandomValues(buf); v = buf[0]; } while (v >= limit);
+  return v % maxExclusive;
+}
+
 function pickBlankIndices(wordCount, level) {
   const blankCount = Math.round(wordCount * LEVEL_RATIO[level]);
   const indices = [...Array(wordCount).keys()];
   for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = secureRandomInt(i + 1);
     [indices[i], indices[j]] = [indices[j], indices[i]];
   }
   return new Set(indices.slice(0, blankCount));
