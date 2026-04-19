@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.50";
+const APP_VERSION = "0.0.51";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1016,6 +1016,16 @@ function openPrintPractice() {
 
   saveSettings();
 
+  const FIRST_TWO_MODE_LABEL = {
+    none: "첫 두 단어 제약 없음",
+    showOnly: "첫 두 단어만 보이기",
+    hideOnly: "첫 두 단어만 가리기",
+    preferFirst: "첫 두 단어 우선 가리기",
+    forceFirst: "첫 두 단어 반드시 가리기",
+  };
+  const firstTwoLabel = FIRST_TWO_MODE_LABEL[firstTwoMode] || FIRST_TWO_MODE_LABEL.none;
+  const mergeLabel = mergeBlanks ? "빈칸 병합 ON" : "빈칸 병합 OFF";
+  const blankStyleLabel = blankStyle === "fixed-width" ? "빈칸 고정 길이" : "빈칸 단어 길이 맞춤";
   const title = `${book.name} ${rangeStr} · 암송 연습지 (${setCount} sets · Lv.${level})`;
   const html = `<!DOCTYPE html>
 <html lang="ko">
@@ -1092,7 +1102,7 @@ function openPrintPractice() {
 </div>
 <header class="doc-head">
   <h1>${escapeHtml(book.name)}</h1>
-  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%)</div>
+  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)}</div>
 </header>
 ${setsHtml.join("")}
 </body>
