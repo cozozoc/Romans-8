@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.59";
+const APP_VERSION = "0.0.60";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -37,7 +37,7 @@ const DEFAULT_SETTINGS = {
   level: "6",
   continuousCount: "1",
   bookmarkedOnly: false,
-  pdfSetCount: "3",
+  pdfSetCount: "1",
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
   pdfNewPagePerSet: false,
