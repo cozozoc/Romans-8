@@ -1,4 +1,4 @@
-const CACHE = "romans8-v1";
+const CACHE = "romans8-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -11,7 +11,9 @@ const ASSETS = [
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then((c) => c.addAll(ASSETS.map((u) => new Request(u, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -23,11 +25,14 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+// Network-first, HTTP-cache 우회. 오프라인일 때만 캐시 fallback.
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
   e.respondWith(
-    fetch(req)
+    fetch(req, { cache: "no-store" })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
