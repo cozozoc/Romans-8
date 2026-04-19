@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.55";
+const APP_VERSION = "0.0.56";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1013,6 +1013,8 @@ function openPrintPractice() {
     return blocks.join("");
   };
 
+  const answerMode = $("pdfAnswerMode") ? $("pdfAnswerMode").value : "none";
+
   const setsHtml = [];
   for (let s = 1; s <= setCount; s++) {
     const verseBlocks = [];
@@ -1054,7 +1056,6 @@ function openPrintPractice() {
 
   const newPagePerSet = $("pdfNewPagePerSet") ? $("pdfNewPagePerSet").checked : true;
   const pageBreakLabel = newPagePerSet ? "Set 새 페이지" : "Set 연속";
-  const answerMode = $("pdfAnswerMode") ? $("pdfAnswerMode").value : "none";
   const ANSWER_MODE_LABEL = {
     none: "정답지 없음",
     perSet: "정답지 Set별",
