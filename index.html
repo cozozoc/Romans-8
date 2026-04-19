@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.51</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.52</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -215,7 +215,17 @@
           </select>
         </div>
       </div>
-      <button id="printPdfBtn" class="secondary pdf-btn">🖨 연습지 생성 · 인쇄 / PDF 저장</button>
+      <div class="pdf-btn-row">
+        <div class="pdf-font-select">
+          <label for="pdfFontSize">폰트 크기</label>
+          <select id="pdfFontSize">
+            <option value="small">작게</option>
+            <option value="medium" selected>중간</option>
+            <option value="large">크게</option>
+          </select>
+        </div>
+        <button id="printPdfBtn" class="secondary pdf-btn">🖨 연습지 생성 · 인쇄 / PDF 저장</button>
+      </div>
     </div>
 
     <button id="startBtn" class="primary big-btn">테스트 시작하기</button>

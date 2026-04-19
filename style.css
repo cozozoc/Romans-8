@@ -366,15 +366,49 @@ button.ghost:hover { background: #f8fafc; }
   margin-bottom: 12px;
 }
 .pdf-controls .form-row { background: white; }
+.pdf-btn-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.pdf-font-select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-width: 130px;
+  flex: 0 0 auto;
+}
+.pdf-font-select label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.pdf-font-select select {
+  border: 0;
+  padding: 4px 2px;
+  font-size: 14px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  cursor: pointer;
+}
+.pdf-font-select select:focus { outline: none; }
 .pdf-btn {
-  display: block;
-  width: 100%;
   padding: 12px;
   border-radius: 10px;
   font-size: 14px;
+  flex: 1 1 auto;
+  width: auto;
 }
 @media (max-width: 640px) {
   .pdf-controls { grid-template-columns: 1fr; gap: 8px; }
+  .pdf-btn-row { flex-direction: column; }
+  .pdf-font-select { min-width: 0; }
 }
 
 /* === Test screen === */

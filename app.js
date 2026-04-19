@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.51";
+const APP_VERSION = "0.0.52";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,7 +22,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle","pdfFontSize"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -39,6 +39,7 @@ const DEFAULT_SETTINGS = {
   bookmarkedOnly: false,
   pdfSetCount: "3",
   pdfBlankStyle: "word-width",
+  pdfFontSize: "medium",
 };
 
 function populateBookOptions(category, preserveKey) {
@@ -1026,6 +1027,15 @@ function openPrintPractice() {
   const firstTwoLabel = FIRST_TWO_MODE_LABEL[firstTwoMode] || FIRST_TWO_MODE_LABEL.none;
   const mergeLabel = mergeBlanks ? "빈칸 병합 ON" : "빈칸 병합 OFF";
   const blankStyleLabel = blankStyle === "fixed-width" ? "빈칸 고정 길이" : "빈칸 단어 길이 맞춤";
+
+  const pdfFontSize = $("pdfFontSize") ? $("pdfFontSize").value : "medium";
+  const FONT_PRESETS = {
+    small:  { body: 10, h1: 13, meta: 9,  setH2: 10, vHeader: 9,  label: "작게" },
+    medium: { body: 12, h1: 14, meta: 10, setH2: 11, vHeader: 10, label: "중간" },
+    large:  { body: 14, h1: 16, meta: 11, setH2: 13, vHeader: 12, label: "크게" },
+  };
+  const fp = FONT_PRESETS[pdfFontSize] || FONT_PRESETS.medium;
+
   const title = `${book.name} ${rangeStr} · 암송 연습지 (${setCount} sets · Lv.${level})`;
   const html = `<!DOCTYPE html>
 <html lang="ko">
@@ -1040,7 +1050,7 @@ function openPrintPractice() {
     font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Nanum Gothic", sans-serif;
     color: #000;
     line-height: 2.2;
-    font-size: 13pt;
+    font-size: ${fp.body}pt;
     padding: 16px;
   }
   .no-print {
@@ -1056,17 +1066,17 @@ function openPrintPractice() {
   }
   .no-print button.sec { background: #e2e8f0; color: #333; }
   header.doc-head { text-align: center; margin-bottom: 12px; }
-  header.doc-head h1 { font-size: 15pt; margin: 0 0 4px; }
-  header.doc-head .meta { font-size: 10pt; color: #444; }
+  header.doc-head h1 { font-size: ${fp.h1}pt; margin: 0 0 4px; }
+  header.doc-head .meta { font-size: ${fp.meta}pt; color: #444; }
   .pdf-set { page-break-after: always; break-after: page; padding-top: 4px; }
   .pdf-set:last-child { page-break-after: auto; break-after: auto; }
   .pdf-set h2 {
-    font-size: 12pt; margin: 0 0 12px; padding: 4px 8px;
+    font-size: ${fp.setH2}pt; margin: 0 0 12px; padding: 4px 8px;
     background: #eef1ff; border-left: 3px solid #5568d3;
   }
   .verse { margin: 0 0 10px; word-break: keep-all; }
   .v-header {
-    font-weight: 700; font-size: 11pt; color: #333;
+    font-weight: 700; font-size: ${fp.vHeader}pt; color: #333;
     margin: 10px 0 4px;
   }
   .v-label {
@@ -1102,7 +1112,7 @@ function openPrintPractice() {
 </div>
 <header class="doc-head">
   <h1>${escapeHtml(book.name)}</h1>
-  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)}</div>
+  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)} · 폰트 ${escapeHtml(fp.label)}</div>
 </header>
 ${setsHtml.join("")}
 </body>
@@ -1162,6 +1172,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("printPdfBtn").addEventListener("click", openPrintPractice);
   $("pdfSetCount").addEventListener("change", saveSettings);
   $("pdfBlankStyle").addEventListener("change", saveSettings);
+  $("pdfFontSize").addEventListener("change", saveSettings);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("clearBookmarksBtn").addEventListener("click", () => {
     const all = loadBookmarks();
