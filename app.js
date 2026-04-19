@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.62";
+const APP_VERSION = "0.0.63";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -276,10 +276,16 @@ function pickBlankIndices(words, level, mode) {
     return new Set(eligible.filter(i => !keep.has(i)));
   }
   if (mode === "hideOnly") {
-    const out = new Set();
-    if (first !== undefined) out.add(first);
-    if (second !== undefined) out.add(second);
-    return out;
+    const forced = [];
+    if (first !== undefined) forced.push(first);
+    if (second !== undefined) forced.push(second);
+    const remainingPool = eligible.filter(i => !forced.includes(i));
+    const additionalCount = Math.round(remainingPool.length * LEVEL_RATIO[level]);
+    for (let i = remainingPool.length - 1; i > 0; i--) {
+      const j = secureRandomInt(i + 1);
+      [remainingPool[i], remainingPool[j]] = [remainingPool[j], remainingPool[i]];
+    }
+    return new Set([...forced, ...remainingPool.slice(0, additionalCount)]);
   }
 
   let blankCount = Math.round(eligible.length * LEVEL_RATIO[level]);
@@ -1085,7 +1091,7 @@ function openPrintPractice() {
   const FIRST_TWO_MODE_LABEL = {
     none: "첫 두 단어 제약 없음",
     showOnly: "첫 두 단어만 보이기",
-    hideOnly: "첫 두 단어만 가리기",
+    hideOnly: "첫 두 단어 항상 빈칸 + 레벨 적용",
     preferFirst: "첫 두 단어 우선 가리기",
     forceFirst: "첫 두 단어 반드시 가리기",
   };
