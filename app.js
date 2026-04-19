@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.67";
+const APP_VERSION = "0.0.68";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -294,21 +294,13 @@ function pickBlankIndices(words, level, mode) {
     return new Set([...forced, ...remainingPool.slice(0, additionalCount)]);
   }
 
-  let blankCount = Math.round(eligible.length * LEVEL_RATIO[level]);
-  const forced = [];
-
-  if (mode === "preferFirst") {
-    if (blankCount >= 1 && first !== undefined) forced.push(first);
-    if (blankCount >= 2 && second !== undefined) forced.push(second);
-  }
-
-  const pool = eligible.filter(i => !forced.includes(i));
+  const blankCount = Math.round(eligible.length * LEVEL_RATIO[level]);
+  const pool = [...eligible];
   for (let i = pool.length - 1; i > 0; i--) {
     const j = secureRandomInt(i + 1);
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  const need = Math.max(0, blankCount - forced.length);
-  return new Set([...forced, ...pool.slice(0, need)]);
+  return new Set(pool.slice(0, blankCount));
 }
 
 function getSelectedBookRaw() {
@@ -1094,7 +1086,6 @@ function openPrintPractice() {
     none: "첫 두 단어 제약 없음",
     showOnly: "첫 두 단어 항상 보이기 + 레벨 적용",
     hideOnly: "첫 두 단어 항상 빈칸 + 레벨 적용",
-    preferFirst: "처음 두 단어부터 가리기",
   };
   const firstTwoLabel = FIRST_TWO_MODE_LABEL[firstTwoMode] || FIRST_TWO_MODE_LABEL.none;
   const mergeLabel = mergeBlanks ? "빈칸 병합 ON" : "빈칸 병합 OFF";
