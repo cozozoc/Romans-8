@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.58";
+const APP_VERSION = "0.0.59";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -933,6 +933,35 @@ function finishAll() {
   }, 300);
 }
 
+function renderPdfAnswersOnlyHtml(words, blankSet, mergeBlanks) {
+  const items = [];
+  let i = 0;
+  let n = 1;
+  while (i < words.length) {
+    const w = words[i];
+    if (w === "/") { i++; continue; }
+    if (mergeBlanks && blankSet.has(i)) {
+      let j = i;
+      const group = [];
+      while (j < words.length && blankSet.has(j) && words[j] !== "/") {
+        group.push(j);
+        j++;
+      }
+      if (group.length >= 2) {
+        const groupText = group.map(k => words[k]).join(" ");
+        items.push(`<span class="ans-chip"><span class="ans-num">${n++}</span>${escapeHtml(groupText)}</span>`);
+        i = j;
+        continue;
+      }
+    }
+    if (blankSet.has(i)) {
+      items.push(`<span class="ans-chip"><span class="ans-num">${n++}</span>${escapeHtml(w)}</span>`);
+    }
+    i++;
+  }
+  return items.join(" ");
+}
+
 function renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle) {
   const parts = [];
   let i = 0;
@@ -1018,6 +1047,7 @@ function openPrintPractice() {
   const setsHtml = [];
   for (let s = 1; s <= setCount; s++) {
     const verseBlocks = [];
+    const answerBlocks = [];
     for (const vnum of verseList) {
       const verse = book.verses[vnum];
       if (!verse) continue;
@@ -1031,10 +1061,19 @@ function openPrintPractice() {
         labelHtml = `<span class="v-label">${vnum}</span>`;
       }
       verseBlocks.push(`<div class="verse">${labelHtml}<span class="v-body">${body}</span></div>`);
+      if (answerMode === "perSet") {
+        const ansBody = renderPdfAnswersOnlyHtml(words, blankSet, mergeBlanks);
+        if (ansBody) {
+          answerBlocks.push(`<div class="verse">${labelHtml}<span class="v-body">${ansBody}</span></div>`);
+        }
+      }
     }
     setsHtml.push(`<section class="pdf-set"><h2>Set ${s}</h2>${verseBlocks.join("")}</section>`);
     if (answerMode === "perSet") {
-      setsHtml.push(`<section class="pdf-answer"><h2>Set ${s} · 정답지</h2>${buildAnswerVerses()}</section>`);
+      const ansContent = answerBlocks.length
+        ? answerBlocks.join("")
+        : `<div class="ans-empty">이 세트에는 빈칸이 없습니다.</div>`;
+      setsHtml.push(`<section class="pdf-answer"><h2>Set ${s} · 정답지 (빈칸 정답)</h2>${ansContent}</section>`);
     }
   }
   if (answerMode === "end") {
@@ -1145,6 +1184,24 @@ function openPrintPractice() {
   .pdf-blank.fixed-width { min-width: 3.2em; }
   .pdf-blank.merged.fixed-width { min-width: 6.5em; }
   .pdf-sep { color: #999; margin: 0 4px; }
+  .ans-chip {
+    display: inline-block;
+    background: #fff8e6;
+    border: 1px solid #e3cf6a;
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin: 2px 3px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+  .ans-num {
+    display: inline-block;
+    color: #b07000;
+    margin-right: 4px;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+  .ans-empty { color: #888; font-style: italic; padding: 6px 4px; }
   @media print {
     body { padding: 0; }
     .no-print { display: none !important; }

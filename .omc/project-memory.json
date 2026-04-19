@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1776468695065,
+  "lastScanned": 1776557834917,
   "projectRoot": "f:\\Project\\claude_code\\Romans8_memorization",
   "techStack": {
     "languages": [
@@ -38,54 +38,130 @@
   },
   "customNotes": [],
   "directoryMap": {
+    "제자훈련1권": {
+      "path": "제자훈련1권",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1776557834842,
+      "keyFiles": [
+        "01_롬10_9-10_마16_16.txt",
+        "02_히4_16_애3_22-23.txt",
+        "03_시1_1-2_시119_105.txt",
+        "04_롬1_16_딤후3_16.txt",
+        "05_빌4_6-7_마6_6.txt"
+      ]
+    },
+    "제자훈련2권": {
+      "path": "제자훈련2권",
+      "purpose": null,
+      "fileCount": 14,
+      "lastAccessed": 1776557834844,
+      "keyFiles": [
+        "01_벧후1_21_수1_8.txt",
+        "02_롬11_36상_렘31_3하.txt",
+        "03_히4_15_요14_6.txt",
+        "04_요1_1_고후13_13.txt",
+        "05_롬5_12_히9_27.txt"
+      ]
+    },
+    "제자훈련3권": {
+      "path": "제자훈련3권",
+      "purpose": null,
+      "fileCount": 12,
+      "lastAccessed": 1776557834845,
+      "keyFiles": [
+        "01_마7_24_요14_21.txt",
+        "02_빌2_3-4_벧전4_11상.txt",
+        "03_마28_19-20_마5_16.txt",
+        "04_눅6_45_잠15_23.txt",
+        "05_엡4_13_빌3_12.txt"
+      ]
+    },
     "성경": {
       "path": "성경",
       "purpose": null,
-      "fileCount": 3,
-      "lastAccessed": 1776468695026,
+      "fileCount": 1189,
+      "lastAccessed": 1776557834851,
       "keyFiles": [
         "고린도전서_13장.txt",
         "로마서_8장.txt",
-        "시편_1편.txt"
+        "시편_1편.txt",
+        "창세기_1장.txt",
+        "창세기_2장.txt"
       ]
     },
     "data": {
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1776468695026,
+      "lastAccessed": 1776557834853,
       "keyFiles": []
+    },
+    "사역훈련2권_교회와_평신도의_자화상": {
+      "path": "사역훈련2권_교회와_평신도의_자화상",
+      "purpose": null,
+      "fileCount": 10,
+      "lastAccessed": 1776557834854,
+      "keyFiles": [
+        "01_엡2_19-20.txt",
+        "02_요4_23-24.txt",
+        "03_엡4_11-13.txt",
+        "06_눅24_46-48.txt",
+        "07_고후4_5.txt"
+      ]
+    },
+    "사역훈련3권_소그룹_환경과_리더십": {
+      "path": "사역훈련3권_소그룹_환경과_리더십",
+      "purpose": null,
+      "fileCount": 5,
+      "lastAccessed": 1776557834856,
+      "keyFiles": [
+        "02_살전2_7-8.txt",
+        "04_사34_16.txt",
+        "05_약1_5.txt",
+        "06_히3_13.txt",
+        "07_잠18_13.txt"
+      ]
+    },
+    "__pycache__": {
+      "path": "__pycache__",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776557834858,
+      "keyFiles": [
+        "scrape_bible.cpython-311.pyc"
+      ]
     }
   },
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 307,
-      "lastAccessed": 1776528541042,
+      "accessCount": 362,
+      "lastAccessed": 1776580425265,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 180,
-      "lastAccessed": 1776528545280,
+      "accessCount": 204,
+      "lastAccessed": 1776580432426,
       "type": "file"
     },
     {
       "path": "verses.js",
-      "accessCount": 37,
-      "lastAccessed": 1776525022716,
+      "accessCount": 40,
+      "lastAccessed": 1776530535264,
       "type": "file"
     },
     {
       "path": "style.css",
-      "accessCount": 36,
-      "lastAccessed": 1776525768254,
+      "accessCount": 38,
+      "lastAccessed": 1776558824971,
       "type": "file"
     },
     {
       "path": "",
-      "accessCount": 14,
-      "lastAccessed": 1776524977678,
+      "accessCount": 17,
+      "lastAccessed": 1776579798775,
       "type": "directory"
     },
     {
@@ -128,6 +204,12 @@
       "path": "docx_lines.txt",
       "accessCount": 3,
       "lastAccessed": 1776519745156,
+      "type": "file"
+    },
+    {
+      "path": "sw.js",
+      "accessCount": 3,
+      "lastAccessed": 1776579279646,
       "type": "file"
     },
     {
@@ -248,12 +330,6 @@
       "path": "사역훈련3권_소그룹_환경과_리더십\\07_잠18_13.txt",
       "accessCount": 1,
       "lastAccessed": 1776489410260,
-      "type": "file"
-    },
-    {
-      "path": "sw.js",
-      "accessCount": 1,
-      "lastAccessed": 1776492602146,
       "type": "file"
     },
     {
