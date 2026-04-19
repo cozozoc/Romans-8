@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.54";
+const APP_VERSION = "0.0.55";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,7 +22,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -41,6 +41,7 @@ const DEFAULT_SETTINGS = {
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
   pdfNewPagePerSet: false,
+  pdfAnswerMode: "none",
 };
 
 function populateBookOptions(category, preserveKey) {
@@ -996,6 +997,22 @@ function openPrintPractice() {
     ? `⭐ 북마크 ${verseList.length}${unit}`
     : `${verseList[0]}${unit}~${verseList[verseList.length - 1]}${unit}`;
 
+  const buildAnswerVerses = () => {
+    const blocks = [];
+    for (const vnum of verseList) {
+      const verse = book.verses[vnum];
+      if (!verse) continue;
+      let labelHtml;
+      if (book.verseLabels && book.verseLabels[vnum]) {
+        labelHtml = `<div class="v-header">${escapeHtml(book.verseLabels[vnum])}</div>`;
+      } else {
+        labelHtml = `<span class="v-label">${vnum}</span>`;
+      }
+      blocks.push(`<div class="verse">${labelHtml}<span class="v-body">${escapeHtml(verse)}</span></div>`);
+    }
+    return blocks.join("");
+  };
+
   const setsHtml = [];
   for (let s = 1; s <= setCount; s++) {
     const verseBlocks = [];
@@ -1014,6 +1031,12 @@ function openPrintPractice() {
       verseBlocks.push(`<div class="verse">${labelHtml}<span class="v-body">${body}</span></div>`);
     }
     setsHtml.push(`<section class="pdf-set"><h2>Set ${s}</h2>${verseBlocks.join("")}</section>`);
+    if (answerMode === "perSet") {
+      setsHtml.push(`<section class="pdf-answer"><h2>Set ${s} · 정답지</h2>${buildAnswerVerses()}</section>`);
+    }
+  }
+  if (answerMode === "end") {
+    setsHtml.push(`<section class="pdf-answer"><h2>📜 전체 본문 (정답지)</h2>${buildAnswerVerses()}</section>`);
   }
 
   saveSettings();
@@ -1031,6 +1054,13 @@ function openPrintPractice() {
 
   const newPagePerSet = $("pdfNewPagePerSet") ? $("pdfNewPagePerSet").checked : true;
   const pageBreakLabel = newPagePerSet ? "Set 새 페이지" : "Set 연속";
+  const answerMode = $("pdfAnswerMode") ? $("pdfAnswerMode").value : "none";
+  const ANSWER_MODE_LABEL = {
+    none: "정답지 없음",
+    perSet: "정답지 Set별",
+    end: "정답지 문서 끝",
+  };
+  const answerModeLabel = ANSWER_MODE_LABEL[answerMode] || ANSWER_MODE_LABEL.none;
   const pdfFontSize = $("pdfFontSize") ? $("pdfFontSize").value : "medium";
   const FONT_PRESETS = {
     small:  { body: 10, h1: 13, meta: 9,  setH2: 10, vHeader: 9,  label: "작게" },
@@ -1074,6 +1104,16 @@ function openPrintPractice() {
   .pdf-set { ${newPagePerSet ? "page-break-after: always; break-after: page;" : ""} padding-top: 4px; }
   .pdf-set:last-child { page-break-after: auto; break-after: auto; }
   .pdf-set + .pdf-set { ${newPagePerSet ? "" : "margin-top: 18px; padding-top: 14px; border-top: 2px dashed #bbb;"} }
+  .pdf-answer {
+    page-break-before: always; break-before: page;
+    page-break-after: always; break-after: page;
+    padding-top: 4px;
+  }
+  .pdf-answer:last-child { page-break-after: auto; break-after: auto; }
+  .pdf-answer h2 {
+    font-size: ${fp.setH2}pt; margin: 0 0 12px; padding: 4px 8px;
+    background: #fff3cd; border-left: 3px solid #d4a017;
+  }
   .pdf-set h2 {
     font-size: ${fp.setH2}pt; margin: 0 0 12px; padding: 4px 8px;
     background: #eef1ff; border-left: 3px solid #5568d3;
@@ -1116,7 +1156,7 @@ function openPrintPractice() {
 </div>
 <header class="doc-head">
   <h1>${escapeHtml(book.name)}</h1>
-  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)} · 폰트 ${escapeHtml(fp.label)} · ${escapeHtml(pageBreakLabel)}</div>
+  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)} · 폰트 ${escapeHtml(fp.label)} · ${escapeHtml(pageBreakLabel)} · ${escapeHtml(answerModeLabel)}</div>
 </header>
 ${setsHtml.join("")}
 </body>
@@ -1178,6 +1218,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("pdfBlankStyle").addEventListener("change", saveSettings);
   $("pdfFontSize").addEventListener("change", saveSettings);
   $("pdfNewPagePerSet").addEventListener("change", saveSettings);
+  $("pdfAnswerMode").addEventListener("change", saveSettings);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("clearBookmarksBtn").addEventListener("click", () => {
     const all = loadBookmarks();

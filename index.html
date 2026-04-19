@@ -15,7 +15,7 @@
   <header class="app-header">
     <button id="helpBtn" class="help-btn" aria-label="도움말" title="도움말">?</button>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.54</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.55</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -220,6 +220,14 @@
             <input type="checkbox" id="pdfNewPagePerSet">
             <span class="slider"></span>
           </label>
+        </div>
+        <div class="form-row full-width">
+          <label for="pdfAnswerMode">정답지 <span class="hint">정답은 항상 새 페이지에서 시작</span></label>
+          <select id="pdfAnswerMode">
+            <option value="none" selected>없음</option>
+            <option value="perSet">각 Set 끝에 정답지 추가</option>
+            <option value="end">문서 끝에 전체 본문 추가</option>
+          </select>
         </div>
       </div>
       <div class="pdf-btn-row">
