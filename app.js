@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.61";
+const APP_VERSION = "0.0.62";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -39,7 +39,7 @@ const DEFAULT_SETTINGS = {
   bookmarkedOnly: false,
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
-  pdfFontSize: "small",
+  pdfFontSize: "medium",
   pdfNewPagePerSet: false,
   pdfAnswerMode: "none",
 };
@@ -1103,10 +1103,10 @@ function openPrintPractice() {
   const answerModeLabel = ANSWER_MODE_LABEL[answerMode] || ANSWER_MODE_LABEL.none;
   const pdfFontSize = $("pdfFontSize") ? $("pdfFontSize").value : "medium";
   const FONT_PRESETS = {
-    xsmall: { body: 8,  h1: 11, meta: 8,  setH2: 9,  vHeader: 8,  label: "매우 작게" },
-    small:  { body: 10, h1: 13, meta: 9,  setH2: 10, vHeader: 9,  label: "작게" },
-    medium: { body: 12, h1: 14, meta: 10, setH2: 11, vHeader: 10, label: "중간" },
-    large:  { body: 14, h1: 16, meta: 11, setH2: 13, vHeader: 12, label: "크게" },
+    xsmall: { body: 6,  h1: 8,  meta: 6,  setH2: 7,  vHeader: 6,  label: "매우 작게" },
+    small:  { body: 8,  h1: 11, meta: 8,  setH2: 9,  vHeader: 8,  label: "작게" },
+    medium: { body: 10, h1: 13, meta: 9,  setH2: 10, vHeader: 9,  label: "중간" },
+    large:  { body: 12, h1: 14, meta: 10, setH2: 11, vHeader: 10, label: "크게" },
   };
   const fp = FONT_PRESETS[pdfFontSize] || FONT_PRESETS.medium;
 
