@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.52";
+const APP_VERSION = "0.0.53";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -22,7 +22,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle","pdfFontSize"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -40,6 +40,7 @@ const DEFAULT_SETTINGS = {
   pdfSetCount: "3",
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
+  pdfNewPagePerSet: true,
 };
 
 function populateBookOptions(category, preserveKey) {
@@ -1028,6 +1029,8 @@ function openPrintPractice() {
   const mergeLabel = mergeBlanks ? "빈칸 병합 ON" : "빈칸 병합 OFF";
   const blankStyleLabel = blankStyle === "fixed-width" ? "빈칸 고정 길이" : "빈칸 단어 길이 맞춤";
 
+  const newPagePerSet = $("pdfNewPagePerSet") ? $("pdfNewPagePerSet").checked : true;
+  const pageBreakLabel = newPagePerSet ? "Set 새 페이지" : "Set 연속";
   const pdfFontSize = $("pdfFontSize") ? $("pdfFontSize").value : "medium";
   const FONT_PRESETS = {
     small:  { body: 10, h1: 13, meta: 9,  setH2: 10, vHeader: 9,  label: "작게" },
@@ -1068,8 +1071,9 @@ function openPrintPractice() {
   header.doc-head { text-align: center; margin-bottom: 12px; }
   header.doc-head h1 { font-size: ${fp.h1}pt; margin: 0 0 4px; }
   header.doc-head .meta { font-size: ${fp.meta}pt; color: #444; }
-  .pdf-set { page-break-after: always; break-after: page; padding-top: 4px; }
+  .pdf-set { ${newPagePerSet ? "page-break-after: always; break-after: page;" : ""} padding-top: 4px; }
   .pdf-set:last-child { page-break-after: auto; break-after: auto; }
+  .pdf-set + .pdf-set { ${newPagePerSet ? "" : "margin-top: 18px; padding-top: 14px; border-top: 2px dashed #bbb;"} }
   .pdf-set h2 {
     font-size: ${fp.setH2}pt; margin: 0 0 12px; padding: 4px 8px;
     background: #eef1ff; border-left: 3px solid #5568d3;
@@ -1112,7 +1116,7 @@ function openPrintPractice() {
 </div>
 <header class="doc-head">
   <h1>${escapeHtml(book.name)}</h1>
-  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)} · 폰트 ${escapeHtml(fp.label)}</div>
+  <div class="meta">${escapeHtml(rangeStr)} · ${setCount} sets · Lv.${level} (빈칸 ${Math.round(LEVEL_RATIO[level]*100)}%) · ${escapeHtml(firstTwoLabel)} · ${escapeHtml(mergeLabel)} · ${escapeHtml(blankStyleLabel)} · 폰트 ${escapeHtml(fp.label)} · ${escapeHtml(pageBreakLabel)}</div>
 </header>
 ${setsHtml.join("")}
 </body>
@@ -1173,6 +1177,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("pdfSetCount").addEventListener("change", saveSettings);
   $("pdfBlankStyle").addEventListener("change", saveSettings);
   $("pdfFontSize").addEventListener("change", saveSettings);
+  $("pdfNewPagePerSet").addEventListener("change", saveSettings);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
   $("clearBookmarksBtn").addEventListener("click", () => {
     const all = loadBookmarks();

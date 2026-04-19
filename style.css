@@ -366,6 +366,7 @@ button.ghost:hover { background: #f8fafc; }
   margin-bottom: 12px;
 }
 .pdf-controls .form-row { background: white; }
+.pdf-controls .full-width { grid-column: 1 / -1; }
 .pdf-btn-row {
   display: flex;
   gap: 10px;
