@@ -136,20 +136,20 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 562,
-      "lastAccessed": 1776723975704,
+      "accessCount": 569,
+      "lastAccessed": 1776724168743,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 280,
-      "lastAccessed": 1776723585038,
+      "accessCount": 283,
+      "lastAccessed": 1776724117900,
       "type": "file"
     },
     {
       "path": "style.css",
-      "accessCount": 83,
-      "lastAccessed": 1776723611750,
+      "accessCount": 87,
+      "lastAccessed": 1776724137276,
       "type": "file"
     },
     {
@@ -160,8 +160,8 @@
     },
     {
       "path": "",
-      "accessCount": 29,
-      "lastAccessed": 1776723618566,
+      "accessCount": 31,
+      "lastAccessed": 1776724176989,
       "type": "directory"
     },
     {
@@ -195,6 +195,12 @@
       "type": "file"
     },
     {
+      "path": "sw.js",
+      "accessCount": 4,
+      "lastAccessed": 1776724183111,
+      "type": "file"
+    },
+    {
       "path": "사역훈련2권_교회와_평신도의_자화상\\04_벧전2_11-12.txt",
       "accessCount": 3,
       "lastAccessed": 1776488503540,
@@ -216,12 +222,6 @@
       "path": "docx_lines.txt",
       "accessCount": 3,
       "lastAccessed": 1776519745156,
-      "type": "file"
-    },
-    {
-      "path": "sw.js",
-      "accessCount": 3,
-      "lastAccessed": 1776579279646,
       "type": "file"
     },
     {

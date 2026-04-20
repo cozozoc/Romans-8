@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.87";
+const APP_VERSION = "0.0.88";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1597,14 +1597,34 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === helpModal) closeHelp();
   });
 
+  const genealogyModal = $("genealogyModal");
+  const genealogyFrame = $("genealogyFrame");
+  const GENEALOGY_SRC = "족보/chronological_apostolic_history.html";
+  const openGenealogy = () => {
+    if (genealogyFrame && !genealogyFrame.getAttribute("src")) {
+      genealogyFrame.setAttribute("src", GENEALOGY_SRC);
+    }
+    genealogyModal.classList.remove("hidden");
+  };
+  const closeGenealogy = () => genealogyModal.classList.add("hidden");
+  $("genealogyBtn").addEventListener("click", openGenealogy);
+  $("genealogyCloseBtn").addEventListener("click", closeGenealogy);
+  genealogyModal.addEventListener("click", (e) => {
+    if (e.target === genealogyModal) closeGenealogy();
+  });
+
   let ctrlComboUsed = false;
   let shiftComboUsed = false;
+  const anyModalOpen = () =>
+    !helpModal.classList.contains("hidden") ||
+    !genealogyModal.classList.contains("hidden");
+
   document.addEventListener("keyup", (e) => {
     if (e.key === "Control") {
       const wasCombo = ctrlComboUsed;
       ctrlComboUsed = false;
       if (wasCombo) return;
-      if (!helpModal.classList.contains("hidden")) return;
+      if (anyModalOpen()) return;
       if ($("test-screen").classList.contains("hidden")) return;
       reshuffleBlanks();
       return;
@@ -1613,7 +1633,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const wasCombo = shiftComboUsed;
       shiftComboUsed = false;
       if (wasCombo) return;
-      if (!helpModal.classList.contains("hidden")) return;
+      if (anyModalOpen()) return;
       if ($("test-screen").classList.contains("hidden")) return;
       const inInput = document.activeElement === $("answerInput");
       if (inInput) return;
@@ -1625,8 +1645,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.ctrlKey && e.key !== "Control") ctrlComboUsed = true;
     if (e.shiftKey && e.key !== "Shift") shiftComboUsed = true;
     const helpOpen = !helpModal.classList.contains("hidden");
+    const genealogyOpen = !genealogyModal.classList.contains("hidden");
     if (helpOpen) {
       if (e.key === "Escape") { e.preventDefault(); closeHelp(); }
+      return;
+    }
+    if (genealogyOpen) {
+      if (e.key === "Escape") { e.preventDefault(); closeGenealogy(); }
       return;
     }
 
