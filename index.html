@@ -14,11 +14,12 @@
 <div class="container">
   <header class="app-header">
     <div class="header-actions">
+      <button id="kingsBtn" class="header-icon-btn" aria-label="분열 왕국 왕 연대기" title="분열 왕국 왕 연대기 (르호보암~시드기야)">👑</button>
       <button id="genealogyBtn" class="header-icon-btn" aria-label="성경 인물 연대기" title="성경 인물 연대기">📜</button>
       <button id="helpBtn" class="header-icon-btn help-btn" aria-label="도움말" title="도움말">?</button>
     </div>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.88</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.89</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -123,6 +124,22 @@
       </div>
       <div class="modal-body modal-body-frame">
         <iframe id="genealogyFrame" title="성경 인물 연대기 인포그래픽" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- 분열 왕국 왕 연대기 모달 -->
+  <div id="kingsModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="kingsTitle">
+    <div class="modal-panel modal-panel-wide">
+      <div class="modal-header">
+        <h2 id="kingsTitle">👑 분열 왕국 왕 연대기</h2>
+        <div class="modal-header-actions">
+          <a id="kingsOpenNewTab" href="족보/divided_kingdom_kings.html" target="_blank" rel="noopener" class="modal-link" title="새 탭에서 열기">↗ 새 탭</a>
+          <button id="kingsCloseBtn" class="modal-close" aria-label="닫기">×</button>
+        </div>
+      </div>
+      <div class="modal-body modal-body-frame">
+        <iframe id="kingsFrame" title="분열 왕국 왕 연대기 인포그래픽" loading="lazy"></iframe>
       </div>
     </div>
   </div>

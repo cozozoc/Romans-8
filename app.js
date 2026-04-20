@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.88";
+const APP_VERSION = "0.0.89";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1613,11 +1613,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === genealogyModal) closeGenealogy();
   });
 
+  const kingsModal = $("kingsModal");
+  const kingsFrame = $("kingsFrame");
+  const KINGS_SRC = "족보/divided_kingdom_kings.html";
+  const openKings = () => {
+    if (kingsFrame && !kingsFrame.getAttribute("src")) {
+      kingsFrame.setAttribute("src", KINGS_SRC);
+    }
+    kingsModal.classList.remove("hidden");
+  };
+  const closeKings = () => kingsModal.classList.add("hidden");
+  $("kingsBtn").addEventListener("click", openKings);
+  $("kingsCloseBtn").addEventListener("click", closeKings);
+  kingsModal.addEventListener("click", (e) => {
+    if (e.target === kingsModal) closeKings();
+  });
+
   let ctrlComboUsed = false;
   let shiftComboUsed = false;
   const anyModalOpen = () =>
     !helpModal.classList.contains("hidden") ||
-    !genealogyModal.classList.contains("hidden");
+    !genealogyModal.classList.contains("hidden") ||
+    !kingsModal.classList.contains("hidden");
 
   document.addEventListener("keyup", (e) => {
     if (e.key === "Control") {
@@ -1652,6 +1669,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (genealogyOpen) {
       if (e.key === "Escape") { e.preventDefault(); closeGenealogy(); }
+      return;
+    }
+    const kingsOpen = !kingsModal.classList.contains("hidden");
+    if (kingsOpen) {
+      if (e.key === "Escape") { e.preventDefault(); closeKings(); }
       return;
     }
 
