@@ -61,30 +61,57 @@ def fetch_chapter(code, ch, retries=3):
 
 VERSE_ID_RE = re.compile(r"^NKRV\.[^.]+\.\d+\.(\d+)$")
 
-def parse_verses(html, code, ch):
-    """Parse verses, concatenating all spans with same verse number in document order."""
+# NKRV website uses Hebrew chapter numbering internally (NKRV.JOL has 4 ch, NKRV.MAL has 3 ch),
+# but 개역개정 print edition uses English numbering (요엘 3 ch, 말라기 4 ch).
+# For affected chapters, fetch an alternate URL and pull ids from a different internal chapter,
+# optionally renumbering verses with an offset.
+# (code, out_ch) -> list of (fetch_url_ch, src_id_ch, verse_offset)
+CHAPTER_OVERRIDES = {
+    ("JOL", 2): [(2, "2", 0), (2, "3", 27)],   # 요엘 2장 = NKRV.JOL.2.1-27 + NKRV.JOL.3.1-5 (→28-32)
+    ("JOL", 3): [(3, "4", 0)],                 # 요엘 3장 = NKRV.JOL.4.1-21
+    ("MAL", 4): [(4, "3", -18)],               # 말라기 4장 = NKRV.MAL.3.19-24 (→1-6)
+}
+
+def _extract_pieces(html, code, id_ch):
     soup = BeautifulSoup(html, "lxml")
-    pieces = {}  # vnum -> list[str] in document order
+    pieces = {}
     for span in soup.select("span.verse"):
         vid = span.get("id", "")
         m = VERSE_ID_RE.match(vid)
         if not m:
             continue
-        # Verify it belongs to this chapter (id may have e.g. NKRV.GEN.1.1)
         parts = vid.split(".")
         if len(parts) != 4:
             continue
-        if parts[1] != code or parts[2] != str(ch):
+        if parts[1] != code or parts[2] != id_ch:
             continue
         vnum = int(m.group(1))
         text = span.get_text(" ", strip=True)
-        # collapse multiple spaces
         text = re.sub(r"\s+", " ", text).strip()
         if not text:
             continue
         pieces.setdefault(vnum, []).append(text)
-    # Join all pieces for each verse in order, then return sorted by verse number
+    return pieces
+
+def parse_verses(html, code, ch):
+    """Parse verses, concatenating all spans with same verse number in document order."""
+    pieces = _extract_pieces(html, code, str(ch))
     return [(n, re.sub(r"\s+", " ", " ".join(pieces[n])).strip()) for n in sorted(pieces)]
+
+def parse_verses_with_override(code, ch):
+    """Handle chapters where the URL/ID mapping doesn't match 개역개정 numbering."""
+    combined = {}
+    last_html_ch = None
+    html = None
+    for fetch_ch, src_id_ch, offset in CHAPTER_OVERRIDES[(code, ch)]:
+        if fetch_ch != last_html_ch:
+            html = fetch_chapter(code, fetch_ch)
+            last_html_ch = fetch_ch
+        pieces = _extract_pieces(html, code, src_id_ch)
+        for vnum, parts in pieces.items():
+            out_v = vnum + offset
+            combined.setdefault(out_v, []).extend(parts)
+    return [(n, re.sub(r"\s+", " ", " ".join(combined[n])).strip()) for n in sorted(combined)]
 
 def file_path(name, ch, unit):
     return os.path.join(OUT_DIR, f"{name}_{ch}{unit}.txt")
@@ -110,13 +137,21 @@ def write_chapter(name, ch, unit, verses):
 
 def main():
     force = os.environ.get("FORCE_RESCRAPE", "").lower() in ("1", "true", "yes")
-    total = sum(c for _,_,c in BOOKS)
+    only_raw = os.environ.get("ONLY_BOOKS", "").strip()
+    only = {s.strip().upper() for s in only_raw.split(",") if s.strip()} if only_raw else None
+    only_chapters_raw = os.environ.get("ONLY_CHAPTERS", "").strip()
+    only_chapters = {int(s) for s in only_chapters_raw.split(",") if s.strip()} if only_chapters_raw else None
+    total = sum(c for code,_,c in BOOKS if only is None or code in only)
     done = 0
     failures = []
     t0 = time.time()
     for code, name, n_ch in BOOKS:
+        if only is not None and code not in only:
+            continue
         unit = "편" if code == "PSA" else "장"
         for ch in range(1, n_ch + 1):
+            if only_chapters is not None and ch not in only_chapters:
+                continue
             done += 1
             path = file_path(name, ch, unit)
             if has_content(path, force=force):
@@ -124,8 +159,11 @@ def main():
                     print(f"[{done}/{total}] skip existing {name} {ch}{unit}", flush=True)
                 continue
             try:
-                html = fetch_chapter(code, ch)
-                verses = parse_verses(html, code, ch)
+                if (code, ch) in CHAPTER_OVERRIDES:
+                    verses = parse_verses_with_override(code, ch)
+                else:
+                    html = fetch_chapter(code, ch)
+                    verses = parse_verses(html, code, ch)
                 if not verses:
                     failures.append((code, ch, "no verses parsed"))
                     print(f"[{done}/{total}] WARN no verses: {code} {ch}", flush=True)
