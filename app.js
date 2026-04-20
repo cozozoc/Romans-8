@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.72";
+const APP_VERSION = "0.0.73";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -20,6 +20,7 @@ const state = {
   revealAllTimer: null,
   autoRevealTimer: null,
   autoNextTimer: null,
+  autoNextStartTimer: null,
   hintQueue: [],
   hintQueueKey: "",
   hintShown: false,
@@ -443,6 +444,12 @@ function clearTimers() {
   if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
   if (state.autoRevealTimer) { clearTimeout(state.autoRevealTimer); state.autoRevealTimer = null; }
   if (state.autoNextTimer) { clearTimeout(state.autoNextTimer); state.autoNextTimer = null; }
+  if (state.autoNextStartTimer) { clearTimeout(state.autoNextStartTimer); state.autoNextStartTimer = null; }
+  const qt = document.getElementById("questionText");
+  if (qt) {
+    qt.classList.remove("auto-nexting");
+    qt.style.removeProperty("--auto-next-duration");
+  }
 }
 
 function updateProgress() {
@@ -511,11 +518,24 @@ function showQuestion() {
 
 function scheduleAutoNext() {
   if (!state.config || !state.config.autoNextEnabled) return;
-  const secs = Math.max(1, parseInt(state.config.autoNextSeconds) || 10);
+  const totalMs = Math.max(1, parseInt(state.config.autoNextSeconds) || 10) * 1000;
+  const startBuffer = 1000;
+  const endBuffer = 1000;
+  if (totalMs > startBuffer + endBuffer) {
+    const transitionMs = totalMs - startBuffer - endBuffer;
+    const qt = $("questionText");
+    state.autoNextStartTimer = setTimeout(() => {
+      state.autoNextStartTimer = null;
+      if (qt) {
+        qt.style.setProperty("--auto-next-duration", `${transitionMs}ms`);
+        qt.classList.add("auto-nexting");
+      }
+    }, startBuffer);
+  }
   state.autoNextTimer = setTimeout(() => {
     state.autoNextTimer = null;
     forceNextVerse();
-  }, secs * 1000);
+  }, totalMs);
 }
 
 function changeLevel(delta) {

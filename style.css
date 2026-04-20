@@ -555,6 +555,15 @@ button.secondary.bookmark-active:hover { background: #ffe9a8; }
   transition: none;
   color: #2563eb;
 }
+
+#questionText.auto-nexting {
+  transition: color var(--auto-next-duration, 8s) linear;
+  color: #2563eb;
+}
+#questionText.auto-nexting .blank.revealed {
+  transition: color var(--auto-next-duration, 8s) linear, background var(--auto-next-duration, 8s) linear;
+  color: #2563eb;
+}
 .question-box.correct .blank.revealed {
   color: #2563eb;
   background: transparent;
