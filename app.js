@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.73";
+const APP_VERSION = "0.0.74";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -6,6 +6,25 @@ const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0
 function parseLevel(val) {
   const n = parseInt(val);
   return Math.max(0, Math.min(10, Number.isFinite(n) ? n : 6));
+}
+
+const AUTO_NEXT_PER_SYLLABLE_OPTIONS = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
+function parseAutoNextSecondsPerSyllable(val) {
+  const n = parseFloat(val);
+  if (!Number.isFinite(n)) return 1.0;
+  let best = AUTO_NEXT_PER_SYLLABLE_OPTIONS[0];
+  let bestDiff = Math.abs(n - best);
+  for (const opt of AUTO_NEXT_PER_SYLLABLE_OPTIONS) {
+    const d = Math.abs(n - opt);
+    if (d < bestDiff) { best = opt; bestDiff = d; }
+  }
+  return best;
+}
+
+function countSyllables(text) {
+  if (!text) return 0;
+  const m = text.match(/[\uAC00-\uD7A3]/g);
+  return m ? m.length : 0;
 }
 
 const state = {
@@ -29,7 +48,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSeconds","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSecondsPerSyllable","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -45,7 +64,7 @@ const DEFAULT_SETTINGS = {
   continuousCount: "1",
   bookmarkedOnly: false,
   autoNextEnabled: false,
-  autoNextSeconds: "10",
+  autoNextSecondsPerSyllable: "1.0",
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
@@ -411,7 +430,7 @@ function startTest() {
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
     bookmarkedOnly: $("bookmarkedOnly").checked,
     autoNextEnabled: $("autoNextEnabled").checked,
-    autoNextSeconds: Math.max(1, parseInt($("autoNextSeconds").value) || 10),
+    autoNextSecondsPerSyllable: parseAutoNextSecondsPerSyllable($("autoNextSecondsPerSyllable").value),
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -518,7 +537,10 @@ function showQuestion() {
 
 function scheduleAutoNext() {
   if (!state.config || !state.config.autoNextEnabled) return;
-  const totalMs = Math.max(1, parseInt(state.config.autoNextSeconds) || 10) * 1000;
+  const secPerSyl = parseAutoNextSecondsPerSyllable(state.config.autoNextSecondsPerSyllable);
+  const verseText = (state.currentWords || []).join(" ");
+  const syllables = Math.max(1, countSyllables(verseText));
+  const totalMs = Math.max(1000, Math.round(syllables * secPerSyl * 1000));
   const startBuffer = 1000;
   const endBuffer = 1000;
   if (totalMs > startBuffer + endBuffer) {
@@ -1314,8 +1336,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (firstTwoModeEl) firstTwoModeEl.addEventListener("change", saveSettings);
   const autoNextEnabledEl = $("autoNextEnabled");
   if (autoNextEnabledEl) autoNextEnabledEl.addEventListener("change", saveSettings);
-  const autoNextSecondsEl = $("autoNextSeconds");
-  if (autoNextSecondsEl) autoNextSecondsEl.addEventListener("change", saveSettings);
+  const autoNextSecondsPerSyllableEl = $("autoNextSecondsPerSyllable");
+  if (autoNextSecondsPerSyllableEl) autoNextSecondsPerSyllableEl.addEventListener("change", saveSettings);
   $("startBtn").addEventListener("click", startTest);
   $("printPdfBtn").addEventListener("click", openPrintPractice);
   $("pdfSetCount").addEventListener("change", saveSettings);
