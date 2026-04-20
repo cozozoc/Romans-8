@@ -62,8 +62,9 @@ def fetch_chapter(code, ch, retries=3):
 VERSE_ID_RE = re.compile(r"^NKRV\.[^.]+\.\d+\.(\d+)$")
 
 def parse_verses(html, code, ch):
+    """Parse verses, concatenating all spans with same verse number in document order."""
     soup = BeautifulSoup(html, "lxml")
-    seen = {}
+    pieces = {}  # vnum -> list[str] in document order
     for span in soup.select("span.verse"):
         vid = span.get("id", "")
         m = VERSE_ID_RE.match(vid)
@@ -79,14 +80,18 @@ def parse_verses(html, code, ch):
         text = span.get_text(" ", strip=True)
         # collapse multiple spaces
         text = re.sub(r"\s+", " ", text).strip()
-        if vnum not in seen or len(text) > len(seen[vnum]):
-            seen[vnum] = text
-    return [(n, seen[n]) for n in sorted(seen)]
+        if not text:
+            continue
+        pieces.setdefault(vnum, []).append(text)
+    # Join all pieces for each verse in order, then return sorted by verse number
+    return [(n, re.sub(r"\s+", " ", " ".join(pieces[n])).strip()) for n in sorted(pieces)]
 
 def file_path(name, ch, unit):
     return os.path.join(OUT_DIR, f"{name}_{ch}{unit}.txt")
 
-def has_content(path):
+def has_content(path, force=False):
+    if force:
+        return False
     if not os.path.exists(path):
         return False
     try:
@@ -104,6 +109,7 @@ def write_chapter(name, ch, unit, verses):
         f.write(header + body + "\n")
 
 def main():
+    force = os.environ.get("FORCE_RESCRAPE", "").lower() in ("1", "true", "yes")
     total = sum(c for _,_,c in BOOKS)
     done = 0
     failures = []
@@ -113,7 +119,7 @@ def main():
         for ch in range(1, n_ch + 1):
             done += 1
             path = file_path(name, ch, unit)
-            if has_content(path):
+            if has_content(path, force=force):
                 if done % 50 == 0:
                     print(f"[{done}/{total}] skip existing {name} {ch}{unit}", flush=True)
                 continue
