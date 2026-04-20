@@ -77,6 +77,23 @@
     display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 16px;
   }
+  .ig-figures.single-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ig-figures.single-row .ig-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+  }
+  .ig-figures.single-row::-webkit-scrollbar { height: 8px; }
+  .ig-figures.single-row::-webkit-scrollbar-thumb {
+    background: var(--color-border-secondary); border-radius: 4px;
+  }
   .ig-card {
     background: var(--color-background-primary);
     border: 1px solid var(--color-border-tertiary);
@@ -588,9 +605,9 @@
         <div class="ig-period-title">남유다 단독 시대</div>
         <div class="ig-period-meta">BC 722–586 · 8인</div>
       </div>
-      <p class="ig-period-note">북이스라엘 멸망 후 유다 단독 — 히스기야·요시야 개혁과 바벨론 멸망까지.</p>
+      <p class="ig-period-note">북이스라엘 멸망 후 유다 단독 — 히스기야·요시야 개혁과 바벨론 멸망까지. (가로 스크롤)</p>
 
-      <div class="ig-figures">
+      <div class="ig-figures single-row">
         <div class="ig-card kingdom-south">
           <div class="ig-name-row">
             <span class="ig-pill pill-south">남</span>
