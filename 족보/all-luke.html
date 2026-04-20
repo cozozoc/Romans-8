@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>아담에서 예수까지 — 누가복음 3장 77대</title>
+<style>
+:root{
+  --bg:#FBF8F3; --bg-card:#FFFFFF; --bg-soft:#F4EEE2; --bg-chip:#FFFFFF;
+  --border:#E5DDC8; --border-soft:#EFE8D7;
+  --text:#2A2622; --text-soft:#6B6259; --text-mute:#998E80;
+  --accent:#3F6F8B; --accent-deep:#1F4961;
+  --accent2:#BA7517;
+  --era-band:#2A2622;
+  --rad:14px; --rad-sm:8px; --rad-pill:999px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;}
+.page{max-width:980px;margin:0 auto;padding:56px 48px 80px;}
+
+.cover{text-align:center;padding:64px 32px 48px;border-bottom:1px solid var(--border);
+  margin-bottom:56px;background:linear-gradient(180deg,#FFFDF8 0%,#FBF8F3 100%);border-radius:24px;}
+.cover .eyebrow{font-size:13px;letter-spacing:.32em;color:var(--accent);font-weight:600;text-transform:uppercase;}
+.cover h1{font-size:46px;line-height:1.15;font-weight:700;margin:18px 0 14px;letter-spacing:-.02em;}
+.cover h1 .alt{color:var(--accent);}
+.cover p.lead{font-size:17px;color:var(--text-soft);margin:0 auto;max-width:600px;line-height:1.7;}
+.cover .meta{margin-top:28px;display:inline-flex;gap:18px;font-size:13px;color:var(--text-mute);}
+.cover .meta span b{color:var(--text);font-weight:600;}
+
+.era{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rad);
+  padding:34px 36px 32px;margin-bottom:34px;
+  box-shadow:0 1px 0 rgba(40,30,15,.02), 0 18px 40px -28px rgba(60,40,15,.18);page-break-inside:avoid;}
+.era-head{display:flex;align-items:flex-end;justify-content:space-between;
+  border-bottom:1px solid var(--border-soft);padding-bottom:18px;margin-bottom:22px;gap:24px;}
+.era-tag{display:inline-flex;align-items:center;gap:10px;padding:6px 14px;background:var(--era-band);color:#FBF8F3;
+  border-radius:var(--rad-pill);font-size:12px;letter-spacing:.16em;font-weight:600;text-transform:uppercase;}
+.era-tag .num{color:var(--accent);font-size:11px;}
+.era-title{font-size:28px;font-weight:700;margin:14px 0 4px;letter-spacing:-.01em;}
+.era-ref{font-size:14px;color:var(--text-soft);}
+.era-pos{font-size:12px;color:var(--text-mute);text-align:right;letter-spacing:.06em;}
+.era-pos b{display:block;color:var(--accent);font-size:18px;letter-spacing:0;}
+
+.viz{background:var(--bg-soft);border-radius:var(--rad);padding:28px 24px;margin-bottom:22px;}
+.viz svg{display:block;width:100%;height:auto;}
+.th{font-family:inherit;font-size:14px;font-weight:600;fill:var(--text);}
+.ts{font-family:inherit;font-size:12px;fill:var(--text-soft);}
+.th-l{font-size:15px;font-weight:700;fill:var(--accent-deep);}
+.th-only{font-size:11px;font-weight:600;fill:var(--accent);letter-spacing:.06em;}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.col{padding:16px 18px;background:var(--bg-soft);border-radius:var(--rad-sm);border:1px solid var(--border-soft);}
+.col-t{font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--text-mute);
+  text-transform:uppercase;margin-bottom:10px;}
+.col-l{font-size:14px;line-height:1.85;color:var(--text);}
+.col-l .star{color:var(--accent);font-weight:700;margin-right:4px;}
+.col-l .badge-l{display:inline-block;background:var(--accent);color:#fff;font-size:10px;font-weight:600;
+  padding:1px 6px;border-radius:8px;margin:0 3px;letter-spacing:.04em;}
+
+.note{font-size:14px;line-height:1.8;color:var(--text-soft);
+  padding:18px 20px;background:#EAF2F6;border-left:3px solid var(--accent);
+  border-radius:0 var(--rad-sm) var(--rad-sm) 0;}
+.note b{color:var(--text);font-weight:700;}
+.note .lonly{color:var(--accent);font-weight:700;}
+
+/* Name grid for unknown blocks */
+.namegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0;}
+.namechip{display:flex;align-items:center;gap:10px;background:#FFFFFF;border:1px solid var(--border);
+  border-radius:var(--rad-sm);padding:10px 12px;}
+.namechip .idx{font-size:11px;color:var(--text-mute);font-weight:600;font-variant-numeric:tabular-nums;min-width:22px;}
+.namechip .nm{font-size:14px;font-weight:600;color:var(--text);}
+.namechip.dup{background:#FFF8E8;border-color:#E8D6A6;}
+.namechip.dup .nm{color:var(--accent2);}
+
+/* Divergence side-by-side */
+.fork{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 14px;}
+.fork-side{background:#FFFFFF;border:1px solid var(--border);border-radius:var(--rad-sm);padding:18px 20px;}
+.fork-side h5{font-size:11px;color:var(--text-mute);font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;margin:0 0 10px;}
+.fork-side h5.luke{color:var(--accent);}
+.fork-side h5.matt{color:var(--accent2);}
+.fork-side .who{font-size:18px;font-weight:700;color:var(--text);margin:2px 0 6px;}
+.fork-side .who b{color:var(--accent);}
+.fork-side .who.matt b{color:var(--accent2);}
+.fork-side .why{font-size:13px;color:var(--text-soft);line-height:1.65;}
+
+.endline{text-align:center;margin-top:24px;padding-top:36px;border-top:1px solid var(--border);
+  color:var(--text-mute);font-size:13px;}
+.endline b{color:var(--accent);font-weight:700;}
+
+/* Comparison card */
+.cmp{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rad);
+  padding:34px 36px 32px;margin-top:34px;
+  box-shadow:0 1px 0 rgba(40,30,15,.02), 0 18px 40px -28px rgba(60,40,15,.18);}
+.cmp h3{font-size:24px;font-weight:700;margin:0 0 6px;}
+.cmp .sub{color:var(--text-soft);font-size:14px;margin:0 0 22px;}
+.cmp table{width:100%;border-collapse:collapse;font-size:14px;}
+.cmp th,.cmp td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border-soft);vertical-align:top;}
+.cmp th{font-weight:600;color:var(--text-mute);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--bg-soft);}
+.cmp td.head{font-weight:600;color:var(--text);width:22%;}
+.cmp td .mh{color:var(--accent2);font-weight:700;}
+.cmp td .lh{color:var(--accent);font-weight:700;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Cover -->
+<section class="cover">
+  <div class="eyebrow">Luke 3 Genealogy · Adam → Jesus</div>
+  <h1>아담에서 <span class="alt">예수 그리스도</span>까지</h1>
+  <p class="lead">누가복음 3장 23–38절에 따른 77대 메시아 계보 — 마태복음과 다른 나단 계열을 따라 거꾸로 거슬러 올라가 아담과 하나님께 이르는 보편적 인류사 족보.</p>
+  <div class="meta">
+    <span><b>77</b> 대 메시아 계보</span>
+    <span><b>나단</b> 계열 (다윗의 셋째 아들)</span>
+    <span><b>8</b> 시대 구속사</span>
+  </div>
+</section>
+
+<!-- ERA 1 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">I</span> 원시 역사</span>
+      <h2 class="era-title">창조부터 홍수까지</h2>
+      <div class="era-ref">눅 3:36–38 · 아담 ~ 셈 (11대) · 창세기 5장 평행</div>
+    </div>
+    <div class="era-pos">계보 위치<b>1 → 11</b></div>
+  </div>
+  <div class="viz">
+    <svg viewBox="0 0 608 420" role="img">
+      <line x1="180" y1="28" x2="180" y2="395" stroke="#B6CCD8" stroke-width="1.5" opacity=".7"/>
+      <g><text class="ts" x="150" y="32" text-anchor="end">1</text><circle cx="180" cy="28" r="7" fill="#3F6F8B"/><text class="th" x="196" y="32">아담</text><line x1="245" y1="28" x2="290" y2="28" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="296" y="32">하나님으로부터 (눅 3:38)</text></g>
+      <g><text class="ts" x="150" y="69" text-anchor="end">2</text><circle cx="180" cy="65" r="6" fill="#3F6F8B"/><text class="th" x="196" y="69">셋</text></g>
+      <g><text class="ts" x="150" y="102" text-anchor="end">3</text><circle cx="180" cy="98" r="6" fill="#3F6F8B"/><text class="th" x="196" y="102">에노스</text></g>
+      <g><text class="ts" x="150" y="135" text-anchor="end">4</text><circle cx="180" cy="131" r="6" fill="#3F6F8B"/><text class="th" x="196" y="135">가이난</text></g>
+      <g><text class="ts" x="150" y="168" text-anchor="end">5</text><circle cx="180" cy="164" r="6" fill="#3F6F8B"/><text class="th" x="196" y="168">마할랄렐</text></g>
+      <g><text class="ts" x="150" y="201" text-anchor="end">6</text><circle cx="180" cy="197" r="6" fill="#3F6F8B"/><text class="th" x="196" y="201">야렛</text></g>
+      <g><text class="ts" x="150" y="234" text-anchor="end">7</text><circle cx="180" cy="230" r="7" fill="#3F6F8B"/><text class="th" x="196" y="234">에녹</text><line x1="245" y1="230" x2="290" y2="230" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="296" y="234">죽음 없이 승천 (365세)</text></g>
+      <g><text class="ts" x="150" y="267" text-anchor="end">8</text><circle cx="180" cy="263" r="7" fill="#3F6F8B"/><text class="th" x="196" y="267">므두셀라</text><line x1="260" y1="263" x2="290" y2="263" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="296" y="267">969세 · 최장수</text></g>
+      <g><text class="ts" x="150" y="300" text-anchor="end">9</text><circle cx="180" cy="296" r="6" fill="#3F6F8B"/><text class="th" x="196" y="300">레멕</text></g>
+      <g><text class="ts" x="150" y="333" text-anchor="end">10</text><circle cx="180" cy="329" r="7" fill="#3F6F8B"/><text class="th" x="196" y="333">노아</text><line x1="240" y1="329" x2="290" y2="329" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="296" y="333">대홍수 · 무지개 언약</text></g>
+      <g><text class="ts" x="150" y="395" text-anchor="end">11</text><circle cx="180" cy="391" r="7" fill="#3F6F8B"/><text class="th" x="196" y="395">셈</text><line x1="223" y1="391" x2="290" y2="391" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="296" y="395">셈족의 조상</text></g>
+    </svg>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 11인</div><div class="col-l"><span class="star">★</span>아담, 셋, 에노스, 가이난, 마할랄렐, 야렛, 에녹, 므두셀라, 레멕, 노아, 셈</div></div>
+    <div class="col"><div class="col-t">마태복음과 비교</div><div class="col-l">마태는 아브라함부터 시작하므로 이 구간 없음. 누가는 창세기 5장 계보를 그대로 거슬러 올라가 <b>아담 → 하나님</b>까지 도달.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 누가는 의도적으로 예수의 계보를 인류 시조 아담까지, 더 나아가 "그 위는 하나님이시니라"(눅 3:38)로 마친다. 예수는 유대인의 메시아일 뿐 아니라 <b>둘째 아담</b>(롬 5:14, 고전 15:45)으로서 모든 인류의 구주임을 선언.</div>
+</section>
+
+<!-- ERA 2 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">II</span> 셈에서 아브라함</span>
+      <h2 class="era-title">홍수 후 민족의 분화</h2>
+      <div class="era-ref">눅 3:34–36 · 아박삿 ~ 아브라함 (10대)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>12 → 21</b></div>
+  </div>
+  <div class="viz">
+    <svg viewBox="0 0 608 410" role="img">
+      <line x1="150" y1="28" x2="150" y2="370" stroke="#B6CCD8" stroke-width="1.5" opacity=".7"/>
+      <g><text class="ts" x="120" y="32" text-anchor="end">12</text><circle cx="150" cy="28" r="6" fill="#3F6F8B"/><text class="th" x="166" y="32">아박삿</text></g>
+      <g><text class="ts" x="120" y="66" text-anchor="end">13</text><circle cx="150" cy="62" r="8" fill="#BA7517" stroke="#633806" stroke-width="1.2"/><text class="th-l" x="170" y="66">가이난</text><line x1="225" y1="62" x2="260" y2="62" stroke="#B6CCD8" stroke-width=".7"/><text class="th-only" x="266" y="62">누가복음에만 등장 (LXX 70인역 따름)</text></g>
+      <g><text class="ts" x="120" y="100" text-anchor="end">14</text><circle cx="150" cy="96" r="6" fill="#3F6F8B"/><text class="th" x="166" y="100">살라</text><line x1="195" y1="96" x2="260" y2="96" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="100">마태에서는 셀라(셈→아박삿→직접)</text></g>
+      <g><text class="ts" x="120" y="134" text-anchor="end">15</text><circle cx="150" cy="130" r="6" fill="#3F6F8B"/><text class="th" x="166" y="134">헤버</text><line x1="195" y1="130" x2="260" y2="130" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="134">"히브리"의 어원</text></g>
+      <g><text class="ts" x="120" y="168" text-anchor="end">16</text><circle cx="150" cy="164" r="6" fill="#3F6F8B"/><text class="th" x="166" y="168">벨렉</text><line x1="195" y1="164" x2="260" y2="164" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="168">"그의 때에 땅이 나뉘었더라"</text></g>
+      <g><text class="ts" x="120" y="202" text-anchor="end">17</text><circle cx="150" cy="198" r="6" fill="#3F6F8B"/><text class="th" x="166" y="202">르우</text></g>
+      <g><text class="ts" x="120" y="236" text-anchor="end">18</text><circle cx="150" cy="232" r="6" fill="#3F6F8B"/><text class="th" x="166" y="236">스룩</text></g>
+      <g><text class="ts" x="120" y="270" text-anchor="end">19</text><circle cx="150" cy="266" r="6" fill="#3F6F8B"/><text class="th" x="166" y="270">나홀</text></g>
+      <g><text class="ts" x="120" y="304" text-anchor="end">20</text><circle cx="150" cy="300" r="6" fill="#3F6F8B"/><text class="th" x="166" y="304">데라</text><line x1="195" y1="300" x2="260" y2="300" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="304">우상 숭배자 · 롯의 조부</text></g>
+      <g><text class="ts" x="120" y="370" text-anchor="end">21</text><circle cx="150" cy="366" r="9" fill="#3F6F8B"/><text class="th-l" x="170" y="370">아브라함</text><line x1="240" y1="366" x2="260" y2="366" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="370">사라 · 이삭의 아버지 · 언약의 조상</text></g>
+    </svg>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 10인</div><div class="col-l"><span class="star">★</span>아박삿, <span class="badge-l">L</span>가이난, 살라, 헤버, 벨렉, 르우, 스룩, 나홀, 데라, 아브라함</div></div>
+    <div class="col"><div class="col-t">마태와의 차이</div><div class="col-l">마태(창 11장 따름)에는 <b>가이난</b>이 없어 1대 적음. 누가는 칠십인역(LXX) 창 11장을 따랐다. 이름 표기도 셀라/살라, 에벨/헤버 등 차이.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 13번 <span class="lonly">가이난</span>은 누가복음 본문에만 등장한다(눅 3:36). 히브리어 마소라 본문(창 11장)에는 없으나, 70인역 헬라어 성경에는 있어 누가가 이를 따랐다. 누가복음 77대 vs 마태복음 61대 차이의 한 원인.</div>
+</section>
+
+<!-- ERA 3 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">III</span> 족장 · 출애굽 · 사사</span>
+      <h2 class="era-title">이삭에서 이새까지</h2>
+      <div class="era-ref">눅 3:32–34 · 이삭 ~ 이새 (13대)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>22 → 34</b></div>
+  </div>
+  <div class="viz">
+    <svg viewBox="0 0 608 480" role="img">
+      <line x1="150" y1="28" x2="150" y2="450" stroke="#B6CCD8" stroke-width="1.5" opacity=".7"/>
+      <g><text class="ts" x="120" y="32" text-anchor="end">22</text><circle cx="150" cy="28" r="6" fill="#3F6F8B"/><text class="th" x="166" y="32">이삭</text></g>
+      <g><text class="ts" x="120" y="60" text-anchor="end">23</text><circle cx="150" cy="56" r="6" fill="#3F6F8B"/><text class="th" x="166" y="60">야곱</text><line x1="195" y1="56" x2="260" y2="56" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="60">12지파의 아버지</text></g>
+      <g><text class="ts" x="120" y="92" text-anchor="end">24</text><circle cx="150" cy="88" r="7" fill="#3F6F8B"/><text class="th" x="166" y="92">유다</text><line x1="195" y1="88" x2="260" y2="88" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="92">유다 지파 · 왕가 선조</text></g>
+      <g><text class="ts" x="120" y="124" text-anchor="end">25</text><circle cx="150" cy="120" r="6" fill="#3F6F8B"/><text class="th" x="166" y="124">베레스</text><line x1="215" y1="120" x2="260" y2="120" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="124">다말의 아들 (창 38)</text></g>
+      <g><text class="ts" x="120" y="156" text-anchor="end">26</text><circle cx="150" cy="152" r="6" fill="#3F6F8B"/><text class="th" x="166" y="156">헤스론</text></g>
+      <g><text class="ts" x="120" y="190" text-anchor="end">27</text><circle cx="150" cy="186" r="6" fill="#BA7517" stroke="#633806" stroke-width="1.2"/><text class="th-l" x="166" y="190">아니</text><line x1="195" y1="186" x2="260" y2="186" stroke="#B6CCD8" stroke-width=".7"/><text class="th-only" x="266" y="190">누가복음에만 등장</text></g>
+      <g><text class="ts" x="120" y="222" text-anchor="end">28</text><circle cx="150" cy="218" r="6" fill="#BA7517" stroke="#633806" stroke-width="1.2"/><text class="th-l" x="166" y="222">아드민</text><line x1="195" y1="218" x2="260" y2="218" stroke="#B6CCD8" stroke-width=".7"/><text class="th-only" x="266" y="222">누가복음에만 등장 (마태는 "람" 1명)</text></g>
+      <g><text class="ts" x="120" y="254" text-anchor="end">29</text><circle cx="150" cy="250" r="6" fill="#3F6F8B"/><text class="th" x="166" y="254">아미나답</text></g>
+      <g><text class="ts" x="120" y="286" text-anchor="end">30</text><circle cx="150" cy="282" r="7" fill="#3F6F8B"/><text class="th" x="166" y="286">나손</text><line x1="195" y1="282" x2="260" y2="282" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="286">유다 지파 지도자 (민 1:7)</text></g>
+      <g><text class="ts" x="120" y="318" text-anchor="end">31</text><circle cx="150" cy="314" r="6" fill="#3F6F8B"/><text class="th" x="166" y="318">살몬</text><line x1="195" y1="314" x2="260" y2="314" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="318">라합과 결혼</text></g>
+      <g><text class="ts" x="120" y="354" text-anchor="end">32</text><circle cx="150" cy="350" r="7" fill="#3F6F8B"/><text class="th" x="166" y="354">보아스</text><line x1="215" y1="350" x2="260" y2="350" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="354">룻과 결혼 · 기업 무를 자</text></g>
+      <g><text class="ts" x="120" y="390" text-anchor="end">33</text><circle cx="150" cy="386" r="6" fill="#3F6F8B"/><text class="th" x="166" y="390">오벳</text></g>
+      <g><text class="ts" x="120" y="450" text-anchor="end">34</text><circle cx="150" cy="446" r="9" fill="#3F6F8B"/><text class="th-l" x="170" y="450">이새</text><line x1="210" y1="446" x2="260" y2="446" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="450">"이새의 줄기에서 한 싹이…" (사 11:1)</text></g>
+    </svg>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 13인</div><div class="col-l"><span class="star">★</span>이삭, 야곱, 유다, 베레스, 헤스론, <span class="badge-l">L</span>아니, <span class="badge-l">L</span>아드민, 아미나답, 나손, 살몬, 보아스, 오벳, 이새</div></div>
+    <div class="col"><div class="col-t">마태와의 차이</div><div class="col-l">마태는 헤스론→<b>람</b>→아미나답 (1대). 누가는 헤스론→<b>아니→아드민</b>→아미나답 (2대 추가). 사본 따라 "아람" 하나로도 읽혀 76대로 셈하기도 함.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 헤스론과 아미나답 사이에 <span class="lonly">아니·아드민</span> 두 이름이 추가되어 출애굽 시기 계보가 길어진다. 이새까지는 마태와 동일하지만, 다음 단계에서 결정적인 분기가 일어난다.</div>
+</section>
+
+<!-- ERA 4 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">IV</span> 다윗과 분기</span>
+      <h2 class="era-title">솔로몬이 아닌 나단으로</h2>
+      <div class="era-ref">눅 3:31 · 다윗 → 나단 (왕가 아닌 비왕족 계열)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>35 → 36</b></div>
+  </div>
+  <div class="viz">
+    <svg viewBox="0 0 608 280" role="img">
+      <g><text class="ts" x="244" y="44" text-anchor="end">35</text><circle cx="280" cy="40" r="11" fill="#3F6F8B" stroke="#1F4961" stroke-width="1.5"/><text class="th-l" x="302" y="46">다윗</text><line x1="350" y1="40" x2="400" y2="40" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="406" y="44">미갈, 아비가일, 밧세바 (다윗 언약 · 삼하 7)</text></g>
+      <line x1="280" y1="58" x2="280" y2="100" stroke="#B6CCD8" stroke-width="1.5"/>
+      <line x1="100" y1="100" x2="460" y2="100" stroke="#B6CCD8" stroke-width="1.5"/>
+      <line x1="120" y1="100" x2="120" y2="140" stroke="#BA7517" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <line x1="440" y1="100" x2="440" y2="140" stroke="#3F6F8B" stroke-width="1.8"/>
+      <g><rect x="40" y="140" width="160" height="100" rx="10" fill="#FFFFFF" stroke="#E8D6A6" stroke-width="1"/>
+        <text class="th-only" x="120" y="160" text-anchor="middle" fill="#BA7517">마태복음 1:6</text>
+        <text class="th" x="120" y="186" text-anchor="middle" fill="#BA7517" font-size="18">솔로몬</text>
+        <text class="ts" x="120" y="208" text-anchor="middle">왕위 계승자</text>
+        <text class="ts" x="120" y="226" text-anchor="middle">→ 르호보암 → 14代 왕가</text>
+      </g>
+      <g><rect x="360" y="140" width="160" height="100" rx="10" fill="#FFFFFF" stroke="#3F6F8B" stroke-width="1.5"/>
+        <text class="th-only" x="440" y="160" text-anchor="middle">누가복음 3:31</text>
+        <text class="th" x="440" y="186" text-anchor="middle" fill="#3F6F8B" font-size="18">나단</text>
+        <text class="ts" x="440" y="208" text-anchor="middle">다윗의 셋째 아들</text>
+        <text class="ts" x="440" y="226" text-anchor="middle">→ 비왕족 사적(私的) 계열</text>
+      </g>
+      <text class="ts" x="280" y="265" text-anchor="middle" font-weight="600">▼ 두 계보가 스알디엘에서 다시 만나거나, 평행으로 진행</text>
+    </svg>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 2인</div><div class="col-l"><span class="star">★</span>다윗, 나단</div></div>
+    <div class="col"><div class="col-t">왜 나단인가</div><div class="col-l">전통적 해석: 누가복음 계보는 <b>마리아의 혈통</b>(요셉의 장인 헬리를 통한)이며, 솔로몬의 왕위 계보를 거치지 않은 다윗의 또 다른 자손 라인이라는 견해.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 마태와 누가의 가장 결정적 분기점. 마태는 <b>왕위</b>(법적 계승)를, 누가는 <b>혈통</b>(육신적 계보)을 추적한다는 신학적 해석이 고대부터 이어져 온다. 예수는 <b>다윗의 합법적 왕위 계승자</b>(마태)이자 <b>다윗의 친자손</b>(누가) 두 자격을 동시에 갖춘다.</div>
+</section>
+
+<!-- ERA 5 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">V</span> 나단 후손 1기</span>
+      <h2 class="era-title">왕정 시대의 사적 계열</h2>
+      <div class="era-ref">눅 3:28–31 · 맛다다 ~ 멜기 (18대)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>37 → 54</b></div>
+  </div>
+  <div class="viz" style="padding:22px 18px;">
+    <div class="namegrid">
+      <div class="namechip"><span class="idx">37</span><span class="nm">맛다다</span></div>
+      <div class="namechip"><span class="idx">38</span><span class="nm">멘나</span></div>
+      <div class="namechip"><span class="idx">39</span><span class="nm">멜레아</span></div>
+      <div class="namechip"><span class="idx">40</span><span class="nm">엘리아김</span></div>
+      <div class="namechip"><span class="idx">41</span><span class="nm">요남</span></div>
+      <div class="namechip"><span class="idx">42</span><span class="nm">요셉</span></div>
+      <div class="namechip"><span class="idx">43</span><span class="nm">유다</span></div>
+      <div class="namechip"><span class="idx">44</span><span class="nm">시므온</span></div>
+      <div class="namechip"><span class="idx">45</span><span class="nm">레위</span></div>
+      <div class="namechip"><span class="idx">46</span><span class="nm">맛닷</span></div>
+      <div class="namechip"><span class="idx">47</span><span class="nm">요림</span></div>
+      <div class="namechip"><span class="idx">48</span><span class="nm">엘리에서</span></div>
+      <div class="namechip dup"><span class="idx">49</span><span class="nm">예수 (요수)</span></div>
+      <div class="namechip"><span class="idx">50</span><span class="nm">에르</span></div>
+      <div class="namechip"><span class="idx">51</span><span class="nm">엘마담</span></div>
+      <div class="namechip"><span class="idx">52</span><span class="nm">고삼</span></div>
+      <div class="namechip"><span class="idx">53</span><span class="nm">앗디</span></div>
+      <div class="namechip"><span class="idx">54</span><span class="nm">멜기</span></div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 18인</div><div class="col-l">맛다다, 멘나, 멜레아, 엘리아김, 요남, 요셉, 유다, 시므온, 레위, 맛닷, 요림, 엘리에서, 예수(요수), 에르, 엘마담, 고삼, 앗디, 멜기</div></div>
+    <div class="col"><div class="col-t">눈여겨볼 이름</div><div class="col-l">49번 <b>예수(Ἰησοῦς, 요수아)</b>는 그리스도의 이름과 동일. 또 야곱의 12아들 이름들(유다, 시므온, 레위, 요셉)이 반복 출현 — 이스라엘 유산을 잇는 가문임을 보여줌.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 이 18대는 <b>다윗 왕가가 아닌 나단의 사적 계열</b>로, 구약 어디에도 등장하지 않는 인물들이다. 마태가 아브라함–다윗–바벨론 유수–그리스도의 <b>왕통(王統)</b>을 강조한다면, 누가는 무명의 백성으로 살아온 <b>평범한 다윗의 자손들</b>을 통해 메시아가 온다는 점을 부각한다.</div>
+</section>
+
+<!-- ERA 6 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">VI</span> 포로기 합류</span>
+      <h2 class="era-title">네리에서 스룹바벨까지</h2>
+      <div class="era-ref">눅 3:27 · 네리 ~ 레사 (4대)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>55 → 58</b></div>
+  </div>
+  <div class="viz">
+    <svg viewBox="0 0 608 320" role="img">
+      <line x1="150" y1="28" x2="150" y2="190" stroke="#B6CCD8" stroke-width="1.5" opacity=".7"/>
+      <g><text class="ts" x="120" y="32" text-anchor="end">55</text><circle cx="150" cy="28" r="7" fill="#3F6F8B"/><text class="th-l" x="170" y="32">네리</text><line x1="210" y1="28" x2="260" y2="28" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="32">스알디엘의 (생물학적) 아버지</text></g>
+      <g><text class="ts" x="120" y="76" text-anchor="end">56</text><circle cx="150" cy="72" r="8" fill="#3F6F8B"/><text class="th-l" x="170" y="76">스알디엘</text><line x1="240" y1="72" x2="260" y2="72" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="76">마태에서는 여고냐의 아들 (마 1:12)</text></g>
+      <g><text class="ts" x="120" y="120" text-anchor="end">57</text><circle cx="150" cy="116" r="8" fill="#3F6F8B"/><text class="th-l" x="170" y="120">스룹바벨</text><line x1="240" y1="116" x2="260" y2="116" stroke="#B6CCD8" stroke-width=".7"/><text class="ts" x="266" y="120">1차 귀환 총독 · 제2성전 착공</text></g>
+      <g><text class="ts" x="120" y="160" text-anchor="end">58</text><circle cx="150" cy="156" r="6" fill="#3F6F8B"/><text class="th" x="166" y="160">레사</text></g>
+      <line x1="40" y1="220" x2="568" y2="220" stroke="#B6CCD8" stroke-width=".7" stroke-dasharray="3 3"/>
+      <text class="ts" x="40" y="240" font-weight="600" fill="#3F6F8B">두 계보가 만나는 지점</text>
+      <g><rect x="40" y="255" width="245" height="50" rx="8" fill="#FFFFFF" stroke="#E8D6A6" stroke-width="1"/>
+        <text class="th-only" x="55" y="273" fill="#BA7517">마태 1:12</text>
+        <text class="ts" x="55" y="293">여고냐 → <tspan font-weight="700" fill="#BA7517">스알디엘</tspan> → 스룹바벨</text>
+      </g>
+      <g><rect x="323" y="255" width="245" height="50" rx="8" fill="#FFFFFF" stroke="#3F6F8B" stroke-width="1.5"/>
+        <text class="th-only" x="338" y="273">누가 3:27</text>
+        <text class="ts" x="338" y="293">네리 → <tspan font-weight="700" fill="#3F6F8B">스알디엘</tspan> → 스룹바벨</text>
+      </g>
+    </svg>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 4인</div><div class="col-l"><span class="star">★</span>네리, 스알디엘, 스룹바벨, 레사</div></div>
+    <div class="col"><div class="col-t">두 계보의 합류</div><div class="col-l">두 계보 모두 <b>스룹바벨</b>을 공통으로 거치지만, 그의 아버지 <b>스알디엘</b>의 아버지가 누구냐가 다르다 — 마태는 <b>여고냐</b>(왕가), 누가는 <b>네리</b>(나단 계열). 수혼·양자 등의 가능성으로 해석.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 여고냐는 예레미야 22:30에서 "그의 자손 중 한 사람도 다윗의 왕위에 앉아 형통할 자가 없으리라"는 저주를 받았다. 누가가 <b>네리(나단 계열)</b>를 통해 스알디엘에게 이른다는 것은, 메시아의 혈통이 이 저주를 우회한다는 신학적 함의를 갖는다.</div>
+</section>
+
+<!-- ERA 7 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">VII</span> 중간기</span>
+      <h2 class="era-title">말라기 이후 침묵의 400년</h2>
+      <div class="era-ref">눅 3:23–27 · 요아난 ~ 요셉 (18대)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>59 → 76</b></div>
+  </div>
+  <div class="viz" style="padding:22px 18px;">
+    <div class="namegrid">
+      <div class="namechip"><span class="idx">59</span><span class="nm">요아난</span></div>
+      <div class="namechip"><span class="idx">60</span><span class="nm">요다</span></div>
+      <div class="namechip"><span class="idx">61</span><span class="nm">요섹</span></div>
+      <div class="namechip"><span class="idx">62</span><span class="nm">서머인</span></div>
+      <div class="namechip"><span class="idx">63</span><span class="nm">맛다디아</span></div>
+      <div class="namechip"><span class="idx">64</span><span class="nm">마앗</span></div>
+      <div class="namechip"><span class="idx">65</span><span class="nm">낙개</span></div>
+      <div class="namechip"><span class="idx">66</span><span class="nm">에슬리</span></div>
+      <div class="namechip"><span class="idx">67</span><span class="nm">나훔</span></div>
+      <div class="namechip"><span class="idx">68</span><span class="nm">아모스</span></div>
+      <div class="namechip"><span class="idx">69</span><span class="nm">맛다디아</span></div>
+      <div class="namechip"><span class="idx">70</span><span class="nm">요셉</span></div>
+      <div class="namechip"><span class="idx">71</span><span class="nm">얀나</span></div>
+      <div class="namechip"><span class="idx">72</span><span class="nm">멜기</span></div>
+      <div class="namechip"><span class="idx">73</span><span class="nm">레위</span></div>
+      <div class="namechip"><span class="idx">74</span><span class="nm">맛닷</span></div>
+      <div class="namechip dup"><span class="idx">75</span><span class="nm">헬리</span></div>
+      <div class="namechip dup"><span class="idx">76</span><span class="nm">요셉</span></div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 18인</div><div class="col-l">요아난, 요다, 요섹, 서머인, 맛다디아, 마앗, 낙개, 에슬리, 나훔, 아모스, 맛다디아, 요셉, 얀나, 멜기, 레위, 맛닷, 헬리, 요셉</div></div>
+    <div class="col"><div class="col-t">마지막 두 이름</div><div class="col-l">75번 <b>헬리</b> = 요셉의 장인(전통적 해석에 따르면 마리아의 부친). 76번 <b>요셉</b> = 마리아의 남편, 예수의 법적 아버지. <b>"사람들이 아는 대로는"</b>(눅 3:23)이라는 단서가 붙어 동정녀 탄생 신학과 조화.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 말라기(B.C.430경) 이후 침묵의 400년 동안 나단 계열은 무명의 백성으로 살아갔다. 이 18대는 구약·신약 어디에도 별다른 기록이 없는 평범한 사람들이지만, 메시아 탄생을 위한 살아 있는 혈통의 다리(bridge)였다.</div>
+</section>
+
+<!-- ERA 8 -->
+<section class="era">
+  <div class="era-head">
+    <div>
+      <span class="era-tag"><span class="num">VIII</span> 성취</span>
+      <h2 class="era-title">아담의 후손 · 하나님의 아들</h2>
+      <div class="era-ref">눅 3:23 · 예수 그리스도 (77대)</div>
+    </div>
+    <div class="era-pos">계보 위치<b>77</b></div>
+  </div>
+  <div class="viz">
+    <svg viewBox="0 0 608 320" role="img">
+      <line x1="304" y1="35" x2="304" y2="195" stroke="#B6CCD8" stroke-width="1.5" opacity=".7"/>
+      <g><text class="ts" x="274" y="39" text-anchor="end">75</text><circle cx="304" cy="35" r="6" fill="#3F6F8B"/><text class="th" x="320" y="39">헬리</text><text class="ts" x="355" y="39">(요셉의 장인 = 마리아의 부친)</text></g>
+      <g><text class="ts" x="274" y="99" text-anchor="end">76</text><circle cx="304" cy="95" r="8" fill="#3F6F8B"/><text class="th" x="322" y="99">요셉</text><text class="ts" x="355" y="99">══ 마리아 · "사람들이 아는 대로는…"</text></g>
+      <g><text class="ts" x="274" y="161" text-anchor="end">77</text><circle cx="304" cy="155" r="13" fill="#3F6F8B" stroke="#1F4961" stroke-width="1.8"/><text class="th" x="328" y="161" font-weight="700" font-size="15">예수 그리스도</text><text class="ts" x="455" y="161">· 메시아</text></g>
+      <line x1="40" y1="220" x2="568" y2="220" stroke="#B6CCD8" stroke-width=".7" stroke-dasharray="3 3"/>
+      <text class="ts" x="304" y="240" text-anchor="middle" font-weight="600" fill="#3F6F8B">상행(上行) 계보의 종착점 · 누가의 신학</text>
+      <g><rect x="40" y="255" width="170" height="32" rx="6" fill="#FFFFFF" stroke="#B6CCD8" stroke-width=".7"/><text class="th" x="50" y="275">아담</text><text class="ts" x="105" y="275">— 인류의 시조</text></g>
+      <g><rect x="219" y="255" width="170" height="32" rx="6" fill="#FFFFFF" stroke="#B6CCD8" stroke-width=".7"/><text class="th" x="229" y="275">하나님</text><text class="ts" x="288" y="275">— "그 위는 하나님"</text></g>
+      <g><rect x="398" y="255" width="170" height="32" rx="6" fill="#FFFFFF" stroke="#B6CCD8" stroke-width=".7"/><text class="th" x="408" y="275">롬 5:14</text><text class="ts" x="475" y="275">— 둘째 아담 예수</text></g>
+    </svg>
+  </div>
+  <div class="cols">
+    <div class="col"><div class="col-t">계보 완성</div><div class="col-l"><span class="star">★</span>헬리, 요셉, <b>예수 그리스도</b> (77대)</div></div>
+    <div class="col"><div class="col-t">누가의 신학적 배치</div><div class="col-l">예수의 세례(눅 3:21–22) 직후 계보가 등장 — "이는 내 사랑하는 아들"이라는 하나님의 음성과, 계보 끝의 "그 위는 하나님이시니라"가 호응한다.</div></div>
+  </div>
+  <div class="note"><b>핵심 의미 ·</b> 누가는 예수를 <b>아담의 후손</b>이자 <b>하나님의 아들</b>로 자리매김한다. 마태가 유대인 독자에게 "아브라함과 다윗의 자손"을 강조했다면, 누가는 헬라계 독자에게 <b>모든 인류의 구주</b>를 선포한다. 예수 안에서 첫 아담의 실패가 회복되고(롬 5장), 모든 민족이 한 가족이 된다(엡 2:14–16).</div>
+</section>
+
+<!-- COMPARISON CARD -->
+<section class="cmp">
+  <h3>마태복음 vs 누가복음 — 두 계보 비교</h3>
+  <p class="sub">같은 메시아, 다른 관점. 두 복음서가 서로를 보완하며 그리스도의 자격을 입체적으로 증언한다.</p>
+  <table>
+    <thead><tr><th></th><th><span class="mh">마태복음 1장</span></th><th><span class="lh">누가복음 3장</span></th></tr></thead>
+    <tbody>
+      <tr><td class="head">시작점</td><td>아브라함부터 (하행 順)</td><td>예수부터 거꾸로 → 아담 → 하나님 (상행 順)</td></tr>
+      <tr><td class="head">총 세대 수</td><td><span class="mh">42대</span> (Abraham→Jesus) · 본 차트는 창세기 5/11 더해 <span class="mh">61대</span></td><td><span class="lh">77대</span> (Adam→Jesus)</td></tr>
+      <tr><td class="head">구조 원리</td><td>3 × 14 (다윗·바벨론·그리스도 기점)</td><td>11 × 7 설(Adam-Abraham 21, Abraham-David 14, David-포로 21, 포로-Jesus 21)</td></tr>
+      <tr><td class="head">다윗 이후 라인</td><td><span class="mh">솔로몬</span> 왕통 → 르호보암 → 분열 왕국 14代</td><td><span class="lh">나단</span> 비왕족 → 이름만 전하는 18代</td></tr>
+      <tr><td class="head">스알디엘의 父</td><td><span class="mh">여고냐</span> (바벨론 유수의 왕)</td><td><span class="lh">네리</span> (나단 계열)</td></tr>
+      <tr><td class="head">요셉의 父</td><td><span class="mh">야곱</span> (마 1:16)</td><td><span class="lh">헬리</span> (눅 3:23) — 마리아의 부친 解</td></tr>
+      <tr><td class="head">독자층</td><td>유대인 — "다윗의 자손, 아브라함의 자손" (마 1:1)</td><td>헬라계 / 이방인 — "모든 사람의 구주"</td></tr>
+      <tr><td class="head">특징적 인물</td><td>4명의 여인 (다말·라합·룻·밧세바)을 명시</td><td>여인 언급 없음 · 가이난·아니·아드민 추가</td></tr>
+      <tr><td class="head">신학적 강조</td><td><b>왕적 계승</b> — 예수는 합법적 다윗의 후사 (예표·성취)</td><td><b>혈연적 친연</b> — 예수는 인류와 한 살 한 핏줄</td></tr>
+      <tr><td class="head">생략·축약</td><td>3왕 의도적 생략 (아하시야·요아스·아마샤)으로 14대 구조 완성</td><td>가이난·아니·아드민 추가 · 전 인류사 펼침</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="endline">
+  <b>아담 → 예수 그리스도</b> · 누가복음 3장 77대 · 마태복음 1장 61대와 상보적 증언
+</div>
+
+</div>
+</body>
+</html>

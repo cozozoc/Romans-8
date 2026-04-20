@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.77";
+const APP_VERSION = "0.0.87";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -40,15 +40,21 @@ const state = {
   autoRevealTimer: null,
   autoNextTimer: null,
   autoNextStartTimer: null,
+  revealCountdownRAF: null,
+  revealProceedFn: null,
   hintQueue: [],
   hintQueueKey: "",
   hintShown: false,
+  sessionStartAt: 0,
+  correctSubmits: 0,
+  totalSubmits: 0,
+  maxStreakReached: 0,
 };
 
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSecondsPerSyllable","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSecondsPerSyllable","revealWaitSeconds","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -65,6 +71,7 @@ const DEFAULT_SETTINGS = {
   bookmarkedOnly: false,
   autoNextEnabled: false,
   autoNextSecondsPerSyllable: "1.0",
+  revealWaitSeconds: "30",
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
@@ -245,6 +252,10 @@ function escapeHtml(s) {
   }[c]));
 }
 
+function wrapSyllables(escapedText) {
+  return escapedText.replace(/[\uAC00-\uD7A3]/g, ch => `<span class="syl">${ch}</span>`);
+}
+
 function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = false) {
   const merge = !revealAll && !!(state.config && state.config.mergeBlanks);
   const parts = [];
@@ -267,14 +278,14 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
     const w = words[i];
     if (blankSet.has(i)) {
       if (revealAll) {
-        parts.push(`<span class="blank revealed">${escapeHtml(w)}</span>`);
+        parts.push(`<span class="blank revealed">${wrapSyllables(escapeHtml(w))}</span>`);
       } else if (revealedSet.has(i)) {
-        parts.push(`<span class="blank revealed" data-idx="${i}">${escapeHtml(w)}</span>`);
+        parts.push(`<span class="blank revealed" data-idx="${i}">${wrapSyllables(escapeHtml(w))}</span>`);
       } else {
         parts.push(`<span class="blank" data-idx="${i}">${escapeHtml(w)}</span>`);
       }
     } else {
-      parts.push(escapeHtml(w));
+      parts.push(wrapSyllables(escapeHtml(w)));
     }
     i++;
   }
@@ -455,6 +466,10 @@ function startTest() {
   saveSettings();
   state.currentVerse = verseList[0];
   state.correctStreak = 0;
+  state.sessionStartAt = Date.now();
+  state.correctSubmits = 0;
+  state.totalSubmits = 0;
+  state.maxStreakReached = 0;
   showScreen("test-screen");
   showQuestion();
 }
@@ -464,11 +479,89 @@ function clearTimers() {
   if (state.autoRevealTimer) { clearTimeout(state.autoRevealTimer); state.autoRevealTimer = null; }
   if (state.autoNextTimer) { clearTimeout(state.autoNextTimer); state.autoNextTimer = null; }
   if (state.autoNextStartTimer) { clearTimeout(state.autoNextStartTimer); state.autoNextStartTimer = null; }
+  stopRevealCountdown();
   const qt = document.getElementById("questionText");
   if (qt) {
     qt.classList.remove("auto-nexting");
     qt.style.removeProperty("--auto-next-duration");
   }
+}
+
+function parseRevealWaitSeconds(v) {
+  if (v === "manual") return null;
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) && n > 0 ? n : REVEAL_SECONDS;
+}
+
+function getRevealWaitSeconds() {
+  return parseRevealWaitSeconds(state.config && state.config.revealWaitSeconds);
+}
+
+function stopRevealCountdown() {
+  if (state.revealCountdownRAF) {
+    cancelAnimationFrame(state.revealCountdownRAF);
+    state.revealCountdownRAF = null;
+  }
+  state.revealProceedFn = null;
+  const wrap = document.getElementById("revealCountdown");
+  if (wrap) {
+    wrap.classList.add("hidden");
+    wrap.classList.remove("manual");
+  }
+  const bar = document.getElementById("revealCountdownBar");
+  if (bar) bar.style.width = "0%";
+}
+
+function startRevealCountdown(seconds, onComplete) {
+  stopRevealCountdown();
+  state.revealProceedFn = typeof onComplete === "function" ? onComplete : null;
+  const wrap = document.getElementById("revealCountdown");
+  const bar = document.getElementById("revealCountdownBar");
+  const text = document.getElementById("revealCountdownText");
+  if (!wrap) {
+    if (seconds === null) return;
+    state.revealAllTimer = setTimeout(() => {
+      state.revealAllTimer = null;
+      const fn = state.revealProceedFn;
+      state.revealProceedFn = null;
+      if (fn) fn();
+    }, seconds * 1000);
+    return;
+  }
+  wrap.classList.remove("hidden");
+  if (seconds === null) {
+    wrap.classList.add("manual");
+    if (bar) bar.style.width = "100%";
+    if (text) text.textContent = "수동 진행 대기";
+    return;
+  }
+  const startedAt = performance.now();
+  const totalMs = seconds * 1000;
+  const tick = () => {
+    const now = performance.now();
+    const elapsed = now - startedAt;
+    const pct = Math.min(100, (elapsed / totalMs) * 100);
+    const remaining = Math.max(0, Math.ceil((totalMs - elapsed) / 1000));
+    if (bar) bar.style.width = pct + "%";
+    if (text) text.textContent = `${remaining}초 후 진행`;
+    if (elapsed >= totalMs) {
+      state.revealCountdownRAF = null;
+      const fn = state.revealProceedFn;
+      state.revealProceedFn = null;
+      stopRevealCountdown();
+      if (fn) fn();
+      return;
+    }
+    state.revealCountdownRAF = requestAnimationFrame(tick);
+  };
+  state.revealCountdownRAF = requestAnimationFrame(tick);
+}
+
+function proceedRevealNow() {
+  const fn = state.revealProceedFn;
+  state.revealProceedFn = null;
+  stopRevealCountdown();
+  if (fn) fn();
 }
 
 function updateProgress() {
@@ -481,6 +574,18 @@ function updateProgress() {
   $("progressLabel").textContent = `진행률 · ${done} / ${total} ${unitText}${filterTag}`;
   $("progressPercent").textContent = `${pct}%`;
   $("progressFill").style.width = `${pct}%`;
+  const pb = $("progressBar");
+  if (pb) {
+    pb.setAttribute("aria-valuenow", String(pct));
+    pb.setAttribute("aria-valuetext", `${done} / ${total} ${unitText} · ${pct}%`);
+  }
+}
+
+function announceSubmit(msg) {
+  const el = $("submitAnnouncer");
+  if (!el) return;
+  el.textContent = "";
+  setTimeout(() => { el.textContent = msg; }, 30);
 }
 
 function verseUnit() {
@@ -497,6 +602,38 @@ function renderQuestionBody() {
   $("questionText").innerHTML = verseLabelHtml() + body;
 }
 
+function renderStatusBar() {
+  if (!state.config) return;
+  const unit = verseUnit();
+  const totalInList = (state.verseList && state.verseList.length) || 1;
+  const pos = (state.verseIdx || 0) + 1;
+  const level = parseLevel(state.config.level);
+  const target = Math.max(1, parseInt(state.config.continuousCount, 10) || 1);
+  const streak = Math.max(0, Math.min(state.correctStreak || 0, target));
+
+  const verseEl = $("verseInfo");
+  if (verseEl) verseEl.innerHTML =
+    `${pos} / ${totalInList} <span class="sub">${state.currentVerse}${unit}</span>`;
+
+  const levelEl = $("levelInfo");
+  if (levelEl) levelEl.innerHTML =
+    `Lv.${level} <span class="sub">${Math.round(LEVEL_RATIO[level]*100)}%</span>`;
+
+  const streakEl = $("streakInfo");
+  if (streakEl) {
+    const dots = [];
+    for (let i = 0; i < target; i++) {
+      dots.push(i < streak
+        ? '<span class="streak-dot filled" aria-hidden="true">●</span>'
+        : '<span class="streak-dot" aria-hidden="true">○</span>');
+    }
+    const srText = `연속 정답 ${streak} / ${target}`;
+    streakEl.innerHTML =
+      `<span class="streak-dots" role="img" aria-label="${srText}">${dots.join("")}</span> ` +
+      `<span class="sub">${streak}/${target}</span>`;
+  }
+}
+
 function showQuestion() {
   clearTimers();
   const verse = state.book.verses[state.currentVerse];
@@ -505,15 +642,8 @@ function showQuestion() {
   const level = state.config.level;
   state.currentBlankSet = pickBlankIndices(words, level, state.config.firstTwoMode);
 
-  const unit = verseUnit();
-  const totalInList = (state.verseList && state.verseList.length) || 1;
-  const pos = (state.verseIdx || 0) + 1;
-  $("verseInfo").innerHTML = `${state.currentVerse}${unit} <span class="sub">(${pos}/${totalInList})</span>`;
-  $("levelInfo").innerHTML = `Lv.${level} <span class="sub">(${Math.round(LEVEL_RATIO[level]*100)}%)</span>`;
-
-  $("streakInfo").innerHTML =
-    `${state.correctStreak} / ${state.config.continuousCount} <span class="sub">(다음 구절)</span>`;
-
+  renderStatusBar();
+  updateLevelStepper(level);
   updateProgress();
 
   state.hintShown = false;
@@ -548,16 +678,32 @@ function scheduleAutoNext() {
     const qt = $("questionText");
     state.autoNextStartTimer = setTimeout(() => {
       state.autoNextStartTimer = null;
-      if (qt) {
-        qt.style.setProperty("--auto-next-duration", `${transitionMs}ms`);
-        qt.classList.add("auto-nexting");
-      }
+      if (!qt) return;
+      qt.classList.add("auto-nexting");
+      const syls = qt.querySelectorAll(".syl");
+      const n = syls.length;
+      if (n === 0) return;
+      const animDur = 300;
+      const maxDelay = Math.max(0, transitionMs - animDur);
+      syls.forEach((el, idx) => {
+        const delay = n > 1 ? (idx / (n - 1)) * maxDelay : 0;
+        el.style.animationDelay = `${Math.round(delay)}ms`;
+      });
     }, startBuffer);
   }
   state.autoNextTimer = setTimeout(() => {
     state.autoNextTimer = null;
     advanceNext();
   }, totalMs);
+}
+
+function updateLevelStepper(level) {
+  const el = $("levelStepperValue");
+  if (el) el.textContent = `Lv.${level}`;
+  const down = $("levelDownBtn");
+  const up = $("levelUpBtn");
+  if (down) down.disabled = level <= 0;
+  if (up) up.disabled = level >= 10;
 }
 
 function changeLevel(delta) {
@@ -569,7 +715,8 @@ function changeLevel(delta) {
   const lvInput = $("level");
   if (lvInput) lvInput.value = String(next);
   saveSettings();
-  $("levelInfo").innerHTML = `Lv.${next} <span class="sub">(${Math.round(LEVEL_RATIO[next]*100)}%)</span>`;
+  renderStatusBar();
+  updateLevelStepper(next);
   reshuffleBlanks();
 }
 
@@ -586,6 +733,7 @@ function reshuffleBlanks() {
   $("feedback").className = "feedback";
   updateHintBtn();
   updateViewToggleBtn();
+  ensureInputFocus();
 }
 
 function showAll() {
@@ -633,8 +781,9 @@ function updateViewToggleBtn() {
   const box = $("questionBox");
   const btn = $("viewToggleBtn");
   if (!btn) return;
-  if (box.classList.contains("reveal-all")) btn.textContent = "🙈 전체 숨기기";
-  else btn.textContent = "👁 전체 보기";
+  const revealed = box.classList.contains("reveal-all");
+  btn.textContent = revealed ? "🙈 전체 숨기기" : "👁 전체 보기";
+  btn.setAttribute("aria-pressed", revealed ? "true" : "false");
   renderPassageTitle();
 }
 
@@ -663,12 +812,24 @@ function renderPassageTitle() {
   pt.innerHTML = `${escapeHtml(prefix)}${titleHtml} (${refHtml})`;
 }
 
+function ensureInputFocus() {
+  const input = $("answerInput");
+  if (!input) return;
+  if (input.disabled || input.classList.contains("hidden")) return;
+  const test = $("test-screen");
+  if (!test || test.classList.contains("hidden")) return;
+  if (document.activeElement === input) return;
+  input.focus();
+}
+
 function applyInputVisibility() {
   const enabled = !!(state.config && state.config.inputEnabled);
   $("answerInput").classList.toggle("hidden", !enabled);
   document.querySelector(".input-hint").classList.toggle("hidden", !enabled);
   $("submitBtn").classList.toggle("hidden", !enabled);
-  $("inputToggleBtn").textContent = enabled ? "⌨ 입력 ON" : "⌨ 입력 OFF";
+  const btn = $("inputToggleBtn");
+  btn.textContent = enabled ? "⌨ 입력 [ON]" : "⌨ 입력 [OFF]";
+  btn.setAttribute("aria-pressed", enabled ? "true" : "false");
   if (enabled && !$("answerInput").disabled) $("answerInput").focus();
 }
 
@@ -684,7 +845,8 @@ function updateAutoRevealBtn() {
   const btn = $("autoRevealBtn");
   if (!btn) return;
   const on = !!(state.config && state.config.autoRevealOnMove);
-  btn.textContent = on ? "📖 자동보기 ON" : "📖 자동보기 OFF";
+  btn.textContent = on ? "📖 자동보기 [ON]" : "📖 자동보기 [OFF]";
+  btn.setAttribute("aria-pressed", on ? "true" : "false");
 }
 
 function toggleAutoReveal() {
@@ -698,23 +860,25 @@ function toggleAutoReveal() {
 function updateBookmarkBtn() {
   const btn = $("bookmarkBtn");
   if (!btn) return;
-  const marked = state.book && isBookmarked(state.book.key, state.currentVerse);
+  const marked = !!(state.book && isBookmarked(state.book.key, state.currentVerse));
   btn.textContent = marked ? "⭐ 북마크" : "☆ 북마크";
-  btn.classList.toggle("bookmark-active", !!marked);
+  btn.classList.toggle("bookmark-active", marked);
+  btn.setAttribute("aria-pressed", marked ? "true" : "false");
 }
 
 function toggleCurrentBookmark() {
   if (!state.book || state.currentVerse == null) return;
   toggleBookmark(state.book.key, state.currentVerse);
   updateBookmarkBtn();
+  ensureInputFocus();
 }
 
 function updateBookmarkFilterBtn() {
   const btn = $("bookmarkFilterBtn");
   if (!btn) return;
   const on = !!(state.config && state.config.bookmarkedOnly);
-  btn.textContent = on ? "🔖 북마크만 ON" : "🔖 북마크만 OFF";
-  btn.classList.toggle("bookmark-active", on);
+  btn.textContent = on ? "🔖 북마크 [ON]" : "🔖 북마크 [OFF]";
+  btn.setAttribute("aria-pressed", on ? "true" : "false");
 }
 
 function toggleBookmarkFilter() {
@@ -757,7 +921,8 @@ function toggleBookmarkFilter() {
 function updateHintBtn() {
   const btn = $("hintBtn");
   if (!btn) return;
-  btn.textContent = state.hintShown ? "💡 힌트 숨기기" : "💡 힌트 보기";
+  btn.textContent = state.hintShown ? "💡 힌트 숨기기" : "💡 힌트";
+  btn.setAttribute("aria-pressed", state.hintShown ? "true" : "false");
 }
 
 function hideHint() {
@@ -765,6 +930,7 @@ function hideHint() {
   state.hintShown = false;
   updateHintBtn();
   updateViewToggleBtn();
+  ensureInputFocus();
 }
 
 function showHint() {
@@ -796,6 +962,7 @@ function showHint() {
   state.hintShown = true;
   updateHintBtn();
   updateViewToggleBtn();
+  ensureInputFocus();
 }
 
 function useHint() {
@@ -832,10 +999,7 @@ function showWrongReveal(expected, actual) {
   }).join(" ");
   qt.innerHTML = labelHtml + body;
 
-  state.revealAllTimer = setTimeout(() => {
-    state.revealAllTimer = null;
-    showQuestion();
-  }, REVEAL_SECONDS * 1000 + 100);
+  startRevealCountdown(getRevealWaitSeconds(), () => showQuestion());
 }
 
 function renderDiff(expected, actual) {
@@ -863,16 +1027,25 @@ function submit() {
   const isCorrect = normalize(userInput) === normalize(verse);
   const fb = $("feedback");
 
+  state.totalSubmits++;
   if (isCorrect) {
     fb.className = "feedback";
     fb.innerHTML = "";
+    state.correctSubmits++;
     state.correctStreak++;
+    if (state.correctStreak > state.maxStreakReached) {
+      state.maxStreakReached = state.correctStreak;
+    }
+    renderStatusBar();
+    announceSubmit(`정답입니다. 연속 ${state.correctStreak}회`);
     revealAllThenAdvance();
   } else {
     fb.className = "feedback";
     fb.innerHTML = "";
-    showWrongReveal(verse, userInput);
     state.correctStreak = 0;
+    renderStatusBar();
+    announceSubmit("틀렸습니다. 오답 단어에 물결 밑줄이 표시되었습니다.");
+    showWrongReveal(verse, userInput);
   }
 }
 
@@ -890,10 +1063,7 @@ function revealAllThenAdvance() {
   updateHintBtn();
   updateViewToggleBtn();
 
-  state.revealAllTimer = setTimeout(() => {
-    state.revealAllTimer = null;
-    handleCorrectAdvance();
-  }, REVEAL_SECONDS * 1000);
+  startRevealCountdown(getRevealWaitSeconds(), () => handleCorrectAdvance());
 }
 
 function handleCorrectAdvance() {
@@ -971,6 +1141,43 @@ function forcePrevVerse() {
   advancePrev();
 }
 
+function formatElapsedDuration(ms) {
+  const totalSec = Math.max(0, Math.round(ms / 1000));
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const pad = (n) => String(n).padStart(2, "0");
+  if (h > 0) return `${h}시간 ${pad(m)}분 ${pad(s)}초`;
+  if (m > 0) return `${m}분 ${pad(s)}초`;
+  return `${s}초`;
+}
+
+function renderDoneSummary() {
+  const total = state.totalSubmits || 0;
+  const correct = state.correctSubmits || 0;
+  const accuracyEl = $("doneAccuracy");
+  if (accuracyEl) {
+    if (total === 0) {
+      accuracyEl.textContent = "—";
+    } else {
+      const pct = Math.round((correct / total) * 100);
+      accuracyEl.textContent = `${pct}%`;
+    }
+  }
+  const accuracySubEl = $("doneAccuracySub");
+  if (accuracySubEl) accuracySubEl.textContent = `${correct} / ${total} 정답`;
+  const elapsedMs = state.sessionStartAt ? (Date.now() - state.sessionStartAt) : 0;
+  const timeEl = $("doneTime");
+  if (timeEl) timeEl.textContent = formatElapsedDuration(elapsedMs);
+  const streakEl = $("doneStreak");
+  if (streakEl) streakEl.textContent = `${state.maxStreakReached || 0}회`;
+  const streakSubEl = $("doneStreakSub");
+  if (streakSubEl) {
+    const target = Math.max(1, parseInt(state.config && state.config.continuousCount, 10) || 1);
+    streakSubEl.textContent = `목표 ${target}회`;
+  }
+}
+
 function finishAll() {
   clearTimers();
   const unit = verseUnit();
@@ -981,6 +1188,7 @@ function finishAll() {
     rangeText = `${state.book.name} ${state.config.startVerse}${unit}부터 ${state.config.endVerse}${unit}까지`;
   }
   $("doneMessage").textContent = `${rangeText} 암송을 완료하셨습니다!`;
+  renderDoneSummary();
   showScreen("done-screen");
   const currentLevel = parseLevel(state.config.level);
   if (currentLevel >= 10) return;
@@ -1338,6 +1546,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (autoNextEnabledEl) autoNextEnabledEl.addEventListener("change", saveSettings);
   const autoNextSecondsPerSyllableEl = $("autoNextSecondsPerSyllable");
   if (autoNextSecondsPerSyllableEl) autoNextSecondsPerSyllableEl.addEventListener("change", saveSettings);
+  const revealWaitSecondsEl = $("revealWaitSeconds");
+  if (revealWaitSecondsEl) revealWaitSecondsEl.addEventListener("change", saveSettings);
+  const revealSkipBtn = $("revealSkipBtn");
+  if (revealSkipBtn) revealSkipBtn.addEventListener("click", proceedRevealNow);
   $("startBtn").addEventListener("click", startTest);
   $("printPdfBtn").addEventListener("click", openPrintPractice);
   $("pdfSetCount").addEventListener("change", saveSettings);
@@ -1373,6 +1585,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   $("restartBtn").addEventListener("click", () => showScreen("setup-screen"));
+  const restartSameBtn = $("restartSameBtn");
+  if (restartSameBtn) restartSameBtn.addEventListener("click", () => startTest());
 
   const helpModal = $("helpModal");
   const openHelp = () => helpModal.classList.remove("hidden");

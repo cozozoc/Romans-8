@@ -1,0 +1,321 @@
+<style>
+.gw { padding: 0.5rem 0; }
+.gw-h { font-size: 22px; font-weight: 500; margin: 0 0 4px; color: var(--color-text-primary); }
+.gw-sub { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 20px; }
+.gw-prog { display: flex; gap: 4px; margin-bottom: 14px; }
+.gw-ps { flex: 1; height: 4px; border-radius: 2px; background: var(--color-border-tertiary); cursor: pointer; transition: background 0.15s; }
+.gw-ps.on { background: var(--color-text-primary); }
+.gw-ps:hover { background: var(--color-border-primary); }
+.gw-ps.on:hover { background: var(--color-text-primary); }
+.gw-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 20px; }
+.gw-ninfo { font-size: 13px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.gw-pnl { display: none; }
+.gw-pnl.on { display: block; }
+.gw-lbl { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--color-text-secondary); margin: 0 0 4px; text-transform: uppercase; }
+.gw-name { font-size: 20px; font-weight: 500; margin: 0 0 4px; color: var(--color-text-primary); }
+.gw-ref { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 16px; }
+.gw-viz { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 24px 16px; margin-bottom: 14px; }
+.gw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.gw-col { padding: 12px 14px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); }
+.gw-col-t { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); margin: 0 0 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+.gw-col-l { font-size: 13px; line-height: 1.75; color: var(--color-text-primary); }
+.gw-sp { color: #BA7517; font-weight: 500; }
+.gw-note { font-size: 13px; line-height: 1.7; color: var(--color-text-secondary); padding: 12px 14px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); }
+.gw-note b { font-weight: 500; color: var(--color-text-primary); }
+</style>
+
+<div class="gw">
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">아담부터 예수까지 메시아 계보와 구약 주요 인물 100명을 8개 시대로 탐색하는 인터랙티브 족보도</h2>
+<h3 class="gw-h">아담에서 예수까지</h3>
+<p class="gw-sub">61대 메시아 계보 · 구약 주요 인물 100인</p>
+
+<div class="gw-prog" id="gw-prog"></div>
+
+<div class="gw-nav">
+<button onclick="gwMove(-1)" style="min-width:80px;">← 이전</button>
+<span class="gw-ninfo"><span id="gw-n">1</span> <span style="color:var(--color-text-tertiary);">/</span> 8 <span style="color:var(--color-text-tertiary);margin-left:8px;" id="gw-t">원시 역사</span></span>
+<button onclick="gwMove(1)" style="min-width:80px;">다음 →</button>
+</div>
+
+<!-- PANEL 1: 원시 역사 시대 -->
+<div class="gw-pnl on">
+<div class="gw-lbl">시대 I · 원시 역사</div>
+<h4 class="gw-name">창조부터 홍수까지</h4>
+<p class="gw-ref">창세기 1-11장 · 아담 ~ 셈 (11대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 420" width="100%" role="img">
+<title>원시 역사 시대 족보</title><desc>아담부터 셈까지 11대 메시아 계보와 주요 분가 인물</desc>
+<line x1="180" y1="28" x2="180" y2="395" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="150" y="32" text-anchor="end" fill="var(--color-text-tertiary)">1</text><circle cx="180" cy="28" r="7" fill="#BA7517"/><text class="th" x="196" y="32">아담</text><line x1="245" y1="28" x2="290" y2="28" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="296" y="32">하와 · 가인 · 아벨</text></g>
+<g><text class="ts" x="150" y="69" text-anchor="end" fill="var(--color-text-tertiary)">2</text><circle cx="180" cy="65" r="6" fill="#BA7517"/><text class="th" x="196" y="69">셋</text></g>
+<g><text class="ts" x="150" y="102" text-anchor="end" fill="var(--color-text-tertiary)">3</text><circle cx="180" cy="98" r="6" fill="#BA7517"/><text class="th" x="196" y="102">에노스</text></g>
+<g><text class="ts" x="150" y="135" text-anchor="end" fill="var(--color-text-tertiary)">4</text><circle cx="180" cy="131" r="6" fill="#BA7517"/><text class="th" x="196" y="135">게난</text></g>
+<g><text class="ts" x="150" y="168" text-anchor="end" fill="var(--color-text-tertiary)">5</text><circle cx="180" cy="164" r="6" fill="#BA7517"/><text class="th" x="196" y="168">마할랄렐</text></g>
+<g><text class="ts" x="150" y="201" text-anchor="end" fill="var(--color-text-tertiary)">6</text><circle cx="180" cy="197" r="6" fill="#BA7517"/><text class="th" x="196" y="201">야렛</text></g>
+<g><text class="ts" x="150" y="234" text-anchor="end" fill="var(--color-text-tertiary)">7</text><circle cx="180" cy="230" r="7" fill="#BA7517"/><text class="th" x="196" y="234">에녹</text><line x1="245" y1="230" x2="290" y2="230" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="296" y="234" fill="var(--color-text-secondary)">죽음 없이 승천 (365세)</text></g>
+<g><text class="ts" x="150" y="267" text-anchor="end" fill="var(--color-text-tertiary)">8</text><circle cx="180" cy="263" r="7" fill="#BA7517"/><text class="th" x="196" y="267">므두셀라</text><line x1="260" y1="263" x2="290" y2="263" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="296" y="267" fill="var(--color-text-secondary)">969세 · 최장수</text></g>
+<g><text class="ts" x="150" y="300" text-anchor="end" fill="var(--color-text-tertiary)">9</text><circle cx="180" cy="296" r="6" fill="#BA7517"/><text class="th" x="196" y="300">라멕</text></g>
+<g><text class="ts" x="150" y="333" text-anchor="end" fill="var(--color-text-tertiary)">10</text><circle cx="180" cy="329" r="7" fill="#BA7517"/><text class="th" x="196" y="333">노아</text><line x1="240" y1="329" x2="290" y2="329" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="296" y="333">함 · 야벳</text></g>
+<g><text class="ts" x="150" y="395" text-anchor="end" fill="var(--color-text-tertiary)">11</text><circle cx="180" cy="391" r="7" fill="#BA7517"/><text class="th" x="196" y="395">셈</text><line x1="223" y1="391" x2="290" y2="391" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="296" y="395" fill="var(--color-text-secondary)">셈족의 조상</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 11인</div><div class="gw-col-l"><span class="gw-sp">★</span> 아담, 셋, 에노스, 게난, 마할랄렐, 야렛, 에녹, 므두셀라, 라멕, 노아, 셈</div></div>
+<div class="gw-col"><div class="gw-col-t">주요 인물 4인</div><div class="gw-col-l">하와 (아담의 아내)<br>가인 · 아벨 (최초 형제)<br>함 · 야벳 (노아의 아들)</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> 창조·타락·홍수·무지개 언약. 에녹은 죽지 않고 들림받았고, 므두셀라는 성경 최장수. 노아 시대 대홍수로 인류가 재출발하며 셈 계열에서 메시아 계보가 이어진다.</div>
+</div>
+
+<!-- PANEL 2: 족장 시대 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 II · 족장 시대</div>
+<h4 class="gw-name">아브라함의 부르심과 언약</h4>
+<p class="gw-ref">창세기 12-50장 · 데라 ~ 베레스 (6대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 280" width="100%" role="img">
+<title>족장 시대 족보</title><desc>데라부터 베레스까지 6대 메시아 계보와 주요 족장 가문 인물</desc>
+<line x1="150" y1="28" x2="150" y2="255" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="120" y="32" text-anchor="end" fill="var(--color-text-tertiary)">12</text><circle cx="150" cy="28" r="6" fill="#BA7517"/><text class="th" x="166" y="32">데라</text><line x1="205" y1="28" x2="260" y2="28" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="32" fill="var(--color-text-secondary)">우상 숭배자 · 롯의 조부</text></g>
+<g><text class="ts" x="120" y="70" text-anchor="end" fill="var(--color-text-tertiary)">13</text><circle cx="150" cy="66" r="8" fill="#BA7517"/><text class="th" x="166" y="70">아브라함</text><line x1="230" y1="66" x2="260" y2="66" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="70">사라, 하갈, 이스마엘, 롯, 멜기세덱</text></g>
+<g><text class="ts" x="120" y="112" text-anchor="end" fill="var(--color-text-tertiary)">14</text><circle cx="150" cy="108" r="7" fill="#BA7517"/><text class="th" x="166" y="112">이삭</text><line x1="200" y1="108" x2="260" y2="108" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="112">리브가, 에서</text></g>
+<g><text class="ts" x="120" y="154" text-anchor="end" fill="var(--color-text-tertiary)">15</text><circle cx="150" cy="150" r="8" fill="#BA7517"/><text class="th" x="166" y="154">야곱</text><line x1="200" y1="150" x2="260" y2="150" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="154">레아, 라헬, 요셉, 베냐민, 르우벤, 레위</text></g>
+<g><text class="ts" x="120" y="196" text-anchor="end" fill="var(--color-text-tertiary)">16</text><circle cx="150" cy="192" r="7" fill="#BA7517"/><text class="th" x="166" y="196">유다</text><line x1="200" y1="192" x2="260" y2="192" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="196">다말 (며느리 · 베레스의 어머니)</text></g>
+<g><text class="ts" x="120" y="258" text-anchor="end" fill="var(--color-text-tertiary)">17</text><circle cx="150" cy="254" r="6" fill="#BA7517"/><text class="th" x="166" y="258">베레스</text><line x1="215" y1="254" x2="260" y2="254" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="258" fill="var(--color-text-secondary)">왕가 계보의 시작</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 6인</div><div class="gw-col-l"><span class="gw-sp">★</span> 데라, 아브라함, 이삭, 야곱, 유다, 베레스</div></div>
+<div class="gw-col"><div class="gw-col-t">주요 인물 17인</div><div class="gw-col-l">사라, 하갈, 이스마엘, 롯, 멜기세덱, 욥, 리브가, 에서, 레아, 라헬, 르우벤, 레위, 요셉, 베냐민, 다말, 에브라임, 므낫세(요셉 子)</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> 아브라함 언약(창 12·15·17)으로 "너로 말미암아 천하 만민이 복을 얻으리라"는 약속이 주어진다. 야곱의 12아들에서 이스라엘 12지파가 형성되고, 유다 지파가 왕가 계보로 선택된다. 욥의 고난 서사도 이 시대 배경.</div>
+</div>
+
+<!-- PANEL 3: 출애굽·광야 시대 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 III · 출애굽과 광야</div>
+<h4 class="gw-name">율법과 광야 40년</h4>
+<p class="gw-ref">출애굽기 - 신명기 · 아미나답 ~ 살몬 (3대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 340" width="100%" role="img">
+<title>출애굽과 광야 시대</title><desc>아미나답부터 살몬까지 3대 메시아 계보와 광야 지도자들</desc>
+<line x1="150" y1="28" x2="150" y2="128" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="120" y="32" text-anchor="end" fill="var(--color-text-tertiary)">18</text><circle cx="150" cy="28" r="6" fill="#BA7517"/><text class="th" x="166" y="32">아미나답</text></g>
+<g><text class="ts" x="120" y="82" text-anchor="end" fill="var(--color-text-tertiary)">19</text><circle cx="150" cy="78" r="8" fill="#BA7517"/><text class="th" x="166" y="82">나손</text><line x1="205" y1="78" x2="260" y2="78" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="82">유다 지파 지도자 (민 1:7)</text></g>
+<g><text class="ts" x="120" y="132" text-anchor="end" fill="var(--color-text-tertiary)">20</text><circle cx="150" cy="128" r="8" fill="#BA7517"/><text class="th" x="166" y="132">살몬</text><line x1="205" y1="128" x2="260" y2="128" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="132">라합(여리고 기생)과 결혼</text></g>
+<line x1="40" y1="180" x2="568" y2="180" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="3 3"/>
+<text class="ts" x="40" y="200" fill="var(--color-text-secondary)">동시대 광야 지도자</text>
+<g><rect x="40" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="100" y="229" text-anchor="middle">모세</text><text class="ts" x="100" y="242" text-anchor="middle" fill="var(--color-text-secondary)">율법의 중보자</text></g>
+<g><rect x="172" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="232" y="229" text-anchor="middle">아론</text><text class="ts" x="232" y="242" text-anchor="middle" fill="var(--color-text-secondary)">초대 대제사장</text></g>
+<g><rect x="304" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="364" y="229" text-anchor="middle">미리암</text><text class="ts" x="364" y="242" text-anchor="middle" fill="var(--color-text-secondary)">여선지자</text></g>
+<g><rect x="436" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="496" y="229" text-anchor="middle">여호수아</text><text class="ts" x="496" y="242" text-anchor="middle" fill="var(--color-text-secondary)">모세 후계자</text></g>
+<g><rect x="40" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="100" y="271" text-anchor="middle">갈렙</text><text class="ts" x="100" y="284" text-anchor="middle" fill="var(--color-text-secondary)">충성된 정탐꾼</text></g>
+<g><rect x="172" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="232" y="271" text-anchor="middle">이드로</text><text class="ts" x="232" y="284" text-anchor="middle" fill="var(--color-text-secondary)">모세의 장인</text></g>
+<g><rect x="304" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="364" y="271" text-anchor="middle">발람</text><text class="ts" x="364" y="284" text-anchor="middle" fill="var(--color-text-secondary)">이방 선지자</text></g>
+<g><rect x="436" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="496" y="271" text-anchor="middle">비느하스</text><text class="ts" x="496" y="284" text-anchor="middle" fill="var(--color-text-secondary)">제사장 언약</text></g>
+<g><rect x="244" y="299" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="304" y="313" text-anchor="middle">라합</text><text class="ts" x="304" y="326" text-anchor="middle" fill="var(--color-text-secondary)">믿음의 이방 여인</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 3인</div><div class="gw-col-l"><span class="gw-sp">★</span> 아미나답, 나손, 살몬</div></div>
+<div class="gw-col"><div class="gw-col-t">주요 인물 9인</div><div class="gw-col-l">모세, 아론, 미리암, 이드로, 여호수아, 갈렙, 발람, 비느하스, 라합</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> 출애굽은 구약 구원사의 원형. 시내산 언약(출 19-24)과 성막·제사 제도가 수립되며, 여호수아("예수"의 히브리 이름)가 가나안 정복을 예비한다. 라합은 이방 여인으로 메시아 계보에 편입된다.</div>
+</div>
+
+<!-- PANEL 4: 정복과 사사 시대 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 IV · 정복과 사사</div>
+<h4 class="gw-name">가나안 정착과 혼돈의 시대</h4>
+<p class="gw-ref">여호수아 - 룻기 · 보아스 ~ 이새 (3대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 340" width="100%" role="img">
+<title>정복과 사사 시대</title><desc>보아스부터 이새까지 3대와 사사들</desc>
+<line x1="150" y1="28" x2="150" y2="128" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="120" y="32" text-anchor="end" fill="var(--color-text-tertiary)">21</text><circle cx="150" cy="28" r="8" fill="#BA7517"/><text class="th" x="166" y="32">보아스</text><line x1="215" y1="28" x2="260" y2="28" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="32">룻 · 나오미 (기업 무를 자)</text></g>
+<g><text class="ts" x="120" y="82" text-anchor="end" fill="var(--color-text-tertiary)">22</text><circle cx="150" cy="78" r="6" fill="#BA7517"/><text class="th" x="166" y="82">오벳</text></g>
+<g><text class="ts" x="120" y="132" text-anchor="end" fill="var(--color-text-tertiary)">23</text><circle cx="150" cy="128" r="8" fill="#BA7517"/><text class="th" x="166" y="132">이새</text><line x1="205" y1="128" x2="260" y2="128" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="132">"이새의 줄기" (사 11:1)</text></g>
+<line x1="40" y1="180" x2="568" y2="180" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="3 3"/>
+<text class="ts" x="40" y="200" fill="var(--color-text-secondary)">대표 사사 5인 · 룻기 인물</text>
+<g><rect x="40" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="100" y="229" text-anchor="middle">드보라</text><text class="ts" x="100" y="242" text-anchor="middle" fill="var(--color-text-secondary)">여사사 · 여선지</text></g>
+<g><rect x="172" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="232" y="229" text-anchor="middle">기드온</text><text class="ts" x="232" y="242" text-anchor="middle" fill="var(--color-text-secondary)">300용사</text></g>
+<g><rect x="304" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="364" y="229" text-anchor="middle">입다</text><text class="ts" x="364" y="242" text-anchor="middle" fill="var(--color-text-secondary)">길르앗의 사사</text></g>
+<g><rect x="436" y="215" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="496" y="229" text-anchor="middle">삼손</text><text class="ts" x="496" y="242" text-anchor="middle" fill="var(--color-text-secondary)">나실인 · 단 지파</text></g>
+<g><rect x="106" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="166" y="271" text-anchor="middle">룻</text><text class="ts" x="166" y="284" text-anchor="middle" fill="var(--color-text-secondary)">모압 여인 · 편입</text></g>
+<g><rect x="238" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="298" y="271" text-anchor="middle">나오미</text><text class="ts" x="298" y="284" text-anchor="middle" fill="var(--color-text-secondary)">룻의 시어머니</text></g>
+<g><rect x="370" y="257" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="430" y="271" text-anchor="middle">옷니엘·에훗</text><text class="ts" x="430" y="284" text-anchor="middle" fill="var(--color-text-secondary)">초기 사사</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 3인</div><div class="gw-col-l"><span class="gw-sp">★</span> 보아스, 오벳, 이새</div></div>
+<div class="gw-col"><div class="gw-col-t">주요 인물 7인</div><div class="gw-col-l">드보라, 기드온, 입다, 삼손, 룻, 나오미, (옷니엘·에훗)</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> "그 때에 이스라엘에 왕이 없으므로 사람마다 자기 소견에 옳은 대로 행하였더라"(삿 21:25). 사사기의 혼돈 가운데 룻기는 이방 여인 룻이 메시아 계보에 편입되는 은혜의 드라마를 보여준다.</div>
+</div>
+
+<!-- PANEL 5: 통일 왕국 시대 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 V · 통일 왕국</div>
+<h4 class="gw-name">다윗 언약과 솔로몬의 영광</h4>
+<p class="gw-ref">사무엘상 - 열왕기상 11장 · 다윗 ~ 솔로몬 (2대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 340" width="100%" role="img">
+<title>통일 왕국 시대</title><desc>다윗과 솔로몬 2대 메시아 계보와 통일 왕국 주요 인물</desc>
+<line x1="150" y1="28" x2="150" y2="78" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="120" y="32" text-anchor="end" fill="var(--color-text-tertiary)">24</text><circle cx="150" cy="28" r="9" fill="#BA7517"/><text class="th" x="168" y="32">다윗</text><line x1="202" y1="28" x2="260" y2="28" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="32">미갈, 아비가일, 밧세바 · 다윗 언약 (삼하 7)</text></g>
+<g><text class="ts" x="120" y="82" text-anchor="end" fill="var(--color-text-tertiary)">25</text><circle cx="150" cy="78" r="9" fill="#BA7517"/><text class="th" x="168" y="82">솔로몬</text><line x1="214" y1="78" x2="260" y2="78" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="82">지혜의 왕 · 성전 건축 (왕상 6-8)</text></g>
+<line x1="40" y1="130" x2="568" y2="130" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="3 3"/>
+<text class="ts" x="40" y="150" fill="var(--color-text-secondary)">사사·왕정 전환기 · 왕가 인물 · 선지자</text>
+<g><rect x="40" y="165" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="100" y="179" text-anchor="middle">한나</text><text class="ts" x="100" y="192" text-anchor="middle" fill="var(--color-text-secondary)">사무엘의 어머니</text></g>
+<g><rect x="172" y="165" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="232" y="179" text-anchor="middle">엘리</text><text class="ts" x="232" y="192" text-anchor="middle" fill="var(--color-text-secondary)">대제사장</text></g>
+<g><rect x="304" y="165" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="364" y="179" text-anchor="middle">사무엘</text><text class="ts" x="364" y="192" text-anchor="middle" fill="var(--color-text-secondary)">마지막 사사·선지</text></g>
+<g><rect x="436" y="165" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="496" y="179" text-anchor="middle">사울</text><text class="ts" x="496" y="192" text-anchor="middle" fill="var(--color-text-secondary)">초대 왕</text></g>
+<g><rect x="40" y="207" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="100" y="221" text-anchor="middle">요나단</text><text class="ts" x="100" y="234" text-anchor="middle" fill="var(--color-text-secondary)">다윗의 언약친구</text></g>
+<g><rect x="172" y="207" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="232" y="221" text-anchor="middle">밧세바</text><text class="ts" x="232" y="234" text-anchor="middle" fill="var(--color-text-secondary)">솔로몬의 어머니</text></g>
+<g><rect x="304" y="207" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="364" y="221" text-anchor="middle">우리아</text><text class="ts" x="364" y="234" text-anchor="middle" fill="var(--color-text-secondary)">헷 사람 충신</text></g>
+<g><rect x="436" y="207" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="496" y="221" text-anchor="middle">압살롬</text><text class="ts" x="496" y="234" text-anchor="middle" fill="var(--color-text-secondary)">다윗의 3남</text></g>
+<g><rect x="40" y="249" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="100" y="263" text-anchor="middle">나단</text><text class="ts" x="100" y="276" text-anchor="middle" fill="var(--color-text-secondary)">왕실 선지자</text></g>
+<g><rect x="172" y="249" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="232" y="263" text-anchor="middle">요압</text><text class="ts" x="232" y="276" text-anchor="middle" fill="var(--color-text-secondary)">군대장관</text></g>
+<g><rect x="304" y="249" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="364" y="263" text-anchor="middle">미갈</text><text class="ts" x="364" y="276" text-anchor="middle" fill="var(--color-text-secondary)">다윗의 첫 아내</text></g>
+<g><rect x="436" y="249" width="120" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="496" y="263" text-anchor="middle">아비가일</text><text class="ts" x="496" y="276" text-anchor="middle" fill="var(--color-text-secondary)">지혜로운 아내</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 2인</div><div class="gw-col-l"><span class="gw-sp">★</span> 다윗, 솔로몬</div></div>
+<div class="gw-col"><div class="gw-col-t">주요 인물 12인</div><div class="gw-col-l">한나, 엘리, 사무엘, 사울, 요나단, 미갈, 아비가일, 밧세바, 우리아, 압살롬, 나단, 요압</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> 다윗 언약(삼하 7:12-16)으로 "네 집과 네 나라가 영원히 보전되리라"는 약속이 주어진다. 이는 메시아 왕권의 기초가 되며, 신약에서 "다윗의 자손 예수 그리스도"(마 1:1)로 성취된다. 솔로몬의 성전은 예수 몸의 예표.</div>
+</div>
+
+<!-- PANEL 6: 분열 왕국 시대 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 VI · 분열 왕국</div>
+<h4 class="gw-name">남유다·북이스라엘과 선지자들</h4>
+<p class="gw-ref">왕상 12 - 왕하 25 · 르호보암 ~ 여고냐 (14대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 410" width="100%" role="img">
+<title>분열 왕국 시대</title><desc>남유다 왕들과 남·북 선지자</desc>
+<line x1="150" y1="28" x2="150" y2="360" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="120" y="32" text-anchor="end" fill="var(--color-text-tertiary)">26</text><circle cx="150" cy="28" r="6" fill="#BA7517"/><text class="th" x="166" y="32">르호보암</text><line x1="225" y1="28" x2="260" y2="28" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="32" fill="var(--color-text-secondary)">왕국 분열</text></g>
+<g><text class="ts" x="120" y="56" text-anchor="end" fill="var(--color-text-tertiary)">27</text><circle cx="150" cy="52" r="5" fill="#BA7517"/><text class="th" x="166" y="56">아비야</text></g>
+<g><text class="ts" x="120" y="80" text-anchor="end" fill="var(--color-text-tertiary)">28</text><circle cx="150" cy="76" r="6" fill="#BA7517"/><text class="th" x="166" y="80">아사</text><line x1="200" y1="76" x2="260" y2="76" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="80" fill="var(--color-text-secondary)">선한 왕 · 우상 제거</text></g>
+<g><text class="ts" x="120" y="104" text-anchor="end" fill="var(--color-text-tertiary)">29</text><circle cx="150" cy="100" r="6" fill="#BA7517"/><text class="th" x="166" y="104">여호사밧</text><line x1="220" y1="100" x2="260" y2="100" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="104" fill="var(--color-text-secondary)">교육·사법 개혁</text></g>
+<g><text class="ts" x="120" y="128" text-anchor="end" fill="var(--color-text-tertiary)">30</text><circle cx="150" cy="124" r="5" fill="#BA7517"/><text class="th" x="166" y="128">요람</text></g>
+<g><text class="ts" x="120" y="152" text-anchor="end" fill="var(--color-text-tertiary)">31</text><circle cx="150" cy="148" r="6" fill="#BA7517"/><text class="th" x="166" y="152">웃시야</text><line x1="210" y1="148" x2="260" y2="148" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="152" fill="var(--color-text-secondary)">52년 치세 · 말년 나병</text></g>
+<g><text class="ts" x="120" y="176" text-anchor="end" fill="var(--color-text-tertiary)">32</text><circle cx="150" cy="172" r="5" fill="#BA7517"/><text class="th" x="166" y="176">요담</text></g>
+<g><text class="ts" x="120" y="200" text-anchor="end" fill="var(--color-text-tertiary)">33</text><circle cx="150" cy="196" r="5" fill="#BA7517"/><text class="th" x="166" y="200">아하스</text></g>
+<g><text class="ts" x="120" y="224" text-anchor="end" fill="var(--color-text-tertiary)">34</text><circle cx="150" cy="220" r="7" fill="#BA7517"/><text class="th" x="166" y="224">히스기야</text><line x1="220" y1="220" x2="260" y2="220" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="224" fill="var(--color-text-secondary)">앗수르 격퇴 · 종교개혁</text></g>
+<g><text class="ts" x="120" y="248" text-anchor="end" fill="var(--color-text-tertiary)">35</text><circle cx="150" cy="244" r="6" fill="#BA7517"/><text class="th" x="166" y="248">므낫세</text><line x1="210" y1="244" x2="260" y2="244" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="248" fill="var(--color-text-secondary)">최악의 왕 → 회개 (대하 33)</text></g>
+<g><text class="ts" x="120" y="272" text-anchor="end" fill="var(--color-text-tertiary)">36</text><circle cx="150" cy="268" r="5" fill="#BA7517"/><text class="th" x="166" y="272">아몬</text></g>
+<g><text class="ts" x="120" y="296" text-anchor="end" fill="var(--color-text-tertiary)">37</text><circle cx="150" cy="292" r="7" fill="#BA7517"/><text class="th" x="166" y="296">요시야</text><line x1="205" y1="292" x2="260" y2="292" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="296" fill="var(--color-text-secondary)">율법책 발견 · 대개혁</text></g>
+<g><text class="ts" x="120" y="320" text-anchor="end" fill="var(--color-text-tertiary)">38</text><circle cx="150" cy="316" r="7" fill="#BA7517"/><text class="th" x="166" y="320">여고냐</text><line x1="205" y1="316" x2="260" y2="316" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="320" fill="var(--color-text-secondary)">바벨론 유수 (B.C.597)</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 13인</div><div class="gw-col-l"><span class="gw-sp">★</span> 르호보암, 아비야, 아사, 여호사밧, 요람, 웃시야, 요담, 아하스, 히스기야, 므낫세, 아몬, 요시야, 여고냐</div></div>
+<div class="gw-col"><div class="gw-col-t">동시대 주요 12인</div><div class="gw-col-l"><b style="font-weight:500;">북이스라엘:</b> 여로보암, 아합, 이세벨, 엘리야, 엘리사, 예후, 호세아, 아모스, 요나<br><b style="font-weight:500;">남유다 선지자:</b> 이사야, 예레미야, 미가, 하박국</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> B.C.931 분열 → B.C.722 북이스라엘 멸망 → B.C.586 예루살렘 함락. 마태복음은 아하시야·요아스·아마샤 3왕을 생략해 14대 3구간 구조를 이룬다. 이사야 53장의 "고난받는 종" 예언과 예레미야의 새 언약 약속이 이 시대에 주어진다.</div>
+</div>
+
+<!-- PANEL 7: 포로와 귀환 시대 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 VII · 포로와 귀환</div>
+<h4 class="gw-name">바벨론 유수와 제2성전</h4>
+<p class="gw-ref">다니엘 - 말라기 · 스알디엘 ~ 맛단 (10대)</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 400" width="100%" role="img">
+<title>포로와 귀환 시대</title><desc>스알디엘부터 맛단까지 10대 메시아 계보와 귀환기 인물</desc>
+<line x1="150" y1="28" x2="150" y2="345" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="120" y="32" text-anchor="end" fill="var(--color-text-tertiary)">39</text><circle cx="150" cy="28" r="6" fill="#BA7517"/><text class="th" x="166" y="32">스알디엘</text><line x1="220" y1="28" x2="260" y2="28" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="32" fill="var(--color-text-secondary)">유수 직후 세대</text></g>
+<g><text class="ts" x="120" y="64" text-anchor="end" fill="var(--color-text-tertiary)">40</text><circle cx="150" cy="60" r="7" fill="#BA7517"/><text class="th" x="166" y="64">스룹바벨</text><line x1="220" y1="60" x2="260" y2="60" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="64">1차 귀환 총독 · 제2성전 착공</text></g>
+<g><text class="ts" x="120" y="96" text-anchor="end" fill="var(--color-text-tertiary)">41</text><circle cx="150" cy="92" r="5" fill="#BA7517"/><text class="th" x="166" y="96">아비훗</text></g>
+<g><text class="ts" x="120" y="128" text-anchor="end" fill="var(--color-text-tertiary)">42</text><circle cx="150" cy="124" r="5" fill="#BA7517"/><text class="th" x="166" y="128">엘리아김</text></g>
+<g><text class="ts" x="120" y="160" text-anchor="end" fill="var(--color-text-tertiary)">43</text><circle cx="150" cy="156" r="5" fill="#BA7517"/><text class="th" x="166" y="160">아소르</text></g>
+<g><text class="ts" x="120" y="192" text-anchor="end" fill="var(--color-text-tertiary)">44</text><circle cx="150" cy="188" r="5" fill="#BA7517"/><text class="th" x="166" y="192">사독</text></g>
+<g><text class="ts" x="120" y="224" text-anchor="end" fill="var(--color-text-tertiary)">45</text><circle cx="150" cy="220" r="5" fill="#BA7517"/><text class="th" x="166" y="224">아킴</text></g>
+<g><text class="ts" x="120" y="256" text-anchor="end" fill="var(--color-text-tertiary)">46</text><circle cx="150" cy="252" r="5" fill="#BA7517"/><text class="th" x="166" y="256">엘리웃</text></g>
+<g><text class="ts" x="120" y="288" text-anchor="end" fill="var(--color-text-tertiary)">47</text><circle cx="150" cy="284" r="5" fill="#BA7517"/><text class="th" x="166" y="288">엘르아살</text></g>
+<g><text class="ts" x="120" y="320" text-anchor="end" fill="var(--color-text-tertiary)">48</text><circle cx="150" cy="316" r="5" fill="#BA7517"/><text class="th" x="166" y="320">맛단</text><line x1="205" y1="316" x2="260" y2="316" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="ts" x="266" y="320" fill="var(--color-text-secondary)">중간기 직전</text></g>
+<line x1="340" y1="28" x2="340" y2="345" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="3 3"/>
+<text class="ts" x="355" y="32" fill="var(--color-text-secondary)">동시대 주요 인물</text>
+<g><rect x="355" y="46" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="66">다니엘</text><text class="ts" x="408" y="66" fill="var(--color-text-secondary)">— 바벨론 포로기 선지자</text></g>
+<g><rect x="355" y="88" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="108">에스겔</text><text class="ts" x="408" y="108" fill="var(--color-text-secondary)">— 그발 강가 · 마른뼈 환상</text></g>
+<g><rect x="355" y="130" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="150">에스라</text><text class="ts" x="408" y="150" fill="var(--color-text-secondary)">— 2차 귀환 · 율법 학사</text></g>
+<g><rect x="355" y="172" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="192">느헤미야</text><text class="ts" x="420" y="192" fill="var(--color-text-secondary)">— 3차 귀환 · 성벽 재건</text></g>
+<g><rect x="355" y="214" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="234">에스더</text><text class="ts" x="408" y="234" fill="var(--color-text-secondary)">— 페르시아 왕비 · 부림절</text></g>
+<g><rect x="355" y="256" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="276">모르드개</text><text class="ts" x="420" y="276" fill="var(--color-text-secondary)">— 에스더의 사촌</text></g>
+<g><rect x="355" y="298" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="318">학개·스가랴</text><text class="ts" x="435" y="318" fill="var(--color-text-secondary)">— 성전 재건 선지자</text></g>
+<g><rect x="355" y="340" width="220" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="365" y="360">말라기</text><text class="ts" x="408" y="360" fill="var(--color-text-secondary)">— 구약 마지막 선지자</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 10인</div><div class="gw-col-l"><span class="gw-sp">★</span> 스알디엘, 스룹바벨, 아비훗, 엘리아김, 아소르, 사독, 아킴, 엘리웃, 엘르아살, 맛단</div></div>
+<div class="gw-col"><div class="gw-col-t">주요 인물 10인</div><div class="gw-col-l">다니엘, 에스겔, 에스라, 느헤미야, 에스더, 모르드개, 학개, 스가랴, 말라기 (+ 다니엘의 세 친구)</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> B.C.586 예루살렘 함락 → B.C.538 고레스 칙령 → 3차 귀환과 성전·성벽 재건. 말라기 이후 약 400년의 "중간기"가 시작되며, 구약은 "엘리야를 보내리라"(말 4:5)는 약속으로 끝난다. 침묵 속에 메시아의 오심이 준비된다.</div>
+</div>
+
+<!-- PANEL 8: 성취 -->
+<div class="gw-pnl">
+<div class="gw-lbl">시대 VIII · 성취</div>
+<h4 class="gw-name">말씀이 육신이 되어</h4>
+<p class="gw-ref">마태복음 1장 · 누가복음 3장 · 야곱 ~ 예수 그리스도</p>
+<div class="gw-viz">
+<svg viewBox="0 0 608 340" width="100%" role="img">
+<title>메시아의 성취</title><desc>야곱부터 예수 그리스도까지와 모든 언약의 성취</desc>
+<line x1="304" y1="35" x2="304" y2="195" stroke="var(--color-border-secondary)" stroke-width="1.5" opacity="0.6"/>
+<g><text class="ts" x="274" y="39" text-anchor="end" fill="var(--color-text-tertiary)">59</text><circle cx="304" cy="35" r="6" fill="#BA7517"/><text class="th" x="320" y="39">야곱</text><text class="ts" x="355" y="39" fill="var(--color-text-secondary)">(요셉의 아버지)</text></g>
+<g><text class="ts" x="274" y="99" text-anchor="end" fill="var(--color-text-tertiary)">60</text><circle cx="304" cy="95" r="8" fill="#BA7517"/><text class="th" x="322" y="99">요셉</text><text class="ts" x="355" y="99" fill="var(--color-text-secondary)">══ 마리아 (눅 3:31 나단 계열)</text></g>
+<g><text class="ts" x="274" y="161" text-anchor="end" fill="var(--color-text-tertiary)">61</text><circle cx="304" cy="155" r="12" fill="#BA7517" stroke="#633806" stroke-width="1.5"/><text class="th" x="324" y="161" style="font-weight:500;">예수 그리스도</text><text class="ts" x="445" y="161" fill="var(--color-text-secondary)">· 메시아</text></g>
+<line x1="40" y1="220" x2="568" y2="220" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="3 3"/>
+<text class="ts" x="304" y="240" text-anchor="middle" fill="var(--color-text-secondary)">예수 그리스도 안에서 성취된 언약</text>
+<g><rect x="40" y="255" width="170" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="50" y="269">창 3:15</text><text class="ts" x="105" y="269" fill="var(--color-text-secondary)">— 여자의 후손</text></g>
+<g><rect x="219" y="255" width="170" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="229" y="269">창 12:3</text><text class="ts" x="284" y="269" fill="var(--color-text-secondary)">— 아브라함 언약</text></g>
+<g><rect x="398" y="255" width="170" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="408" y="269">삼하 7:12</text><text class="ts" x="472" y="269" fill="var(--color-text-secondary)">— 다윗 언약</text></g>
+<g><rect x="40" y="297" width="170" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="50" y="311">사 53장</text><text class="ts" x="105" y="311" fill="var(--color-text-secondary)">— 고난의 종</text></g>
+<g><rect x="219" y="297" width="170" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="229" y="311">렘 31:31</text><text class="ts" x="294" y="311" fill="var(--color-text-secondary)">— 새 언약</text></g>
+<g><rect x="398" y="297" width="170" height="32" rx="6" fill="var(--color-background-primary)" stroke="var(--color-border-tertiary)" stroke-width="0.5"/><text class="th" x="408" y="311">미 5:2</text><text class="ts" x="454" y="311" fill="var(--color-text-secondary)">— 베들레헴 탄생</text></g>
+</svg>
+</div>
+<div class="gw-grid">
+<div class="gw-col"><div class="gw-col-t">주계보 완성</div><div class="gw-col-l"><span class="gw-sp">★</span> 야곱, 요셉, <b style="font-weight:500;">예수 그리스도</b> (61대)</div></div>
+<div class="gw-col"><div class="gw-col-t">사중 언약의 성취</div><div class="gw-col-l">아담 언약 · 아브라함 언약<br>다윗 언약 · 새 언약</div></div>
+</div>
+<div class="gw-note"><b>핵심 의미:</b> "때가 차매 하나님이 그 아들을 보내사 여자에게서 나게 하시고 율법 아래에 나게 하신 것은 율법 아래에 있는 자들을 속량하시고 우리로 아들의 명분을 얻게 하려 하심이라"(갈 4:4-5). 아담의 실패는 둘째 아담 예수 안에서 회복되며, 구약 전체가 이 한 이름에 수렴한다.</div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var titles = ['원시 역사','족장 시대','출애굽·광야','정복·사사','통일 왕국','분열 왕국','포로·귀환','성취'];
+  var cur = 0;
+  var panels = document.querySelectorAll('.gw-pnl');
+  var prog = document.getElementById('gw-prog');
+  var numEl = document.getElementById('gw-n');
+  var titleEl = document.getElementById('gw-t');
+  
+  for (var i = 0; i < 8; i++) {
+    var seg = document.createElement('div');
+    seg.className = 'gw-ps' + (i === 0 ? ' on' : '');
+    (function(idx){ seg.onclick = function(){ gwGo(idx); }; })(i);
+    prog.appendChild(seg);
+  }
+  var segs = document.querySelectorAll('.gw-ps');
+  
+  function gwGo(i) {
+    if (i < 0) i = 7;
+    if (i > 7) i = 0;
+    cur = i;
+    for (var j = 0; j < panels.length; j++) {
+      panels[j].classList.toggle('on', j === i);
+      segs[j].classList.toggle('on', j === i);
+    }
+    numEl.textContent = i + 1;
+    titleEl.textContent = titles[i];
+  }
+  
+  window.gwGo = gwGo;
+  window.gwMove = function(d){ gwGo(cur + d); };
+})();
+</script>

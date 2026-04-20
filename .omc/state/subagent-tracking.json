@@ -1,26 +1,7 @@
 {
-  "agents": [
-    {
-      "agent_id": "ab15dd718129ed6af",
-      "agent_type": "bible-curator",
-      "started_at": "2026-04-20T14:12:19.141Z",
-      "parent_mode": "none",
-      "status": "completed",
-      "completed_at": "2026-04-20T14:18:56.257Z",
-      "duration_ms": 397116
-    },
-    {
-      "agent_id": "a628f8a22d999a9a4",
-      "agent_type": "Explore",
-      "started_at": "2026-04-20T16:07:45.217Z",
-      "parent_mode": "none",
-      "status": "completed",
-      "completed_at": "2026-04-20T16:07:55.053Z",
-      "duration_ms": 9836
-    }
-  ],
-  "total_spawned": 2,
-  "total_completed": 2,
+  "agents": [],
+  "total_spawned": 0,
+  "total_completed": 0,
   "total_failed": 0,
-  "last_updated": "2026-04-20T16:07:55.165Z"
+  "last_updated": "2026-04-20T22:12:30.923Z"
 }
