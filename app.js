@@ -1,11 +1,11 @@
-const APP_VERSION = "0.0.74";
+const APP_VERSION = "0.0.77";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
 
 function parseLevel(val) {
   const n = parseInt(val);
-  return Math.max(0, Math.min(10, Number.isFinite(n) ? n : 6));
+  return Math.max(0, Math.min(10, Number.isFinite(n) ? n : 1));
 }
 
 const AUTO_NEXT_PER_SYLLABLE_OPTIONS = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
@@ -60,7 +60,7 @@ const DEFAULT_SETTINGS = {
   autoRevealOnMove: true,
   firstTwoMode: "none",
   mergeBlanks: false,
-  level: "6",
+  level: "1",
   continuousCount: "1",
   bookmarkedOnly: false,
   autoNextEnabled: false,
@@ -556,7 +556,7 @@ function scheduleAutoNext() {
   }
   state.autoNextTimer = setTimeout(() => {
     state.autoNextTimer = null;
-    forceNextVerse();
+    advanceNext();
   }, totalMs);
 }
 

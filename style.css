@@ -192,12 +192,31 @@ h2 {
 .hidden { display: none !important; }
 
 /* === Setup screen === */
-.settings-grid {
+.settings-group {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  background: #fafbfc;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+}
+.settings-group-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.2px;
+}
+.settings-group-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px 24px;
+  gap: 14px 20px;
 }
-.settings-grid .full-width { grid-column: 1 / -1; }
+.settings-group-grid .full-width { grid-column: 1 / -1; }
+.settings-group-grid .form-row { background: #fff; }
+
+@media (max-width: 640px) {
+  .settings-group-grid { grid-template-columns: 1fr; gap: 10px; }
+}
 
 .form-row {
   display: flex;
