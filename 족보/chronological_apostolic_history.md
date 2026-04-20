@@ -10,7 +10,7 @@ chronological_apostolic_history_v6:
   - period: "공동체 형성 및 정복 시대"
     figures:
       - name: "모세"
-        contemporary_kings: "애굽의 바로 (라메스 2세 등으로 추정)"
+        contemporary_kings: "애굽의 바로 (람세스 2세 등으로 추정)"
         achievement: "출애굽과 광야 공동체 건립"
         failure: "므리바에서의 혈기로 가나안 입성 금지"
         primary_adversary: "애굽(이집트), 아말렉"
