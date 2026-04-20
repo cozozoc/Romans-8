@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1776557834917,
+  "lastScanned": 1776693751538,
   "projectRoot": "f:\\Project\\claude_code\\Romans8_memorization",
   "techStack": {
     "languages": [
@@ -42,7 +42,7 @@
       "path": "제자훈련1권",
       "purpose": null,
       "fileCount": 6,
-      "lastAccessed": 1776557834842,
+      "lastAccessed": 1776693751440,
       "keyFiles": [
         "01_롬10_9-10_마16_16.txt",
         "02_히4_16_애3_22-23.txt",
@@ -55,7 +55,7 @@
       "path": "제자훈련2권",
       "purpose": null,
       "fileCount": 14,
-      "lastAccessed": 1776557834844,
+      "lastAccessed": 1776693751442,
       "keyFiles": [
         "01_벧후1_21_수1_8.txt",
         "02_롬11_36상_렘31_3하.txt",
@@ -68,7 +68,7 @@
       "path": "제자훈련3권",
       "purpose": null,
       "fileCount": 12,
-      "lastAccessed": 1776557834845,
+      "lastAccessed": 1776693751443,
       "keyFiles": [
         "01_마7_24_요14_21.txt",
         "02_빌2_3-4_벧전4_11상.txt",
@@ -81,7 +81,7 @@
       "path": "성경",
       "purpose": null,
       "fileCount": 1189,
-      "lastAccessed": 1776557834851,
+      "lastAccessed": 1776693751460,
       "keyFiles": [
         "고린도전서_13장.txt",
         "로마서_8장.txt",
@@ -94,14 +94,14 @@
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1776557834853,
+      "lastAccessed": 1776693751462,
       "keyFiles": []
     },
     "사역훈련2권_교회와_평신도의_자화상": {
       "path": "사역훈련2권_교회와_평신도의_자화상",
       "purpose": null,
       "fileCount": 10,
-      "lastAccessed": 1776557834854,
+      "lastAccessed": 1776693751463,
       "keyFiles": [
         "01_엡2_19-20.txt",
         "02_요4_23-24.txt",
@@ -114,7 +114,7 @@
       "path": "사역훈련3권_소그룹_환경과_리더십",
       "purpose": null,
       "fileCount": 5,
-      "lastAccessed": 1776557834856,
+      "lastAccessed": 1776693751467,
       "keyFiles": [
         "02_살전2_7-8.txt",
         "04_사34_16.txt",
@@ -127,7 +127,7 @@
       "path": "__pycache__",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1776557834858,
+      "lastAccessed": 1776693751468,
       "keyFiles": [
         "scrape_bible.cpython-311.pyc"
       ]
@@ -136,14 +136,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 369,
-      "lastAccessed": 1776581104851,
+      "accessCount": 394,
+      "lastAccessed": 1776697953128,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 211,
-      "lastAccessed": 1776581109000,
+      "accessCount": 233,
+      "lastAccessed": 1776698007432,
       "type": "file"
     },
     {
@@ -160,9 +160,15 @@
     },
     {
       "path": "",
-      "accessCount": 17,
-      "lastAccessed": 1776579798775,
+      "accessCount": 20,
+      "lastAccessed": 1776697940722,
       "type": "directory"
+    },
+    {
+      "path": "scrape_bible.py",
+      "accessCount": 8,
+      "lastAccessed": 1776697874493,
+      "type": "file"
     },
     {
       "path": "data\\bible\\psalms.json",
@@ -180,6 +186,12 @@
       "path": "성경\\시편_1편.txt",
       "accessCount": 4,
       "lastAccessed": 1776519674545,
+      "type": "file"
+    },
+    {
+      "path": "성경\\말라기_4장.txt",
+      "accessCount": 4,
+      "lastAccessed": 1776697917794,
       "type": "file"
     },
     {
@@ -213,6 +225,12 @@
       "type": "file"
     },
     {
+      "path": "성경\\요엘_3장.txt",
+      "accessCount": 3,
+      "lastAccessed": 1776697917518,
+      "type": "file"
+    },
+    {
       "path": "data\\bible\\1corinthians.json",
       "accessCount": 2,
       "lastAccessed": 1776490626751,
@@ -223,18 +241,6 @@
       "accessCount": 2,
       "lastAccessed": 1776497125542,
       "type": "directory"
-    },
-    {
-      "path": "scrape_bible.py",
-      "accessCount": 2,
-      "lastAccessed": 1776500190120,
-      "type": "file"
-    },
-    {
-      "path": "성경\\말라기_4장.txt",
-      "accessCount": 2,
-      "lastAccessed": 1776500258139,
-      "type": "file"
     },
     {
       "path": ".claude\\agents\\bible-curator.md",
@@ -252,6 +258,12 @@
       "path": "C:\\Users\\thomas\\.claude\\plans\\temporal-questing-quill.md",
       "accessCount": 2,
       "lastAccessed": 1776524947862,
+      "type": "file"
+    },
+    {
+      "path": "성경\\창세기_1장.txt",
+      "accessCount": 2,
+      "lastAccessed": 1776693937183,
       "type": "file"
     },
     {
@@ -351,18 +363,6 @@
       "type": "file"
     },
     {
-      "path": "성경\\요엘_3장.txt",
-      "accessCount": 1,
-      "lastAccessed": 1776500229479,
-      "type": "file"
-    },
-    {
-      "path": "성경\\창세기_1장.txt",
-      "accessCount": 1,
-      "lastAccessed": 1776500493574,
-      "type": "file"
-    },
-    {
       "path": ".claude\\skills\\expose-bible-books\\SKILL.md",
       "accessCount": 1,
       "lastAccessed": 1776503117632,
@@ -426,6 +426,12 @@
       "path": "제자훈련2권\\02_롬11_36상_렘31_3하.txt",
       "accessCount": 1,
       "lastAccessed": 1776521084275,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\thomas\\.claude\\plans\\validated-bouncing-lampson.md",
+      "accessCount": 1,
+      "lastAccessed": 1776604813939,
       "type": "file"
     }
   ],

@@ -1,7 +1,17 @@
 {
-  "agents": [],
-  "total_spawned": 0,
-  "total_completed": 0,
+  "agents": [
+    {
+      "agent_id": "ab15dd718129ed6af",
+      "agent_type": "bible-curator",
+      "started_at": "2026-04-20T14:12:19.141Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-20T14:18:56.257Z",
+      "duration_ms": 397116
+    }
+  ],
+  "total_spawned": 1,
+  "total_completed": 1,
   "total_failed": 0,
-  "last_updated": "2026-04-19T06:25:20.980Z"
+  "last_updated": "2026-04-20T14:49:35.924Z"
 }

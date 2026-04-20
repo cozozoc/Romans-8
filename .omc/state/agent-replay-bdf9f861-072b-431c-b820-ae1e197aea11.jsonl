@@ -1,1 +1,4 @@
-{"t":0,"agent":"a970400","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"ab15dd7","agent_type":"bible-curator","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"ab15dd7","agent_type":"bible-curator","event":"agent_stop","success":true,"duration_ms":397116}
+{"t":0,"agent":"ad66103","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"a83c14e","agent_type":"unknown","event":"agent_stop","success":true}

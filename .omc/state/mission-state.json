@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-19T06:03:30.731Z",
+  "updatedAt": "2026-04-20T14:49:35.817Z",
   "missions": [
     {
       "id": "session:075a021b-87d8-4d40-9098-1ef59765521b:none",
@@ -206,6 +206,96 @@
           "agent": "Explore:a49295a",
           "detail": "completed",
           "sourceKey": "session-stop:a238a632b6a4699f1"
+        }
+      ]
+    },
+    {
+      "id": "session:bdf9f861-072b-431c-b820-ae1e197aea11:none",
+      "source": "session",
+      "name": "none",
+      "objective": "Session mission",
+      "createdAt": "2026-04-19T13:18:34.398Z",
+      "updatedAt": "2026-04-20T14:49:35.817Z",
+      "status": "done",
+      "workerCount": 2,
+      "taskCounts": {
+        "total": 2,
+        "pending": 0,
+        "blocked": 0,
+        "inProgress": 0,
+        "completed": 2,
+        "failed": 0
+      },
+      "agents": [
+        {
+          "name": "Explore:aef20db",
+          "role": "Explore",
+          "ownership": "aef20db22b7c60b99",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-20T14:49:35.817Z"
+        },
+        {
+          "name": "bible-curator:ab15dd7",
+          "role": "bible-curator",
+          "ownership": "ab15dd718129ed6af",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-20T14:18:56.257Z"
+        }
+      ],
+      "timeline": [
+        {
+          "id": "session-start:aef20db22b7c60b99:2026-04-19T13:18:34.398Z",
+          "at": "2026-04-19T13:18:34.398Z",
+          "kind": "update",
+          "agent": "Explore:aef20db",
+          "detail": "started Explore:aef20db",
+          "sourceKey": "session-start:aef20db22b7c60b99"
+        },
+        {
+          "id": "session-stop:aef20db22b7c60b99:2026-04-19T13:18:59.480Z",
+          "at": "2026-04-19T13:18:59.480Z",
+          "kind": "completion",
+          "agent": "Explore:aef20db",
+          "detail": "completed",
+          "sourceKey": "session-stop:aef20db22b7c60b99"
+        },
+        {
+          "id": "session-start:ab15dd718129ed6af:2026-04-20T14:12:19.141Z",
+          "at": "2026-04-20T14:12:19.141Z",
+          "kind": "update",
+          "agent": "bible-curator:ab15dd7",
+          "detail": "started bible-curator:ab15dd7",
+          "sourceKey": "session-start:ab15dd718129ed6af"
+        },
+        {
+          "id": "session-stop:ab15dd718129ed6af:2026-04-20T14:18:56.257Z",
+          "at": "2026-04-20T14:18:56.257Z",
+          "kind": "completion",
+          "agent": "bible-curator:ab15dd7",
+          "detail": "completed",
+          "sourceKey": "session-stop:ab15dd718129ed6af"
+        },
+        {
+          "id": "session-stop:ad661037eb27ea6f2:2026-04-20T14:48:08.470Z",
+          "at": "2026-04-20T14:48:08.470Z",
+          "kind": "completion",
+          "agent": "Explore:aef20db",
+          "detail": "completed",
+          "sourceKey": "session-stop:ad661037eb27ea6f2"
+        },
+        {
+          "id": "session-stop:a83c14e2a751923c8:2026-04-20T14:49:35.817Z",
+          "at": "2026-04-20T14:49:35.817Z",
+          "kind": "completion",
+          "agent": "Explore:aef20db",
+          "detail": "completed",
+          "sourceKey": "session-stop:a83c14e2a751923c8"
         }
       ]
     }
