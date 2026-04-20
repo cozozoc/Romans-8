@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.89";
+const APP_VERSION = "0.0.90";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -8,7 +8,7 @@ function parseLevel(val) {
   return Math.max(0, Math.min(10, Number.isFinite(n) ? n : 1));
 }
 
-const AUTO_NEXT_PER_SYLLABLE_OPTIONS = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0];
+const AUTO_NEXT_PER_SYLLABLE_OPTIONS = [0.1, 0.2, 0.3, 0.4, 0.5, 1.0];
 function parseAutoNextSecondsPerSyllable(val) {
   const n = parseFloat(val);
   if (!Number.isFinite(n)) return 1.0;
