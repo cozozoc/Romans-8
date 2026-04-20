@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.71";
+const APP_VERSION = "0.0.72";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -19,6 +19,7 @@ const state = {
   currentBlankSet: new Set(),
   revealAllTimer: null,
   autoRevealTimer: null,
+  autoNextTimer: null,
   hintQueue: [],
   hintQueueKey: "",
   hintShown: false,
@@ -27,7 +28,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSeconds","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -42,6 +43,8 @@ const DEFAULT_SETTINGS = {
   level: "6",
   continuousCount: "1",
   bookmarkedOnly: false,
+  autoNextEnabled: false,
+  autoNextSeconds: "10",
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
@@ -406,6 +409,8 @@ function startTest() {
     level: parseLevel($("level").value),
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
     bookmarkedOnly: $("bookmarkedOnly").checked,
+    autoNextEnabled: $("autoNextEnabled").checked,
+    autoNextSeconds: Math.max(1, parseInt($("autoNextSeconds").value) || 10),
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -437,6 +442,7 @@ function startTest() {
 function clearTimers() {
   if (state.revealAllTimer) { clearTimeout(state.revealAllTimer); state.revealAllTimer = null; }
   if (state.autoRevealTimer) { clearTimeout(state.autoRevealTimer); state.autoRevealTimer = null; }
+  if (state.autoNextTimer) { clearTimeout(state.autoNextTimer); state.autoNextTimer = null; }
 }
 
 function updateProgress() {
@@ -500,6 +506,16 @@ function showQuestion() {
   updateBookmarkBtn();
   updateBookmarkFilterBtn();
   applyInputVisibility();
+  scheduleAutoNext();
+}
+
+function scheduleAutoNext() {
+  if (!state.config || !state.config.autoNextEnabled) return;
+  const secs = Math.max(1, parseInt(state.config.autoNextSeconds) || 10);
+  state.autoNextTimer = setTimeout(() => {
+    state.autoNextTimer = null;
+    forceNextVerse();
+  }, secs * 1000);
 }
 
 function changeLevel(delta) {
@@ -1276,6 +1292,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const firstTwoModeEl = $("firstTwoMode");
   if (firstTwoModeEl) firstTwoModeEl.addEventListener("change", saveSettings);
+  const autoNextEnabledEl = $("autoNextEnabled");
+  if (autoNextEnabledEl) autoNextEnabledEl.addEventListener("change", saveSettings);
+  const autoNextSecondsEl = $("autoNextSeconds");
+  if (autoNextSecondsEl) autoNextSecondsEl.addEventListener("change", saveSettings);
   $("startBtn").addEventListener("click", startTest);
   $("printPdfBtn").addEventListener("click", openPrintPractice);
   $("pdfSetCount").addEventListener("change", saveSettings);
