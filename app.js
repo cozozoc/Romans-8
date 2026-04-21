@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.93";
+const APP_VERSION = "0.0.94";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -8,7 +8,14 @@ function parseLevel(val) {
   return Math.max(0, Math.min(10, Number.isFinite(n) ? n : 1));
 }
 
-const AUTO_NEXT_PER_SYLLABLE_OPTIONS = [0.1, 0.2, 0.3, 0.4, 0.5, 1.0];
+const AUTO_NEXT_PER_SYLLABLE_OPTIONS = Array.from({ length: 20 }, (_, i) => Math.round((i + 1) * 0.05 * 100) / 100);
+function populateAutoNextSecondsPerSyllableOptions() {
+  const sel = document.getElementById("autoNextSecondsPerSyllable");
+  if (!sel) return;
+  sel.innerHTML = AUTO_NEXT_PER_SYLLABLE_OPTIONS
+    .map(v => `<option value="${v.toFixed(2)}"${v === 1.0 ? " selected" : ""}>${v.toFixed(2)}초</option>`)
+    .join("");
+}
 function parseAutoNextSecondsPerSyllable(val) {
   const n = parseFloat(val);
   if (!Number.isFinite(n)) return 1.0;
@@ -70,7 +77,7 @@ const DEFAULT_SETTINGS = {
   continuousCount: "1",
   bookmarkedOnly: false,
   autoNextEnabled: false,
-  autoNextSecondsPerSyllable: "1.0",
+  autoNextSecondsPerSyllable: "1.00",
   revealWaitSeconds: "30",
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
@@ -1508,6 +1515,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkVersionAndMigrate();
   const vEl = $("appVersion");
   if (vEl) vEl.textContent = "v" + APP_VERSION;
+  populateAutoNextSecondsPerSyllableOptions();
   loadSettings();
   if ($("bookKey").options.length === 0) {
     populateBookOptions($("category").value || "bible");
