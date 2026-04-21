@@ -56,7 +56,7 @@ chronological_apostolic_history_v6:
       - name: "엘리사"
         contemporary_kings: "여호람, 예후, 여호아하스, 요아스 (북이스라엘)"
         achievement: "엘리야의 갑절 영감 계승 및 수많은 기적 수행"
-        failure: "자신을 조롱하는 자들을 저주하여 죽게 한 가혹한 심판"
+        failure: "뚜렷한 개인적 허물 없음 (조롱자 저주 사건은 하나님의 공의로운 심판으로 해석됨)"
         primary_adversary: "아람(벤 하닷), 북이스라엘의 불신앙"
       - name: "히스기야"
         contemporary_kings: "산헤립 (앗수르 왕), 므로닥발라단 (바벨론 왕)"
