@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.100";
+const APP_VERSION = "0.0.101";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -210,30 +210,6 @@ function saveSettings() {
   });
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(obj)); } catch (e) {}
 }
-const SETUP_PRESETS = {
-  reading:    { autoNextEnabled: true,  autoNextSpeed: "normal", level: "0" },
-  recitation: { autoNextEnabled: false, autoNextSpeed: "slow",   level: "1" },
-};
-function updatePresetIndicator(name) {
-  document.querySelectorAll(".preset-btn").forEach(b => {
-    const active = b.dataset.preset === name;
-    b.classList.toggle("preset-selected", active);
-    b.setAttribute("aria-checked", active ? "true" : "false");
-  });
-}
-function applySetupPreset(name) {
-  updatePresetIndicator(name);
-  const preset = SETUP_PRESETS[name];
-  if (!preset) return;
-  const en = $("autoNextEnabled");
-  const sp = $("autoNextSpeed");
-  const lv = $("level");
-  if (en) en.checked = preset.autoNextEnabled;
-  if (sp) sp.value = preset.autoNextSpeed;
-  if (lv) lv.value = preset.level;
-  saveSettings();
-}
-
 function resetSettings() {
   if (!confirm("모든 설정을 기본값으로 초기화할까요?\n\n(북마크는 영향받지 않고 그대로 유지됩니다. 북마크를 지우려면 '북마크 전체 삭제' 버튼을 사용하세요.)")) return;
   // 의도적으로 BOOKMARKS_KEY는 건드리지 않는다 — 북마크는 오직 clearAllBookmarks()로만 삭제
@@ -1643,9 +1619,6 @@ document.addEventListener("DOMContentLoaded", () => {
   $("pdfNewPagePerSet").addEventListener("change", saveSettings);
   $("pdfAnswerMode").addEventListener("change", saveSettings);
   $("resetSettingsBtn").addEventListener("click", resetSettings);
-  document.querySelectorAll(".preset-btn").forEach(btn => {
-    btn.addEventListener("click", () => applySetupPreset(btn.dataset.preset));
-  });
   $("clearBookmarksBtn").addEventListener("click", () => {
     const all = loadBookmarks();
     const total = Object.values(all).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0);
