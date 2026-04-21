@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.99";
+const APP_VERSION = "0.0.100";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -25,6 +25,26 @@ function populateAutoNextSpeedOptions() {
   if (!sel) return;
   sel.innerHTML = AUTO_NEXT_SPEED_PRESETS
     .map(p => `<option value="${p.value}"${p.value === AUTO_NEXT_SPEED_DEFAULT ? " selected" : ""}>${p.label}</option>`)
+    .join("");
+}
+
+const AUTO_NEXT_GAP_PRESETS = [
+  { value: "very-slow", label: "매우 느리게", seconds: 5 },
+  { value: "slow",      label: "느리게",      seconds: 4 },
+  { value: "normal",    label: "보통",        seconds: 3 },
+  { value: "fast",      label: "빠르게",      seconds: 2 },
+  { value: "very-fast", label: "매우 빠르게", seconds: 1 },
+];
+const AUTO_NEXT_GAP_DEFAULT = "normal";
+function parseAutoNextGap(val) {
+  return AUTO_NEXT_GAP_PRESETS.find(p => p.value === val)
+      || AUTO_NEXT_GAP_PRESETS.find(p => p.value === AUTO_NEXT_GAP_DEFAULT);
+}
+function populateAutoNextGapOptions() {
+  const sel = document.getElementById("autoNextGapSpeed");
+  if (!sel) return;
+  sel.innerHTML = AUTO_NEXT_GAP_PRESETS
+    .map(p => `<option value="${p.value}"${p.value === AUTO_NEXT_GAP_DEFAULT ? " selected" : ""}>${p.label}</option>`)
     .join("");
 }
 
@@ -61,7 +81,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSpeed","revealWaitSeconds","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSpeed","autoNextGapSpeed","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -78,7 +98,7 @@ const DEFAULT_SETTINGS = {
   bookmarkedOnly: false,
   autoNextEnabled: false,
   autoNextSpeed: AUTO_NEXT_SPEED_DEFAULT,
-  revealWaitSeconds: "30",
+  autoNextGapSpeed: AUTO_NEXT_GAP_DEFAULT,
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
   pdfFontSize: "medium",
@@ -518,14 +538,8 @@ function clearTimers() {
   }
 }
 
-function parseRevealWaitSeconds(v) {
-  if (v === "manual") return null;
-  const n = parseInt(v, 10);
-  return Number.isFinite(n) && n > 0 ? n : REVEAL_SECONDS;
-}
-
 function getRevealWaitSeconds() {
-  return parseRevealWaitSeconds(state.config && state.config.revealWaitSeconds);
+  return REVEAL_SECONDS;
 }
 
 function stopRevealCountdown() {
@@ -740,14 +754,16 @@ function scheduleAutoNext() {
   if (!state.config || !state.config.autoNextEnabled) return;
   const preset = parseAutoNextSpeed(state.config.autoNextSpeed);
   const baseMs = preset.secPerSyl * 1000;
+  const gapPreset = parseAutoNextGap(state.config.autoNextGapSpeed);
+  const gapMs = gapPreset.seconds * 1000;
   const qt = $("questionText");
   if (!qt) return;
   const { syls, delays, total } = computeAutoNextDelays(qt, baseMs);
-  const startBuffer = 700;
-  const endBuffer = Math.max(700, Math.round(baseMs * 2));
+  const startBuffer = 300;
+  const endBuffer = gapMs;
   const animDur = Math.min(320, Math.max(90, Math.round(baseMs * 0.7)));
   const transitionMs = Math.max(total, baseMs);
-  const totalMs = Math.max(1200, startBuffer + transitionMs + endBuffer);
+  const totalMs = startBuffer + transitionMs + endBuffer;
   if (syls.length > 0) {
     state.autoNextStartTimer = setTimeout(() => {
       state.autoNextStartTimer = null;
@@ -1576,6 +1592,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const vEl = $("appVersion");
   if (vEl) vEl.textContent = "v" + APP_VERSION;
   populateAutoNextSpeedOptions();
+  populateAutoNextGapOptions();
   loadSettings();
   if ($("bookKey").options.length === 0) {
     populateBookOptions($("category").value || "bible");
@@ -1614,8 +1631,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (autoNextEnabledEl) autoNextEnabledEl.addEventListener("change", saveSettings);
   const autoNextSpeedEl = $("autoNextSpeed");
   if (autoNextSpeedEl) autoNextSpeedEl.addEventListener("change", saveSettings);
-  const revealWaitSecondsEl = $("revealWaitSeconds");
-  if (revealWaitSecondsEl) revealWaitSecondsEl.addEventListener("change", saveSettings);
+  const autoNextGapSpeedEl = $("autoNextGapSpeed");
+  if (autoNextGapSpeedEl) autoNextGapSpeedEl.addEventListener("change", saveSettings);
   const revealSkipBtn = $("revealSkipBtn");
   if (revealSkipBtn) revealSkipBtn.addEventListener("click", proceedRevealNow);
   $("startBtn").addEventListener("click", startTest);

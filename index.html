@@ -146,7 +146,7 @@
 
   <!-- 설정 화면 -->
   <section id="setup-screen" class="screen">
-    <h2>테스트 설정</h2>
+    <h2>기본 설정</h2>
     <div class="preset-group" role="radiogroup" aria-label="프리셋">
       <button type="button" class="preset-btn" data-preset="reading" role="radio" aria-checked="false">📖 낭독</button>
       <button type="button" class="preset-btn" data-preset="recitation" role="radio" aria-checked="false">✏️ 암송</button>
@@ -255,13 +255,8 @@
           <select id="autoNextSpeed"></select>
         </div>
         <div class="form-row full-width">
-          <label for="revealWaitSeconds">정답/오답 후 대기 <span class="hint">결과 확인 시간 · 수동은 직접 넘기기</span></label>
-          <select id="revealWaitSeconds">
-            <option value="5">5초</option>
-            <option value="10">10초</option>
-            <option value="30" selected>30초 (기본)</option>
-            <option value="manual">수동 (직접 넘기기)</option>
-          </select>
+          <label for="autoNextGapSpeed">자동 Next 시 구절간 시간 간격 <span class="hint">다음 구절로 넘어가기 전 대기</span></label>
+          <select id="autoNextGapSpeed"></select>
         </div>
       </div>
     </details>
