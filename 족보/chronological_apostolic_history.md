@@ -56,7 +56,7 @@ chronological_apostolic_history_v6:
       - name: "엘리사"
         contemporary_kings: "여호람, 예후, 여호아하스, 요아스 (북이스라엘)"
         achievement: "엘리야의 갑절 영감 계승 및 수많은 기적 수행"
-        failure: "뚜렷한 개인적 허물 없음 (조롱자 저주 사건은 하나님의 공의로운 심판으로 해석됨)"
+        failure: "수넴 여인 아들 회생 시 게하시 편에 지팡이를 먼저 보냈으나 실패 — 하나님의 능력이 아닌 인간의 방법·형식(지팡이)을 의지한 시도였고, 결국 본인이 직접 가서 기도로 살림 (왕하 4:29-35)"
         primary_adversary: "아람(벤 하닷), 북이스라엘의 불신앙"
       - name: "히스기야"
         contemporary_kings: "산헤립 (앗수르 왕), 므로닥발라단 (바벨론 왕)"
