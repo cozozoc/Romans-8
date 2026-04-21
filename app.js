@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.94";
+const APP_VERSION = "0.0.95";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -8,24 +8,24 @@ function parseLevel(val) {
   return Math.max(0, Math.min(10, Number.isFinite(n) ? n : 1));
 }
 
-const AUTO_NEXT_PER_SYLLABLE_OPTIONS = Array.from({ length: 20 }, (_, i) => Math.round((i + 1) * 0.05 * 100) / 100);
-function populateAutoNextSecondsPerSyllableOptions() {
-  const sel = document.getElementById("autoNextSecondsPerSyllable");
-  if (!sel) return;
-  sel.innerHTML = AUTO_NEXT_PER_SYLLABLE_OPTIONS
-    .map(v => `<option value="${v.toFixed(2)}"${v === 1.0 ? " selected" : ""}>${v.toFixed(2)}초</option>`)
-    .join("");
+const AUTO_NEXT_SPEED_PRESETS = [
+  { value: "very-slow", label: "매우 느리게", secPerSyl: 0.55 },
+  { value: "slow",      label: "느리게",      secPerSyl: 0.38 },
+  { value: "normal",    label: "보통",        secPerSyl: 0.26 },
+  { value: "fast",      label: "빠르게",      secPerSyl: 0.18 },
+  { value: "very-fast", label: "매우 빠르게", secPerSyl: 0.12 },
+];
+const AUTO_NEXT_SPEED_DEFAULT = "normal";
+function parseAutoNextSpeed(val) {
+  return AUTO_NEXT_SPEED_PRESETS.find(p => p.value === val)
+      || AUTO_NEXT_SPEED_PRESETS.find(p => p.value === AUTO_NEXT_SPEED_DEFAULT);
 }
-function parseAutoNextSecondsPerSyllable(val) {
-  const n = parseFloat(val);
-  if (!Number.isFinite(n)) return 1.0;
-  let best = AUTO_NEXT_PER_SYLLABLE_OPTIONS[0];
-  let bestDiff = Math.abs(n - best);
-  for (const opt of AUTO_NEXT_PER_SYLLABLE_OPTIONS) {
-    const d = Math.abs(n - opt);
-    if (d < bestDiff) { best = opt; bestDiff = d; }
-  }
-  return best;
+function populateAutoNextSpeedOptions() {
+  const sel = document.getElementById("autoNextSpeed");
+  if (!sel) return;
+  sel.innerHTML = AUTO_NEXT_SPEED_PRESETS
+    .map(p => `<option value="${p.value}"${p.value === AUTO_NEXT_SPEED_DEFAULT ? " selected" : ""}>${p.label}</option>`)
+    .join("");
 }
 
 function countSyllables(text) {
@@ -61,7 +61,7 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 const SETTINGS_KEY = "romans8_settings_v1";
-const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSecondsPerSyllable","revealWaitSeconds","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
+const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSpeed","revealWaitSeconds","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
   category: "bible",
@@ -77,7 +77,7 @@ const DEFAULT_SETTINGS = {
   continuousCount: "1",
   bookmarkedOnly: false,
   autoNextEnabled: false,
-  autoNextSecondsPerSyllable: "1.00",
+  autoNextSpeed: AUTO_NEXT_SPEED_DEFAULT,
   revealWaitSeconds: "30",
   pdfSetCount: "1",
   pdfBlankStyle: "word-width",
@@ -448,7 +448,7 @@ function startTest() {
     continuousCount: Math.max(1, parseInt($("continuousCount").value) || 3),
     bookmarkedOnly: $("bookmarkedOnly").checked,
     autoNextEnabled: $("autoNextEnabled").checked,
-    autoNextSecondsPerSyllable: parseAutoNextSecondsPerSyllable($("autoNextSecondsPerSyllable").value),
+    autoNextSpeed: parseAutoNextSpeed($("autoNextSpeed").value).value,
   };
   if (cfg.startVerse > cfg.endVerse) {
     alert("시작 구절이 끝 구절보다 클 수 없습니다.");
@@ -672,29 +672,65 @@ function showQuestion() {
   scheduleAutoNext();
 }
 
+function computeAutoNextDelays(qt, baseMs) {
+  const HANGUL = /[가-힣]/;
+  const WORD_GAP = 0.30;
+  const COMMA_PAUSE = 0.85;
+  const SENTENCE_PAUSE = 1.45;
+  const BLANK_SKIP = 0.55;
+  const ALNUM_UNIT = 0.40;
+  const syls = [];
+  const delays = [];
+  let cum = 0;
+  function visit(node) {
+    if (node.nodeType === 1) {
+      if (node.classList && node.classList.contains("blank") && !node.classList.contains("revealed")) {
+        cum += baseMs * BLANK_SKIP;
+        return;
+      }
+      if (node.classList && node.classList.contains("syl")) {
+        syls.push(node);
+        delays.push(cum);
+        cum += baseMs;
+        return;
+      }
+      for (const child of node.childNodes) visit(child);
+      return;
+    }
+    if (node.nodeType === 3) {
+      const text = node.nodeValue || "";
+      for (const ch of text) {
+        if (HANGUL.test(ch)) { cum += baseMs; continue; }
+        if (ch === " " || ch === " " || ch === "\t" || ch === "\n") { cum += baseMs * WORD_GAP; continue; }
+        if (ch === "," || ch === "、" || ch === "、") { cum += baseMs * COMMA_PAUSE; continue; }
+        if (".?!;:…".indexOf(ch) >= 0) { cum += baseMs * SENTENCE_PAUSE; continue; }
+        if (/[A-Za-z0-9]/.test(ch)) { cum += baseMs * ALNUM_UNIT; continue; }
+      }
+    }
+  }
+  visit(qt);
+  return { syls, delays, total: cum };
+}
+
 function scheduleAutoNext() {
   if (!state.config || !state.config.autoNextEnabled) return;
-  const secPerSyl = parseAutoNextSecondsPerSyllable(state.config.autoNextSecondsPerSyllable);
-  const verseText = (state.currentWords || []).join(" ");
-  const syllables = Math.max(1, countSyllables(verseText));
-  const totalMs = Math.max(1000, Math.round(syllables * secPerSyl * 1000));
-  const startBuffer = 1000;
-  const endBuffer = 1000;
-  if (totalMs > startBuffer + endBuffer) {
-    const transitionMs = totalMs - startBuffer - endBuffer;
-    const qt = $("questionText");
+  const preset = parseAutoNextSpeed(state.config.autoNextSpeed);
+  const baseMs = preset.secPerSyl * 1000;
+  const qt = $("questionText");
+  if (!qt) return;
+  const { syls, delays, total } = computeAutoNextDelays(qt, baseMs);
+  const startBuffer = 700;
+  const endBuffer = Math.max(700, Math.round(baseMs * 2));
+  const animDur = Math.min(320, Math.max(90, Math.round(baseMs * 0.7)));
+  const transitionMs = Math.max(total, baseMs);
+  const totalMs = Math.max(1200, startBuffer + transitionMs + endBuffer);
+  if (syls.length > 0) {
     state.autoNextStartTimer = setTimeout(() => {
       state.autoNextStartTimer = null;
-      if (!qt) return;
       qt.classList.add("auto-nexting");
-      const syls = qt.querySelectorAll(".syl");
-      const n = syls.length;
-      if (n === 0) return;
-      const animDur = 300;
-      const maxDelay = Math.max(0, transitionMs - animDur);
-      syls.forEach((el, idx) => {
-        const delay = n > 1 ? (idx / (n - 1)) * maxDelay : 0;
-        el.style.animationDelay = `${Math.round(delay)}ms`;
+      syls.forEach((el, i) => {
+        el.style.animationDelay = `${Math.round(delays[i])}ms`;
+        el.style.animationDuration = `${animDur}ms`;
       });
     }, startBuffer);
   }
@@ -1515,7 +1551,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkVersionAndMigrate();
   const vEl = $("appVersion");
   if (vEl) vEl.textContent = "v" + APP_VERSION;
-  populateAutoNextSecondsPerSyllableOptions();
+  populateAutoNextSpeedOptions();
   loadSettings();
   if ($("bookKey").options.length === 0) {
     populateBookOptions($("category").value || "bible");
@@ -1552,8 +1588,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (firstTwoModeEl) firstTwoModeEl.addEventListener("change", saveSettings);
   const autoNextEnabledEl = $("autoNextEnabled");
   if (autoNextEnabledEl) autoNextEnabledEl.addEventListener("change", saveSettings);
-  const autoNextSecondsPerSyllableEl = $("autoNextSecondsPerSyllable");
-  if (autoNextSecondsPerSyllableEl) autoNextSecondsPerSyllableEl.addEventListener("change", saveSettings);
+  const autoNextSpeedEl = $("autoNextSpeed");
+  if (autoNextSpeedEl) autoNextSpeedEl.addEventListener("change", saveSettings);
   const revealWaitSecondsEl = $("revealWaitSeconds");
   if (revealWaitSecondsEl) revealWaitSecondsEl.addEventListener("change", saveSettings);
   const revealSkipBtn = $("revealSkipBtn");
