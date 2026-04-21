@@ -1107,6 +1107,12 @@ summary:focus-visible,
 @media (max-width: 640px) {
   body { padding: 16px 16px; }
   .container { padding: 24px 18px; border-radius: 14px; }
+  /* 모바일: 헤더 아이콘 버튼을 제목 위 한 줄로 분리 — 제목 겹침 방지 */
+  .header-actions {
+    position: static;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
   .app-header h1 { font-size: 22px; }
   .settings-grid { grid-template-columns: 1fr; gap: 10px; }
   .status-bar { grid-template-columns: 1fr; gap: 8px; }
