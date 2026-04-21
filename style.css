@@ -240,6 +240,45 @@ h2 {
 .hidden { display: none !important; }
 
 /* === Setup screen === */
+.preset-group {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  flex-wrap: wrap;
+}
+.preset-btn {
+  flex: 1 1 0;
+  min-width: 120px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--text-secondary);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.05s;
+}
+.preset-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.preset-btn:active { transform: translateY(1px); }
+.preset-btn.preset-selected {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+@media (max-width: 600px) {
+  .preset-btn {
+    flex: 1 1 45%;
+    min-width: 0;
+    padding: 10px 10px;
+    font-size: 13px;
+  }
+}
+
 .settings-group {
   margin-bottom: 16px;
   padding: 14px 16px;
@@ -958,30 +997,33 @@ summary:focus-visible,
   user-select: none;
 }
 
-/* === 종료 버튼: 테스트 화면 우상단 X === */
-#test-screen { position: relative; }
-.test-head {
+/* === 종료 버튼: 테스트 화면 하단 복귀 버튼 === */
+.quit-row {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
+  justify-content: center;
 }
-.test-close {
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 22px;
-  line-height: 1;
-  border: 1px solid var(--border);
-  flex: 0 0 auto;
+.quit-btn {
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text-secondary, #475569);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.05s;
 }
-.test-close:hover {
+.quit-btn:hover {
   background: var(--danger-bg);
   color: var(--danger);
   border-color: #fca5a5;
 }
+.quit-btn:active { transform: translateY(1px); }
 
 /* 현재 구절 북마크 버튼(☆/⭐) 별도 active 스타일은 기존 .bookmark-active 재사용 */
 .button-row .bookmark-btn[aria-pressed="true"] {
@@ -1184,9 +1226,8 @@ summary:focus-visible,
     font-size: 15px;
     border-radius: 10px;
   }
-  .test-close {
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
+  .quit-btn {
+    padding: 12px 14px;
+    font-size: 14px;
   }
 }
