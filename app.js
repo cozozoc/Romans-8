@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.103";
+const APP_VERSION = "0.0.104";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1658,44 +1658,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === helpModal) closeHelp();
   });
 
-  const genealogyModal = $("genealogyModal");
-  const genealogyFrame = $("genealogyFrame");
-  const GENEALOGY_SRC = "족보/chronological_apostolic_history.html";
-  const openGenealogy = () => {
-    if (genealogyFrame && !genealogyFrame.getAttribute("src")) {
-      genealogyFrame.setAttribute("src", GENEALOGY_SRC);
-    }
-    genealogyModal.classList.remove("hidden");
-  };
-  const closeGenealogy = () => genealogyModal.classList.add("hidden");
-  $("genealogyBtn").addEventListener("click", openGenealogy);
-  $("genealogyCloseBtn").addEventListener("click", closeGenealogy);
-  genealogyModal.addEventListener("click", (e) => {
-    if (e.target === genealogyModal) closeGenealogy();
-  });
-
-  const kingsModal = $("kingsModal");
-  const kingsFrame = $("kingsFrame");
-  const KINGS_SRC = "족보/divided_kingdom_kings.html";
-  const openKings = () => {
-    if (kingsFrame && !kingsFrame.getAttribute("src")) {
-      kingsFrame.setAttribute("src", KINGS_SRC);
-    }
-    kingsModal.classList.remove("hidden");
-  };
-  const closeKings = () => kingsModal.classList.add("hidden");
-  $("kingsBtn").addEventListener("click", openKings);
-  $("kingsCloseBtn").addEventListener("click", closeKings);
-  kingsModal.addEventListener("click", (e) => {
-    if (e.target === kingsModal) closeKings();
-  });
+  $("genealogyBtn").addEventListener("click", () => window.open("족보/chronological_apostolic_history.html", "_blank", "noopener"));
+  $("kingsBtn").addEventListener("click", () => window.open("족보/divided_kingdom_kings.html", "_blank", "noopener"));
 
   let ctrlComboUsed = false;
   let shiftComboUsed = false;
   const anyModalOpen = () =>
-    !helpModal.classList.contains("hidden") ||
-    !genealogyModal.classList.contains("hidden") ||
-    !kingsModal.classList.contains("hidden");
+    !helpModal.classList.contains("hidden");
 
   document.addEventListener("keyup", (e) => {
     if (e.key === "Control") {
@@ -1723,18 +1692,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.ctrlKey && e.key !== "Control") ctrlComboUsed = true;
     if (e.shiftKey && e.key !== "Shift") shiftComboUsed = true;
     const helpOpen = !helpModal.classList.contains("hidden");
-    const genealogyOpen = !genealogyModal.classList.contains("hidden");
     if (helpOpen) {
       if (e.key === "Escape") { e.preventDefault(); closeHelp(); }
-      return;
-    }
-    if (genealogyOpen) {
-      if (e.key === "Escape") { e.preventDefault(); closeGenealogy(); }
-      return;
-    }
-    const kingsOpen = !kingsModal.classList.contains("hidden");
-    if (kingsOpen) {
-      if (e.key === "Escape") { e.preventDefault(); closeKings(); }
       return;
     }
 

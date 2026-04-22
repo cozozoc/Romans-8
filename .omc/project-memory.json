@@ -149,14 +149,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 643,
-      "lastAccessed": 1776860736897,
+      "accessCount": 648,
+      "lastAccessed": 1776861005249,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 317,
-      "lastAccessed": 1776860540062,
+      "accessCount": 319,
+      "lastAccessed": 1776861012156,
       "type": "file"
     },
     {
@@ -167,8 +167,8 @@
     },
     {
       "path": "",
-      "accessCount": 47,
-      "lastAccessed": 1776860643974,
+      "accessCount": 50,
+      "lastAccessed": 1776861078278,
       "type": "directory"
     },
     {
