@@ -71,109 +71,126 @@
   .chip-poetry { background: var(--color-poetry); }
   .chip-prophecy { background: var(--color-prophecy); }
 
-  /* ===== Timeline (horizontal scroll) ===== */
+  /* ===== Timeline (vertical) ===== */
   .timeline-section {
     background: var(--color-background-secondary);
     border-radius: var(--border-radius-lg);
-    padding: 1rem 1rem 0.5rem;
+    padding: 1rem 1rem 1rem;
     margin-bottom: 2.5rem;
-    overflow: hidden;
   }
   .timeline-hint {
     font-size: 12px; color: var(--color-text-tertiary);
-    margin: 0 0 10px; text-align: right;
-  }
-  .timeline-scroll {
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .timeline-scroll::-webkit-scrollbar { height: 10px; }
-  .timeline-scroll::-webkit-scrollbar-thumb {
-    background: var(--color-border-secondary); border-radius: 5px;
-  }
-  .timeline {
-    position: relative;
-    height: 460px;
-    min-width: 2380px;
+    margin: 0 0 10px; text-align: center;
   }
 
-  /* Axis */
-  .axis {
-    position: absolute; left: 0; right: 0; top: 0; height: 30px;
+  /* Lane header (sticky 카테고리 라벨) */
+  .lane-header {
+    display: grid;
+    grid-template-columns: 64px 1fr 0.5fr 1fr;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    background: var(--color-background-secondary);
+    padding: 6px 0 8px;
+    z-index: 4;
     border-bottom: 1px solid var(--color-border-secondary);
   }
+  .lane-header > div {
+    font-size: 12px; font-weight: 700;
+    text-align: center;
+    padding: 6px 4px;
+    border-radius: 6px;
+  }
+  .lane-header .h-axis { color: var(--color-text-tertiary); }
+  .lane-header .h-history  { background: rgba(59, 126, 161, 0.12); color: var(--color-history); }
+  .lane-header .h-poetry   { background: rgba(224, 169, 58, 0.18); color: #8B6914; }
+  .lane-header .h-prophecy { background: rgba(178, 56, 58, 0.12); color: var(--color-prophecy); }
+
+  .timeline {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Axis (왼쪽 세로축) */
+  .axis {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 64px;
+    border-right: 1px solid var(--color-border-secondary);
+  }
   .axis-tick {
-    position: absolute; top: 0; bottom: 0;
-    border-left: 1px dashed var(--color-border-tertiary);
-    font-size: 11px; color: var(--color-text-tertiary);
-    padding-left: 4px;
-    user-select: none;
-  }
-
-  /* Period bands */
-  .period-band {
-    position: absolute; top: 30px; bottom: 26px;
-    background: var(--color-background-tertiary);
-    opacity: 0.4;
-    border-left: 1px solid var(--color-border-tertiary);
-    border-right: 1px solid var(--color-border-tertiary);
-  }
-  .period-band-label {
-    position: absolute; top: 32px;
-    font-size: 10px; font-weight: 700;
-    color: var(--color-text-tertiary);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    padding: 2px 4px;
-    white-space: nowrap;
-    user-select: none;
-  }
-
-  /* Lanes */
-  .lane {
     position: absolute; left: 0; right: 0;
     border-top: 1px dashed var(--color-border-tertiary);
+    font-size: 11px; color: var(--color-text-tertiary);
+    padding: 2px 6px 0 0;
+    text-align: right;
+    user-select: none;
   }
-  .lane-label {
-    position: sticky; left: 0;
-    display: inline-block;
-    padding: 3px 8px;
-    font-size: 11px; font-weight: 700;
-    background: var(--color-background-primary);
-    border: 1px solid var(--color-border-tertiary);
-    border-radius: 4px;
-    margin: 4px 0 0 4px;
-    z-index: 3;
-  }
-  .lane-history { background: rgba(59, 126, 161, 0.06); }
-  .lane-poetry  { background: rgba(224, 169, 58, 0.06); }
-  .lane-prophecy { background: rgba(178, 56, 58, 0.06); }
+  .axis-tick.major { font-weight: 700; color: var(--color-text-secondary); }
 
-  /* Bars */
+  /* 차트 영역 */
+  .chart {
+    position: absolute;
+    left: 64px; right: 0; top: 0; bottom: 0;
+  }
+
+  /* Period bands (가로 띠) */
+  .period-band {
+    position: absolute; left: 0; right: 0;
+    background: var(--color-background-tertiary);
+    opacity: 0.35;
+    border-top: 1px solid var(--color-border-tertiary);
+    border-bottom: 1px solid var(--color-border-tertiary);
+  }
+  .period-band.alt { opacity: 0.55; }
+  .period-band-label {
+    position: absolute; right: 6px;
+    font-size: 10px; font-weight: 700;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.04em;
+    padding: 3px 6px;
+    background: var(--color-background-secondary);
+    border-radius: 4px;
+    white-space: nowrap;
+    user-select: none;
+    z-index: 2;
+  }
+
+  /* Lanes (세로 기둥) */
+  .lane {
+    position: absolute; top: 0; bottom: 0;
+    border-right: 1px solid var(--color-border-tertiary);
+  }
+  .lane:last-child { border-right: none; }
+  .lane-history  { background: rgba(59, 126, 161, 0.04); }
+  .lane-poetry   { background: rgba(224, 169, 58, 0.06); }
+  .lane-prophecy { background: rgba(178, 56, 58, 0.04); }
+
+  /* Bars (세로 막대) */
   .bar {
     position: absolute;
-    height: 22px;
-    border-radius: 4px;
-    display: flex; align-items: center;
-    padding: 0 6px;
+    border-radius: 5px;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 6px 4px 4px;
     font-size: 12px; font-weight: 700;
     color: white;
     cursor: pointer;
     overflow: hidden;
-    white-space: nowrap;
+    text-align: center;
+    line-height: 1.15;
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
     transition: transform 0.12s, box-shadow 0.12s;
+    z-index: 3;
+    word-break: keep-all;
   }
   .bar:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-    z-index: 5;
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 6;
   }
   .bar-history  { background: var(--color-history); }
   .bar-poetry   { background: var(--color-poetry); color: #3a2b08; }
   .bar-prophecy { background: var(--color-prophecy); }
+  .bar-short { padding: 3px 2px; font-size: 11px; }
 
   /* Tooltip */
   .tooltip {
@@ -298,10 +315,14 @@
 
   <!-- ===== Timeline ===== -->
   <div class="timeline-section">
-    <p class="timeline-hint">← 좌우로 스크롤 · 막대 hover 시 요약 →</p>
-    <div class="timeline-scroll">
-      <div id="timeline" class="timeline"></div>
+    <p class="timeline-hint">⬇ 위(오래됨) → 아래(최근) · BC 2100 ~ BC 400 · 막대 hover 시 요약</p>
+    <div class="lane-header">
+      <div class="h-axis">연대</div>
+      <div class="h-history">📘 역사서</div>
+      <div class="h-poetry">📕 시가서</div>
+      <div class="h-prophecy">📙 예언서</div>
     </div>
+    <div id="timeline" class="timeline"></div>
   </div>
   <div id="tooltip" class="tooltip" role="tooltip"></div>
 
@@ -829,116 +850,130 @@
     { label: "귀환",     start: -538,  end: -400 }
   ];
 
+  // 세로 스케일: 1년 = 1.1px → 1700년 ≈ 1870px
+  const V_SCALE = 1.1;
+  const MIN_BAR_HEIGHT = 40;
+  const AXIS_WIDTH = 64;
+
+  // 레인(카테고리) 가중치: grid-template-columns와 동일 비율 (1 : 0.5 : 1)
   const LANE_CONFIG = {
-    history:  { top: 60,  rows: 5, color: "bar-history",  label: "역사서",  bgClass: "lane-history"  },
-    poetry:   { top: 200, rows: 3, color: "bar-poetry",   label: "시가서",  bgClass: "lane-poetry"   },
-    prophecy: { top: 290, rows: 5, color: "bar-prophecy", label: "예언서",  bgClass: "lane-prophecy" }
+    history:  { weight: 1.0, barClass: "bar-history",  label: "역사서",  bgClass: "lane-history"  },
+    poetry:   { weight: 0.5, barClass: "bar-poetry",   label: "시가서",  bgClass: "lane-poetry"   },
+    prophecy: { weight: 1.0, barClass: "bar-prophecy", label: "예언서",  bgClass: "lane-prophecy" }
   };
-  const ROW_HEIGHT = 26;
-  const LANE_HEIGHT = { history: 140, poetry: 90, prophecy: 150 };
+  const LANE_ORDER = ["history", "poetry", "prophecy"];
 
-  // ===== Render =====
-  const yearToX = (y) => (y - MIN_YEAR) * SCALE;
+  const yearToY = (y) => (y - MIN_YEAR) * V_SCALE;
 
-  function packRows(items) {
-    const rows = [];
+  // 같은 레인 내 시간 겹침이 있으면 서브컬럼(옆으로 분기) 배정
+  function packColumns(items) {
     items.sort((a, b) => a.start - b.start);
+    const cols = [];
     for (const item of items) {
       let placed = false;
-      for (let i = 0; i < rows.length; i++) {
-        const last = rows[i][rows[i].length - 1];
-        if (item.start >= last.end + 8) {
-          rows[i].push(item);
-          item._row = i;
+      for (let i = 0; i < cols.length; i++) {
+        const last = cols[i][cols[i].length - 1];
+        if (item.start >= last.end + 4) {
+          cols[i].push(item);
+          item._col = i;
           placed = true;
           break;
         }
       }
       if (!placed) {
-        rows.push([item]);
-        item._row = rows.length - 1;
+        cols.push([item]);
+        item._col = cols.length - 1;
       }
     }
-    return rows.length;
+    return cols.length;
   }
 
   function render() {
     const timeline = document.getElementById("timeline");
     const tooltip = document.getElementById("tooltip");
-    const totalWidth = (MAX_YEAR - MIN_YEAR) * SCALE;
-    timeline.style.width = totalWidth + "px";
+    const chartHeight = (MAX_YEAR - MIN_YEAR) * V_SCALE;
+    timeline.style.height = chartHeight + "px";
 
-    // Axis ticks every 100 years, labels every 200
+    // ===== 왼쪽 연도 축 =====
     const axis = document.createElement("div");
     axis.className = "axis";
     for (let y = MIN_YEAR; y <= MAX_YEAR; y += 100) {
       const tick = document.createElement("div");
-      tick.className = "axis-tick";
-      tick.style.left = yearToX(y) + "px";
+      tick.className = "axis-tick" + (y % 200 === 0 ? " major" : "");
+      tick.style.top = yearToY(y) + "px";
       if (y % 200 === 0) tick.textContent = "BC " + Math.abs(y);
       axis.appendChild(tick);
     }
     timeline.appendChild(axis);
 
-    // Period bands
-    periods.forEach((p) => {
+    // ===== 차트 영역 =====
+    const chart = document.createElement("div");
+    chart.className = "chart";
+    timeline.appendChild(chart);
+
+    // 시대 밴드 (가로 띠)
+    periods.forEach((p, i) => {
       const band = document.createElement("div");
-      band.className = "period-band";
-      band.style.left = yearToX(p.start) + "px";
-      band.style.width = (yearToX(p.end) - yearToX(p.start)) + "px";
-      timeline.appendChild(band);
+      band.className = "period-band" + (i % 2 === 1 ? " alt" : "");
+      band.style.top = yearToY(p.start) + "px";
+      band.style.height = (yearToY(p.end) - yearToY(p.start)) + "px";
+      chart.appendChild(band);
 
       const label = document.createElement("div");
       label.className = "period-band-label";
-      label.style.left = yearToX(p.start) + "px";
+      label.style.top = (yearToY(p.start) + 4) + "px";
       label.textContent = p.label;
-      timeline.appendChild(label);
+      chart.appendChild(label);
     });
 
-    // Lanes
-    let laneTop = 60;
-    for (const key of ["history", "poetry", "prophecy"]) {
-      const cfg = LANE_CONFIG[key];
-      cfg.top = laneTop;
-
-      const lane = document.createElement("div");
-      lane.className = "lane " + cfg.bgClass;
-      lane.style.top = laneTop + "px";
-      lane.style.height = LANE_HEIGHT[key] + "px";
-
-      const lbl = document.createElement("span");
-      lbl.className = "lane-label";
-      lbl.textContent = cfg.label;
-      lane.appendChild(lbl);
-
-      timeline.appendChild(lane);
-      laneTop += LANE_HEIGHT[key];
-    }
-
-    // Pack bars per lane
+    // ===== 레인(카테고리 세로 기둥) + 막대 배치 =====
     const byCat = { history: [], poetry: [], prophecy: [] };
     books.forEach((b) => byCat[b.cat].push(b));
 
-    for (const key of ["history", "poetry", "prophecy"]) {
+    const totalWeight = LANE_ORDER.reduce((s, k) => s + LANE_CONFIG[k].weight, 0);
+    let laneLeftPct = 0;
+
+    for (const key of LANE_ORDER) {
       const cfg = LANE_CONFIG[key];
-      packRows(byCat[key]);
+      const widthPct = (cfg.weight / totalWeight) * 100;
+
+      const lane = document.createElement("div");
+      lane.className = "lane " + cfg.bgClass;
+      lane.style.left = laneLeftPct + "%";
+      lane.style.width = widthPct + "%";
+      chart.appendChild(lane);
+
+      // 서브컬럼 수 계산
+      const subCols = packColumns(byCat[key]);
+
       byCat[key].forEach((b) => {
-        const left = yearToX(b.start);
-        let width = yearToX(b.end) - left;
-        if (width < 38) width = 38;
+        const top = yearToY(b.start);
+        let height = yearToY(b.end) - top;
+        if (height < MIN_BAR_HEIGHT) height = MIN_BAR_HEIGHT;
+
+        const subW = 100 / subCols;
         const bar = document.createElement("div");
-        bar.className = "bar " + cfg.color;
-        bar.style.left = left + "px";
-        bar.style.width = width + "px";
-        bar.style.top = (cfg.top + 24 + b._row * ROW_HEIGHT) + "px";
-        bar.textContent = b.name;
+        bar.className = "bar " + cfg.barClass + (height < 50 ? " bar-short" : "");
+        bar.style.top = top + "px";
+        bar.style.height = height + "px";
+        // lane 내부 좌/우를 subW% 단위로 분할 (간격 6%)
+        const innerLeft = b._col * subW;
+        const innerWidth = subW;
+        bar.style.left = "calc(" + laneLeftPct + "% + " + innerLeft + "% * " + (widthPct / 100) + " + 4px)";
+        bar.style.width = "calc(" + innerWidth + "% * " + (widthPct / 100) + " - 8px)";
+
+        // 간결한 라벨 (짧은 막대는 이름만, 긴 막대는 이름 + 연도)
+        const bcRange = (b.end - b.start) < 15
+          ? "~BC " + Math.abs(b.end)
+          : "BC " + Math.abs(b.start) + "~" + Math.abs(b.end);
+        if (height >= 80) {
+          bar.innerHTML = '<div>' + b.name + '<br><span style="font-weight:400;font-size:10px;opacity:0.85">' + bcRange + '</span></div>';
+        } else {
+          bar.textContent = b.name;
+        }
         bar.dataset.name = b.name;
 
-        const bcRange = (b.start === b.end || (b.end - b.start) < 15)
-          ? "~BC " + Math.abs(b.end)
-          : "BC " + Math.abs(b.start) + " ~ " + Math.abs(b.end);
-
-        bar.addEventListener("mouseenter", (e) => {
+        bar.addEventListener("mouseenter", () => {
           tooltip.innerHTML =
             '<div class="tooltip-title">' + b.name + ' <span style="font-weight:400;opacity:0.7">' + b.eng + '</span></div>' +
             '<div class="tooltip-meta">' + bcRange + ' · ' + cfg.label + '</div>' +
@@ -960,13 +995,11 @@
           tooltip.classList.remove("visible");
         });
 
-        timeline.appendChild(bar);
+        chart.appendChild(bar);
       });
-    }
 
-    // Recompute total height
-    const totalHeight = laneTop + 10;
-    timeline.style.height = totalHeight + "px";
+      laneLeftPct += widthPct;
+    }
   }
 
   render();
