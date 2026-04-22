@@ -243,7 +243,7 @@ const BIBLE_LIBRARY = {
   "ephesians-1-paul-prayer": {
     key: "ephesians-1-paul-prayer",
     category: "bible-memory",
-    name: "바울의 기도 (에베소서 1:15-23)",
+    name: "에베소서 1:15-23 (바울의 기도)",
     startVerse: 15,
     endVerse: 23,
     verses: EPHESIANS_1_PAUL_PRAYER,
