@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>구약 성경 연대기 (창세기 ~ 말라기)</title>
+<style>
+  :root {
+    --color-text-primary: #1f1f1d;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f1efe8;
+    --color-background-tertiary: #e8e6df;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.18);
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+
+    --color-history: #3B7EA1;
+    --color-poetry: #E0A93A;
+    --color-prophecy: #B2383A;
+    --color-history-light: #D6E4EC;
+    --color-poetry-light: #F7E8C2;
+    --color-prophecy-light: #EBCACB;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #f0eee6;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-background-primary: #181816;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #3a3a37;
+      --color-border-tertiary: rgba(255,255,255,0.12);
+      --color-border-secondary: rgba(255,255,255,0.2);
+      --color-history-light: #2a4454;
+      --color-poetry-light: #544424;
+      --color-prophecy-light: #4a2526;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px;
+    background-color: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    display: flex; justify-content: center;
+  }
+  .container { max-width: 1100px; width: 100%; }
+
+  h1.title { font-size: 32px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
+  p.sub { font-size: 17px; text-align: center; color: var(--color-text-secondary); margin: 0 0 2rem; }
+
+  /* ===== Legend ===== */
+  .legend {
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    font-size: 13px; font-weight: 600; color: var(--color-text-secondary);
+    margin-bottom: 1.5rem; padding: 12px;
+    background: var(--color-background-secondary); border-radius: var(--border-radius-md);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-chip {
+    width: 18px; height: 10px; border-radius: 3px; flex-shrink: 0;
+  }
+  .chip-history { background: var(--color-history); }
+  .chip-poetry { background: var(--color-poetry); }
+  .chip-prophecy { background: var(--color-prophecy); }
+
+  /* ===== Timeline (horizontal scroll) ===== */
+  .timeline-section {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1rem 0.5rem;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+  }
+  .timeline-hint {
+    font-size: 12px; color: var(--color-text-tertiary);
+    margin: 0 0 10px; text-align: right;
+  }
+  .timeline-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .timeline-scroll::-webkit-scrollbar { height: 10px; }
+  .timeline-scroll::-webkit-scrollbar-thumb {
+    background: var(--color-border-secondary); border-radius: 5px;
+  }
+  .timeline {
+    position: relative;
+    height: 460px;
+    min-width: 2380px;
+  }
+
+  /* Axis */
+  .axis {
+    position: absolute; left: 0; right: 0; top: 0; height: 30px;
+    border-bottom: 1px solid var(--color-border-secondary);
+  }
+  .axis-tick {
+    position: absolute; top: 0; bottom: 0;
+    border-left: 1px dashed var(--color-border-tertiary);
+    font-size: 11px; color: var(--color-text-tertiary);
+    padding-left: 4px;
+    user-select: none;
+  }
+
+  /* Period bands */
+  .period-band {
+    position: absolute; top: 30px; bottom: 26px;
+    background: var(--color-background-tertiary);
+    opacity: 0.4;
+    border-left: 1px solid var(--color-border-tertiary);
+    border-right: 1px solid var(--color-border-tertiary);
+  }
+  .period-band-label {
+    position: absolute; top: 32px;
+    font-size: 10px; font-weight: 700;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 2px 4px;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /* Lanes */
+  .lane {
+    position: absolute; left: 0; right: 0;
+    border-top: 1px dashed var(--color-border-tertiary);
+  }
+  .lane-label {
+    position: sticky; left: 0;
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 11px; font-weight: 700;
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: 4px;
+    margin: 4px 0 0 4px;
+    z-index: 3;
+  }
+  .lane-history { background: rgba(59, 126, 161, 0.06); }
+  .lane-poetry  { background: rgba(224, 169, 58, 0.06); }
+  .lane-prophecy { background: rgba(178, 56, 58, 0.06); }
+
+  /* Bars */
+  .bar {
+    position: absolute;
+    height: 22px;
+    border-radius: 4px;
+    display: flex; align-items: center;
+    padding: 0 6px;
+    font-size: 12px; font-weight: 700;
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .bar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    z-index: 5;
+  }
+  .bar-history  { background: var(--color-history); }
+  .bar-poetry   { background: var(--color-poetry); color: #3a2b08; }
+  .bar-prophecy { background: var(--color-prophecy); }
+
+  /* Tooltip */
+  .tooltip {
+    position: absolute;
+    z-index: 20;
+    background: var(--color-text-primary);
+    color: var(--color-background-primary);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 260px;
+    pointer-events: none;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.12s, transform 0.12s;
+  }
+  .tooltip.visible { opacity: 1; transform: translateY(0); }
+  .tooltip-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .tooltip-meta { font-size: 11px; opacity: 0.75; margin-bottom: 4px; }
+
+  /* ===== Periods cards ===== */
+  .period { margin-bottom: 2.5rem; }
+  .period-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 0.6rem;
+    padding-bottom: 10px; border-bottom: 1px solid var(--color-border-secondary);
+    flex-wrap: wrap;
+  }
+  .period-num {
+    width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%;
+    background: #EEEDFE; color: #3C3489;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700;
+  }
+  .period-title { font-size: 20px; font-weight: 700; }
+  .period-era { font-size: 13px; color: var(--color-text-tertiary); margin-left: auto; }
+  .period-note {
+    font-size: 14px; color: var(--color-text-secondary);
+    margin: 0 0 1rem; padding: 0 4px;
+  }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .book-card {
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 0.9rem 1rem;
+    border-left: 4px solid transparent;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .book-card.cat-history  { border-left-color: var(--color-history); }
+  .book-card.cat-poetry   { border-left-color: var(--color-poetry); }
+  .book-card.cat-prophecy { border-left-color: var(--color-prophecy); }
+
+  .book-head {
+    display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .book-pill {
+    font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .pill-history  { background: var(--color-history-light);  color: var(--color-history); }
+  .pill-poetry   { background: var(--color-poetry-light);   color: #8B6914; }
+  .pill-prophecy { background: var(--color-prophecy-light); color: var(--color-prophecy); }
+  .book-name { font-size: 17px; font-weight: 700; }
+  .book-eng { font-size: 12px; color: var(--color-text-tertiary); }
+  .book-era { font-size: 12px; color: var(--color-text-tertiary); margin-left: auto; }
+  .book-summary { font-size: 13px; color: var(--color-text-secondary); margin: 2px 0 0; }
+
+  @media (prefers-color-scheme: dark) {
+    .period-num { background: #3C3489; color: #CECBF6; }
+    .pill-history  { background: #2a4454; color: #9ec9dd; }
+    .pill-poetry   { background: #544424; color: #f0c987; }
+    .pill-prophecy { background: #4a2526; color: #e79a9c; }
+  }
+
+  /* Stats */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; margin-top: 1rem;
+  }
+  .stat-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem; text-align: center;
+  }
+  .stat-num { font-size: 28px; font-weight: 700; line-height: 1.2; }
+  .stat-label { font-size: 12px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  footer {
+    margin-top: 3rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-tertiary);
+    font-size: 12px; color: var(--color-text-tertiary);
+    text-align: center; line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    h1.title { font-size: 24px; }
+    p.sub { font-size: 14px; }
+    .timeline { height: 440px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="title">구약 성경 연대기</h1>
+  <p class="sub">창세기 ~ 말라기 39권 · 사건 발생 시기 기준 BC 연대순</p>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-chip chip-history"></span>역사서 (17권)</span>
+    <span class="legend-item"><span class="legend-chip chip-poetry"></span>시가서 (5권)</span>
+    <span class="legend-item"><span class="legend-chip chip-prophecy"></span>예언서 (17권)</span>
+  </div>
+
+  <!-- ===== Timeline ===== -->
+  <div class="timeline-section">
+    <p class="timeline-hint">← 좌우로 스크롤 · 막대 hover 시 요약 →</p>
+    <div class="timeline-scroll">
+      <div id="timeline" class="timeline"></div>
+    </div>
+  </div>
+  <div id="tooltip" class="tooltip" role="tooltip"></div>
+
+  <!-- ===== Period Cards ===== -->
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">1</div>
+      <div class="period-title">태초 ~ 족장 시대</div>
+      <div class="period-era">~ BC 2000 이전</div>
+    </div>
+    <p class="period-note">창조, 타락, 홍수, 바벨탑 — 그리고 아브라함을 부르시기까지 하나님의 언약사의 서문.</p>
+    <div class="books-grid">
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">창세기</span>
+          <span class="book-eng">Genesis</span>
+          <span class="book-era">~태초 ~ BC 1800</span>
+        </div>
+        <p class="book-summary">창조, 타락, 홍수, 족장사 — 이스라엘 민족의 기원.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">2</div>
+      <div class="period-title">족장 시대</div>
+      <div class="period-era">BC 2000 ~ 1800</div>
+    </div>
+    <p class="period-note">아브라함, 이삭, 야곱, 요셉 — 언약의 가문이 애굽에 정착하기까지.</p>
+    <div class="books-grid">
+      <div class="book-card cat-poetry">
+        <div class="book-head">
+          <span class="book-pill pill-poetry">시가</span>
+          <span class="book-name">욥기</span>
+          <span class="book-eng">Job</span>
+          <span class="book-era">~BC 2000 ~ 1800</span>
+        </div>
+        <p class="book-summary">의인의 고난과 하나님의 주권 — 가장 오래된 지혜문학.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">3</div>
+      <div class="period-title">출애굽 ~ 광야 시대</div>
+      <div class="period-era">BC 1500 ~ 1400</div>
+    </div>
+    <p class="period-note">모세의 인도 아래 애굽을 나와 시내 산에서 율법을 받고 40년 광야를 지나 가나안 경계에 이르다.</p>
+    <div class="books-grid">
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">출애굽기</span>
+          <span class="book-eng">Exodus</span>
+          <span class="book-era">BC 1500 ~ 1440</span>
+        </div>
+        <p class="book-summary">출애굽, 십계명, 성막 — 언약 공동체의 형성.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">레위기</span>
+          <span class="book-eng">Leviticus</span>
+          <span class="book-era">~BC 1440</span>
+        </div>
+        <p class="book-summary">제사법과 거룩한 삶의 규례.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">민수기</span>
+          <span class="book-eng">Numbers</span>
+          <span class="book-era">BC 1440 ~ 1400</span>
+        </div>
+        <p class="book-summary">광야 40년의 여정과 인구조사.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">신명기</span>
+          <span class="book-eng">Deuteronomy</span>
+          <span class="book-era">~BC 1400</span>
+        </div>
+        <p class="book-summary">모세의 고별 설교, 율법 재선포.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">4</div>
+      <div class="period-title">사사 시대</div>
+      <div class="period-era">BC 1400 ~ 1050</div>
+    </div>
+    <p class="period-note">가나안 정착 후 12사사의 반복되는 타락과 구원의 주기.</p>
+    <div class="books-grid">
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">여호수아</span>
+          <span class="book-eng">Joshua</span>
+          <span class="book-era">BC 1400 ~ 1375</span>
+        </div>
+        <p class="book-summary">가나안 정복과 12지파 분배.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">사사기</span>
+          <span class="book-eng">Judges</span>
+          <span class="book-era">BC 1375 ~ 1050</span>
+        </div>
+        <p class="book-summary">12사사와 반복되는 타락의 순환.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">룻기</span>
+          <span class="book-eng">Ruth</span>
+          <span class="book-era">~BC 1100</span>
+        </div>
+        <p class="book-summary">이방 여인의 신실함, 다윗의 조상.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">5</div>
+      <div class="period-title">통일 왕국</div>
+      <div class="period-era">BC 1050 ~ 930</div>
+    </div>
+    <p class="period-note">사울 · 다윗 · 솔로몬 3대 · 이스라엘의 황금기와 성전 건축.</p>
+    <div class="books-grid">
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">사무엘상</span>
+          <span class="book-eng">1 Samuel</span>
+          <span class="book-era">BC 1050 ~ 1010</span>
+        </div>
+        <p class="book-summary">사무엘, 사울, 다윗의 등장.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">사무엘하</span>
+          <span class="book-eng">2 Samuel</span>
+          <span class="book-era">BC 1010 ~ 970</span>
+        </div>
+        <p class="book-summary">다윗 왕의 통치와 언약.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">열왕기상</span>
+          <span class="book-eng">1 Kings</span>
+          <span class="book-era">BC 970 ~ 850</span>
+        </div>
+        <p class="book-summary">솔로몬의 영광과 왕국 분열.</p>
+      </div>
+      <div class="book-card cat-poetry">
+        <div class="book-head">
+          <span class="book-pill pill-poetry">시가</span>
+          <span class="book-name">시편</span>
+          <span class="book-eng">Psalms</span>
+          <span class="book-era">BC 1410 ~ 450</span>
+        </div>
+        <p class="book-summary">150편의 찬양과 기도 — 다윗~포로 귀환까지 장기간 편찬.</p>
+      </div>
+      <div class="book-card cat-poetry">
+        <div class="book-head">
+          <span class="book-pill pill-poetry">시가</span>
+          <span class="book-name">아가</span>
+          <span class="book-eng">Song of Songs</span>
+          <span class="book-era">~BC 960</span>
+        </div>
+        <p class="book-summary">솔로몬의 사랑의 노래.</p>
+      </div>
+      <div class="book-card cat-poetry">
+        <div class="book-head">
+          <span class="book-pill pill-poetry">시가</span>
+          <span class="book-name">잠언</span>
+          <span class="book-eng">Proverbs</span>
+          <span class="book-era">BC 970 ~ 930</span>
+        </div>
+        <p class="book-summary">솔로몬의 지혜 모음.</p>
+      </div>
+      <div class="book-card cat-poetry">
+        <div class="book-head">
+          <span class="book-pill pill-poetry">시가</span>
+          <span class="book-name">전도서</span>
+          <span class="book-eng">Ecclesiastes</span>
+          <span class="book-era">~BC 935</span>
+        </div>
+        <p class="book-summary">인생의 허무와 참된 의미.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">6</div>
+      <div class="period-title">분열 왕국</div>
+      <div class="period-era">BC 930 ~ 722</div>
+    </div>
+    <p class="period-note">여로보암(북)과 르호보암(남)의 분열. 엘리야·엘리사 및 8세기 예언자 시대.</p>
+    <div class="books-grid">
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">요엘</span>
+          <span class="book-eng">Joel</span>
+          <span class="book-era">~BC 835</span>
+        </div>
+        <p class="book-summary">여호와의 날, 성령 강림 예언.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">요나</span>
+          <span class="book-eng">Jonah</span>
+          <span class="book-era">~BC 780</span>
+        </div>
+        <p class="book-summary">니느웨 선교, 하나님의 이방을 향한 긍휼.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">아모스</span>
+          <span class="book-eng">Amos</span>
+          <span class="book-era">~BC 760</span>
+        </div>
+        <p class="book-summary">사회 정의와 공의의 메시지.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">호세아</span>
+          <span class="book-eng">Hosea</span>
+          <span class="book-era">BC 755 ~ 715</span>
+        </div>
+        <p class="book-summary">하나님의 변함없는 언약적 사랑.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">이사야</span>
+          <span class="book-eng">Isaiah</span>
+          <span class="book-era">BC 740 ~ 680</span>
+        </div>
+        <p class="book-summary">메시아 예언의 책, 제5복음서로 불림.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">미가</span>
+          <span class="book-eng">Micah</span>
+          <span class="book-era">BC 735 ~ 700</span>
+        </div>
+        <p class="book-summary">심판과 소망, 베들레헴 탄생 예언.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">7</div>
+      <div class="period-title">남유다 단독</div>
+      <div class="period-era">BC 722 ~ 586</div>
+    </div>
+    <p class="period-note">북이스라엘 멸망 이후 남유다가 홀로 선 시기 — 예루살렘 함락까지.</p>
+    <div class="books-grid">
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">열왕기하</span>
+          <span class="book-eng">2 Kings</span>
+          <span class="book-era">BC 850 ~ 586</span>
+        </div>
+        <p class="book-summary">남북 왕국의 멸망 과정.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">나훔</span>
+          <span class="book-eng">Nahum</span>
+          <span class="book-era">~BC 650</span>
+        </div>
+        <p class="book-summary">니느웨 멸망 예언.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">스바냐</span>
+          <span class="book-eng">Zephaniah</span>
+          <span class="book-era">BC 640 ~ 609</span>
+        </div>
+        <p class="book-summary">여호와의 날의 심판과 남은 자의 소망.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">하박국</span>
+          <span class="book-eng">Habakkuk</span>
+          <span class="book-era">~BC 609</span>
+        </div>
+        <p class="book-summary">"의인은 믿음으로 살리라".</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">예레미야</span>
+          <span class="book-eng">Jeremiah</span>
+          <span class="book-era">BC 627 ~ 580</span>
+        </div>
+        <p class="book-summary">눈물의 선지자, 예루살렘 함락 증언.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">8</div>
+      <div class="period-title">바벨론 포로기</div>
+      <div class="period-era">BC 586 ~ 538</div>
+    </div>
+    <p class="period-note">예루살렘 함락 이후 바벨론으로 끌려간 70년 포로 기간.</p>
+    <div class="books-grid">
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">예레미야애가</span>
+          <span class="book-eng">Lamentations</span>
+          <span class="book-era">~BC 586</span>
+        </div>
+        <p class="book-summary">예루살렘 멸망에 대한 애가 5편.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">오바댜</span>
+          <span class="book-eng">Obadiah</span>
+          <span class="book-era">~BC 586</span>
+        </div>
+        <p class="book-summary">에돔에 대한 심판 예언.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">에스겔</span>
+          <span class="book-eng">Ezekiel</span>
+          <span class="book-era">BC 593 ~ 570</span>
+        </div>
+        <p class="book-summary">포로지에서의 환상과 회복 예언.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">다니엘</span>
+          <span class="book-eng">Daniel</span>
+          <span class="book-era">BC 605 ~ 536</span>
+        </div>
+        <p class="book-summary">바벨론 궁정 생활과 종말 환상.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="period">
+    <div class="period-header">
+      <div class="period-num">9</div>
+      <div class="period-title">포로 귀환 시대</div>
+      <div class="period-era">BC 538 ~ 400</div>
+    </div>
+    <p class="period-note">고레스 칙령 이후 3차 귀환 · 성전 재건 · 성벽 재건 · 구약의 마지막 목소리.</p>
+    <div class="books-grid">
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">역대상</span>
+          <span class="book-eng">1 Chronicles</span>
+          <span class="book-era">~BC 450 (편찬)</span>
+        </div>
+        <p class="book-summary">아담부터 다윗의 계보와 왕국.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">역대하</span>
+          <span class="book-eng">2 Chronicles</span>
+          <span class="book-era">~BC 450 (편찬)</span>
+        </div>
+        <p class="book-summary">솔로몬부터 포로 귀환까지 남유다 회고.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">학개</span>
+          <span class="book-eng">Haggai</span>
+          <span class="book-era">~BC 520</span>
+        </div>
+        <p class="book-summary">성전 재건 독려.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">스가랴</span>
+          <span class="book-eng">Zechariah</span>
+          <span class="book-era">BC 520 ~ 480</span>
+        </div>
+        <p class="book-summary">성전 재건과 메시아 환상 8편.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">에스더</span>
+          <span class="book-eng">Esther</span>
+          <span class="book-era">BC 483 ~ 473</span>
+        </div>
+        <p class="book-summary">페르시아 왕궁에서 유대 민족을 구원.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">에스라</span>
+          <span class="book-eng">Ezra</span>
+          <span class="book-era">BC 457 ~ 444</span>
+        </div>
+        <p class="book-summary">1·2차 포로 귀환, 성전 재건.</p>
+      </div>
+      <div class="book-card cat-history">
+        <div class="book-head">
+          <span class="book-pill pill-history">역사</span>
+          <span class="book-name">느헤미야</span>
+          <span class="book-eng">Nehemiah</span>
+          <span class="book-era">BC 444 ~ 432</span>
+        </div>
+        <p class="book-summary">예루살렘 성벽 재건과 개혁.</p>
+      </div>
+      <div class="book-card cat-prophecy">
+        <div class="book-head">
+          <span class="book-pill pill-prophecy">예언</span>
+          <span class="book-name">말라기</span>
+          <span class="book-eng">Malachi</span>
+          <span class="book-era">~BC 430</span>
+        </div>
+        <p class="book-summary">구약의 마지막 선지자 · 엘리야 예언.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">39</div><div class="stat-label">구약 전체</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--color-history)">17</div><div class="stat-label">역사서</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#B88A1C">5</div><div class="stat-label">시가서</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--color-prophecy)">17</div><div class="stat-label">예언서</div></div>
+  </div>
+
+  <footer>
+    * 연대 추정치는 학자마다 차이가 있습니다 — 보수적 복음주의 연대관 기준.<br>
+    * 욥기·오바댜·요엘 등 일부는 연대 논쟁이 있으며, 시편은 작성 기간이 매우 깁니다.
+  </footer>
+</div>
+
+<script>
+  // ===== Data =====
+  const MIN_YEAR = -2100;
+  const MAX_YEAR = -400;
+  const SCALE = 1.4;
+
+  const books = [
+    { name: "창세기",     eng: "Genesis",       cat: "history",  start: -2100, end: -1800, summary: "창조, 타락, 홍수, 족장사" },
+    { name: "욥기",       eng: "Job",           cat: "poetry",   start: -2000, end: -1800, summary: "의인의 고난과 하나님의 주권" },
+    { name: "출애굽기",   eng: "Exodus",        cat: "history",  start: -1500, end: -1440, summary: "출애굽, 십계명, 성막" },
+    { name: "레위기",     eng: "Leviticus",     cat: "history",  start: -1445, end: -1435, summary: "제사법과 거룩한 삶의 규례" },
+    { name: "민수기",     eng: "Numbers",       cat: "history",  start: -1440, end: -1400, summary: "광야 40년의 여정" },
+    { name: "신명기",     eng: "Deuteronomy",   cat: "history",  start: -1405, end: -1395, summary: "모세의 고별 설교" },
+    { name: "여호수아",   eng: "Joshua",        cat: "history",  start: -1400, end: -1375, summary: "가나안 정복과 분배" },
+    { name: "사사기",     eng: "Judges",        cat: "history",  start: -1375, end: -1050, summary: "12사사와 반복되는 타락" },
+    { name: "룻기",       eng: "Ruth",          cat: "history",  start: -1105, end: -1095, summary: "이방 여인의 신실함" },
+    { name: "사무엘상",   eng: "1 Samuel",      cat: "history",  start: -1050, end: -1010, summary: "사무엘·사울·다윗의 등장" },
+    { name: "사무엘하",   eng: "2 Samuel",      cat: "history",  start: -1010, end: -970,  summary: "다윗 왕의 통치" },
+    { name: "시편",       eng: "Psalms",        cat: "poetry",   start: -1410, end: -450,  summary: "150편의 찬양과 기도" },
+    { name: "잠언",       eng: "Proverbs",      cat: "poetry",   start: -970,  end: -930,  summary: "솔로몬의 지혜 모음" },
+    { name: "아가",       eng: "Song of Songs", cat: "poetry",   start: -965,  end: -955,  summary: "사랑의 노래" },
+    { name: "전도서",     eng: "Ecclesiastes",  cat: "poetry",   start: -940,  end: -930,  summary: "인생의 허무와 참된 의미" },
+    { name: "열왕기상",   eng: "1 Kings",       cat: "history",  start: -970,  end: -850,  summary: "솔로몬, 왕국 분열" },
+    { name: "요엘",       eng: "Joel",          cat: "prophecy", start: -840,  end: -830,  summary: "여호와의 날, 성령 강림" },
+    { name: "요나",       eng: "Jonah",         cat: "prophecy", start: -785,  end: -775,  summary: "니느웨 선교" },
+    { name: "아모스",     eng: "Amos",          cat: "prophecy", start: -765,  end: -755,  summary: "사회 정의와 공의" },
+    { name: "호세아",     eng: "Hosea",         cat: "prophecy", start: -755,  end: -715,  summary: "하나님의 변함없는 사랑" },
+    { name: "이사야",     eng: "Isaiah",        cat: "prophecy", start: -740,  end: -680,  summary: "메시아 예언" },
+    { name: "미가",       eng: "Micah",         cat: "prophecy", start: -735,  end: -700,  summary: "베들레헴 탄생 예언" },
+    { name: "열왕기하",   eng: "2 Kings",       cat: "history",  start: -850,  end: -586,  summary: "남북 왕국의 멸망" },
+    { name: "나훔",       eng: "Nahum",         cat: "prophecy", start: -655,  end: -645,  summary: "니느웨 멸망 예언" },
+    { name: "스바냐",     eng: "Zephaniah",     cat: "prophecy", start: -640,  end: -609,  summary: "여호와의 날의 심판" },
+    { name: "하박국",     eng: "Habakkuk",      cat: "prophecy", start: -614,  end: -604,  summary: "의인은 믿음으로 산다" },
+    { name: "예레미야",   eng: "Jeremiah",      cat: "prophecy", start: -627,  end: -580,  summary: "눈물의 선지자" },
+    { name: "예레미야애가", eng: "Lamentations", cat: "prophecy", start: -591,  end: -581,  summary: "예루살렘 멸망 애가" },
+    { name: "오바댜",     eng: "Obadiah",       cat: "prophecy", start: -591,  end: -581,  summary: "에돔 심판 예언" },
+    { name: "에스겔",     eng: "Ezekiel",       cat: "prophecy", start: -593,  end: -570,  summary: "포로지의 환상과 회복" },
+    { name: "다니엘",     eng: "Daniel",        cat: "prophecy", start: -605,  end: -536,  summary: "바벨론 궁정·종말 환상" },
+    { name: "역대상",     eng: "1 Chronicles",  cat: "history",  start: -455,  end: -445,  summary: "아담~다윗 계보" },
+    { name: "역대하",     eng: "2 Chronicles",  cat: "history",  start: -455,  end: -445,  summary: "솔로몬~포로 귀환" },
+    { name: "학개",       eng: "Haggai",        cat: "prophecy", start: -525,  end: -515,  summary: "성전 재건 독려" },
+    { name: "스가랴",     eng: "Zechariah",     cat: "prophecy", start: -520,  end: -480,  summary: "성전 재건·메시아 환상" },
+    { name: "에스더",     eng: "Esther",        cat: "history",  start: -483,  end: -473,  summary: "페르시아에서 유대 민족 구원" },
+    { name: "에스라",     eng: "Ezra",          cat: "history",  start: -457,  end: -444,  summary: "포로 귀환·성전 재건" },
+    { name: "느헤미야",   eng: "Nehemiah",      cat: "history",  start: -444,  end: -432,  summary: "예루살렘 성벽 재건" },
+    { name: "말라기",     eng: "Malachi",       cat: "prophecy", start: -435,  end: -425,  summary: "구약 마지막 선지자" }
+  ];
+
+  const periods = [
+    { label: "족장",     start: -2100, end: -1800 },
+    { label: "출애굽",   start: -1500, end: -1400 },
+    { label: "사사",     start: -1400, end: -1050 },
+    { label: "통일왕국", start: -1050, end: -930 },
+    { label: "분열왕국", start: -930,  end: -722 },
+    { label: "남유다",   start: -722,  end: -586 },
+    { label: "포로기",   start: -586,  end: -538 },
+    { label: "귀환",     start: -538,  end: -400 }
+  ];
+
+  const LANE_CONFIG = {
+    history:  { top: 60,  rows: 5, color: "bar-history",  label: "역사서",  bgClass: "lane-history"  },
+    poetry:   { top: 200, rows: 3, color: "bar-poetry",   label: "시가서",  bgClass: "lane-poetry"   },
+    prophecy: { top: 290, rows: 5, color: "bar-prophecy", label: "예언서",  bgClass: "lane-prophecy" }
+  };
+  const ROW_HEIGHT = 26;
+  const LANE_HEIGHT = { history: 140, poetry: 90, prophecy: 150 };
+
+  // ===== Render =====
+  const yearToX = (y) => (y - MIN_YEAR) * SCALE;
+
+  function packRows(items) {
+    const rows = [];
+    items.sort((a, b) => a.start - b.start);
+    for (const item of items) {
+      let placed = false;
+      for (let i = 0; i < rows.length; i++) {
+        const last = rows[i][rows[i].length - 1];
+        if (item.start >= last.end + 8) {
+          rows[i].push(item);
+          item._row = i;
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        rows.push([item]);
+        item._row = rows.length - 1;
+      }
+    }
+    return rows.length;
+  }
+
+  function render() {
+    const timeline = document.getElementById("timeline");
+    const tooltip = document.getElementById("tooltip");
+    const totalWidth = (MAX_YEAR - MIN_YEAR) * SCALE;
+    timeline.style.width = totalWidth + "px";
+
+    // Axis ticks every 100 years, labels every 200
+    const axis = document.createElement("div");
+    axis.className = "axis";
+    for (let y = MIN_YEAR; y <= MAX_YEAR; y += 100) {
+      const tick = document.createElement("div");
+      tick.className = "axis-tick";
+      tick.style.left = yearToX(y) + "px";
+      if (y % 200 === 0) tick.textContent = "BC " + Math.abs(y);
+      axis.appendChild(tick);
+    }
+    timeline.appendChild(axis);
+
+    // Period bands
+    periods.forEach((p) => {
+      const band = document.createElement("div");
+      band.className = "period-band";
+      band.style.left = yearToX(p.start) + "px";
+      band.style.width = (yearToX(p.end) - yearToX(p.start)) + "px";
+      timeline.appendChild(band);
+
+      const label = document.createElement("div");
+      label.className = "period-band-label";
+      label.style.left = yearToX(p.start) + "px";
+      label.textContent = p.label;
+      timeline.appendChild(label);
+    });
+
+    // Lanes
+    let laneTop = 60;
+    for (const key of ["history", "poetry", "prophecy"]) {
+      const cfg = LANE_CONFIG[key];
+      cfg.top = laneTop;
+
+      const lane = document.createElement("div");
+      lane.className = "lane " + cfg.bgClass;
+      lane.style.top = laneTop + "px";
+      lane.style.height = LANE_HEIGHT[key] + "px";
+
+      const lbl = document.createElement("span");
+      lbl.className = "lane-label";
+      lbl.textContent = cfg.label;
+      lane.appendChild(lbl);
+
+      timeline.appendChild(lane);
+      laneTop += LANE_HEIGHT[key];
+    }
+
+    // Pack bars per lane
+    const byCat = { history: [], poetry: [], prophecy: [] };
+    books.forEach((b) => byCat[b.cat].push(b));
+
+    for (const key of ["history", "poetry", "prophecy"]) {
+      const cfg = LANE_CONFIG[key];
+      packRows(byCat[key]);
+      byCat[key].forEach((b) => {
+        const left = yearToX(b.start);
+        let width = yearToX(b.end) - left;
+        if (width < 38) width = 38;
+        const bar = document.createElement("div");
+        bar.className = "bar " + cfg.color;
+        bar.style.left = left + "px";
+        bar.style.width = width + "px";
+        bar.style.top = (cfg.top + 24 + b._row * ROW_HEIGHT) + "px";
+        bar.textContent = b.name;
+        bar.dataset.name = b.name;
+
+        const bcRange = (b.start === b.end || (b.end - b.start) < 15)
+          ? "~BC " + Math.abs(b.end)
+          : "BC " + Math.abs(b.start) + " ~ " + Math.abs(b.end);
+
+        bar.addEventListener("mouseenter", (e) => {
+          tooltip.innerHTML =
+            '<div class="tooltip-title">' + b.name + ' <span style="font-weight:400;opacity:0.7">' + b.eng + '</span></div>' +
+            '<div class="tooltip-meta">' + bcRange + ' · ' + cfg.label + '</div>' +
+            '<div>' + b.summary + '</div>';
+          tooltip.classList.add("visible");
+        });
+        bar.addEventListener("mousemove", (e) => {
+          const pad = 14;
+          let x = e.clientX + pad;
+          let y = e.clientY + pad;
+          const tw = tooltip.offsetWidth;
+          const th = tooltip.offsetHeight;
+          if (x + tw > window.innerWidth - 8) x = e.clientX - tw - pad;
+          if (y + th > window.innerHeight - 8) y = e.clientY - th - pad;
+          tooltip.style.left = x + "px";
+          tooltip.style.top = y + "px";
+        });
+        bar.addEventListener("mouseleave", () => {
+          tooltip.classList.remove("visible");
+        });
+
+        timeline.appendChild(bar);
+      });
+    }
+
+    // Recompute total height
+    const totalHeight = laneTop + 10;
+    timeline.style.height = totalHeight + "px";
+  }
+
+  render();
+</script>
+
+</body>
+</html>
