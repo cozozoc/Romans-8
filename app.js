@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.116";
+const APP_VERSION = "0.0.117";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1741,10 +1741,12 @@ document.addEventListener("DOMContentLoaded", () => {
       changeLevel(-1);
     } else if (!inInput && (e.key === "+" || e.key === "=")) {
       e.preventDefault();
-      forceNextVerse();
+      if (inputOff) changeLevel(+1);
+      else forceNextVerse();
     } else if (!inInput && (e.key === "-" || e.key === "_")) {
       e.preventDefault();
-      forcePrevVerse();
+      if (inputOff) changeLevel(-1);
+      else forcePrevVerse();
     }
   });
 });
