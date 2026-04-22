@@ -3,7 +3,7 @@ chronological_apostolic_history_v6:
     figures:
       - name: "아브라함"
         contemporary_kings: "아비멜렉 (그랄 왕), 소돔 왕 Bera 등"
-        contemporary_prophet: "(제도적 선지자 이전) · 멜기세덱 (살렘 왕 겸 제사장)"
+        contemporary_prophet: "(제도적 선지자 이전) ※ 멜기세덱(살렘 왕 겸 지극히 높으신 하나님의 제사장, 창 14장) 등장"
         achievement: "하나님의 부르심에 순종하여 믿음의 조상이 됨"
         failure: "기근 시 애굽으로 내려가 아내를 누이라 속이며 생존 도모"
         primary_adversary: "불신앙, 가나안 현지 왕들"
