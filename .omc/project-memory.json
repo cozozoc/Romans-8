@@ -149,14 +149,14 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 637,
-      "lastAccessed": 1776812129694,
+      "accessCount": 642,
+      "lastAccessed": 1776860526807,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 309,
-      "lastAccessed": 1776812133166,
+      "accessCount": 317,
+      "lastAccessed": 1776860540062,
       "type": "file"
     },
     {
@@ -166,16 +166,16 @@
       "type": "file"
     },
     {
-      "path": "verses.js",
-      "accessCount": 40,
-      "lastAccessed": 1776530535264,
-      "type": "file"
+      "path": "",
+      "accessCount": 47,
+      "lastAccessed": 1776860643974,
+      "type": "directory"
     },
     {
-      "path": "",
-      "accessCount": 40,
-      "lastAccessed": 1776812143324,
-      "type": "directory"
+      "path": "verses.js",
+      "accessCount": 44,
+      "lastAccessed": 1776860480395,
+      "type": "file"
     },
     {
       "path": "scrape_bible.py",

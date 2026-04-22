@@ -31,9 +31,8 @@
       </div>
       <div class="modal-body">
         <h3>🎯 개요</h3>
-        <p>개역개정 성경 본문을 구절 단위로 반복 학습하며 암송하는 도구입니다. 본문은 세 분류로 제공됩니다:</p>
+        <p>개역개정 성경 본문을 구절 단위로 반복 학습하며 암송하는 도구입니다. 본문은 두 분류로 제공됩니다:</p>
         <ul>
-          <li><b>성경</b> — 개역개정 전체 66권 (책 선택 후 장 선택)</li>
           <li><b>훈련 교재</b> — 로마서 8장(사역훈련 1과), 사역훈련 2권(14과), 사역훈련 3권(8과), 제자훈련 1권(6과), 제자훈련 2권(14과), 제자훈련 3권(12과)</li>
           <li><b>Bible Memory</b> — 고린도전서 13장, 시편 1편</li>
         </ul>
@@ -41,8 +40,8 @@
 
         <h3>⚙️ 설정 화면</h3>
         <ul>
-          <li><b>분류</b> <i>(기본 훈련 교재)</i>: <b>성경 / 훈련 교재 / Bible Memory</b> 중 하나. 선택에 따라 아래 <b>본문 선택</b> 드롭다운이 필터링됩니다.</li>
-          <li><b>본문 선택</b>: 현재 분류 안의 암송 본문. 분류가 <b>성경</b>이면 아래에 <b>장 선택</b>이 추가로 나타나고, <b>훈련 교재 / Bible Memory</b>는 과 또는 장 단위로 바로 선택됩니다.</li>
+          <li><b>분류</b> <i>(기본 훈련 교재)</i>: <b>훈련 교재 / Bible Memory</b> 중 하나. 선택에 따라 아래 <b>본문 선택</b> 드롭다운이 필터링됩니다.</li>
+          <li><b>본문 선택</b>: 현재 분류 안의 암송 본문. <b>훈련 교재 / Bible Memory</b>는 과 또는 장 단위로 바로 선택됩니다.</li>
           <li><b>시작 / 끝 구절 (또는 과)</b>: 선택한 본문 내에서 학습할 범위. 훈련 교재(레슨 단위)는 <b>과</b>, 나머지는 <b>절</b> 단위.</li>
           <li><b>텍스트 입력</b> <i>(기본 OFF)</i>: 키보드로 전체 구절을 타이핑하여 제출할지 여부. OFF면 입력 영역과 제출 버튼이 숨겨지고 힌트·전체 보기로만 연습.</li>
           <li><b>구절 이동 시 자동 전체보기</b> <i>(기본 ON)</i>: ON이면 수동으로 구절을 이동할 때(◀/▶ 버튼, 화살표, PageUp/Down) 현재 구절의 빈칸을 <b>전체 단어 수 × 1초</b> 동안 정답으로 채워 미리보고 난 뒤 다음 구절로 넘어감 (예: 단어 12개 → 12초). 정답/오답으로 자동 이동할 때는 이미 답이 공개되므로 별도 미리보기 없음. <b>이전 구절(◀ Prev)</b>로 이동할 때는 자동보기가 동작하지 않습니다.</li>
@@ -153,7 +152,6 @@
         <div class="form-row full-width">
           <label for="category">분류</label>
           <select id="category">
-            <option value="bible">성경</option>
             <option value="training" selected>훈련 교재</option>
             <option value="bible-memory">Bible Memory</option>
           </select>
@@ -419,7 +417,6 @@
   </section>
 </div>
 
-<script src="bible-all.js"></script>
 <script src="verses.js"></script>
 <script src="app.js"></script>
 </body>

@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.101";
+const APP_VERSION = "0.0.102";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -84,7 +84,7 @@ const SETTINGS_KEY = "romans8_settings_v1";
 const SETTING_IDS = ["category","bookKey","chapterNum","startVerse","endVerse","inputEnabled","autoRevealOnMove","firstTwoMode","mergeBlanks","level","continuousCount","bookmarkedOnly","autoNextEnabled","autoNextSpeed","autoNextGapSpeed","pdfSetCount","pdfBlankStyle","pdfFontSize","pdfNewPagePerSet","pdfAnswerMode"];
 const REVEAL_SECONDS = 30;
 const DEFAULT_SETTINGS = {
-  category: "bible",
+  category: "training",
   bookKey: DEFAULT_BOOK_KEY,
   chapterNum: "1",
   startVerse: "1",
@@ -222,7 +222,7 @@ function loadSettings() {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (!raw) return;
     const obj = JSON.parse(raw);
-    const cat = obj.category || "bible";
+    const cat = obj.category || "training";
     const catEl = $("category");
     if (catEl) catEl.value = cat;
     populateBookOptions(cat, obj.bookKey);
@@ -1571,7 +1571,7 @@ document.addEventListener("DOMContentLoaded", () => {
   populateAutoNextGapOptions();
   loadSettings();
   if ($("bookKey").options.length === 0) {
-    populateBookOptions($("category").value || "bible");
+    populateBookOptions($("category").value || "training");
   }
   if (!$("chapterNum").options.length) {
     populateChapterOptions(getSelectedBookRaw(), 1);
