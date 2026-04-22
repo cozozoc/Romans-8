@@ -127,29 +127,6 @@
   }
   .axis-tick.major { font-weight: 700; color: var(--color-text-secondary); }
 
-  .axis-era-label {
-    position: absolute;
-    left: 0; right: 0;
-    display: flex; align-items: center; justify-content: center;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .axis-era-label > span {
-    font-size: 9px; font-weight: 700;
-    color: var(--color-text-tertiary);
-    text-align: center;
-    letter-spacing: 0.02em;
-    opacity: 0.75;
-    line-height: 1.25;
-  }
-  .axis-era-disputed {
-    background: repeating-linear-gradient(
-      135deg,
-      transparent 0 6px,
-      rgba(0,0,0,0.03) 6px 12px
-    );
-  }
-
   /* 차트 영역 */
   .chart {
     position: absolute;
@@ -329,9 +306,6 @@
 <div class="container">
   <h1 class="title">구약 성경 연대기</h1>
   <p class="sub">창세기 ~ 말라기 39권 · 사건 발생 시기 기준</p>
-  <p class="sub" style="font-size:13px;margin-top:-1rem;margin-bottom:1.5rem;">
-    📜 분열왕국(BC 931) 이전은 연대 논란이 커 시대 명칭만 표기 · 이후는 앗수르·바벨론·페르시아 사료 기준 확정 BC 연도
-  </p>
 
   <div class="legend">
     <span class="legend-item"><span class="legend-chip chip-history"></span>역사서 (17권)</span>
@@ -357,7 +331,7 @@
     <div class="period-header">
       <div class="period-num">1</div>
       <div class="period-title">태초 ~ 족장 시대</div>
-      <div class="period-era">연대 논란 구간</div>
+      <div class="period-era"></div>
     </div>
     <p class="period-note">창조, 타락, 홍수, 바벨탑 — 그리고 아브라함을 부르시기까지 하나님의 언약사의 서문.</p>
     <div class="books-grid">
@@ -377,7 +351,7 @@
     <div class="period-header">
       <div class="period-num">2</div>
       <div class="period-title">족장 시대</div>
-      <div class="period-era">연대 논란 구간</div>
+      <div class="period-era"></div>
     </div>
     <p class="period-note">아브라함, 이삭, 야곱, 요셉 — 언약의 가문이 애굽에 정착하기까지.</p>
     <div class="books-grid">
@@ -397,7 +371,7 @@
     <div class="period-header">
       <div class="period-num">3</div>
       <div class="period-title">출애굽 ~ 광야 시대</div>
-      <div class="period-era">연대 논란 구간</div>
+      <div class="period-era"></div>
     </div>
     <p class="period-note">모세의 인도 아래 애굽을 나와 시내 산에서 율법을 받고 40년 광야를 지나 가나안 경계에 이르다.</p>
     <div class="books-grid">
@@ -444,7 +418,7 @@
     <div class="period-header">
       <div class="period-num">4</div>
       <div class="period-title">사사 시대</div>
-      <div class="period-era">연대 논란 구간</div>
+      <div class="period-era"></div>
     </div>
     <p class="period-note">가나안 정착 후 12사사의 반복되는 타락과 구원의 주기.</p>
     <div class="books-grid">
@@ -812,9 +786,8 @@
   </div>
 
   <footer>
-    * <b>BC 931 분열왕국 이전</b>: 창세기 ~ 통일왕국 시기는 히브리 본문 내부 연대 외 외부 사료가 부족하여 절대 연대 논란이 크므로 <b>시대 명칭만</b> 표기.<br>
-    * <b>BC 931 분열왕국 이후</b>: 앗수르 왕실 연대기(살만에셀 3세의 검은 오벨리스크 등) · 바벨론 연대기 · 페르시아 기록과 대조 가능한 <b>확정 BC 연도</b> 표기.<br>
-    * 기준: Edwin R. Thiele의 분열왕국 연대기 체계 (<i>The Mysterious Numbers of the Hebrew Kings</i>).
+    * BC 연도는 앗수르 왕실 연대기 · 바벨론 연대기 · 페르시아 기록과 교차 검증이 가능한 구간에 한해 표기 (분열왕국 이후).<br>
+    * 연대 기준: Edwin R. Thiele, <i>The Mysterious Numbers of the Hebrew Kings</i>.
   </footer>
 </div>
 
@@ -925,7 +898,7 @@
     timeline.style.height = chartHeight + "px";
 
     // ===== 왼쪽 연도 축 =====
-    // BC 931 분열왕국 이전은 연대 논란 구간 → BC 숫자 표시 안 함, 시대 명칭만
+    // BC 931 분열왕국 이전은 외부 사료 부족으로 숫자만 비워둠 (눈금만 유지)
     const CONFIRMED_BOUNDARY = -931;
     const axis = document.createElement("div");
     axis.className = "axis";
@@ -933,22 +906,9 @@
       const tick = document.createElement("div");
       tick.className = "axis-tick" + (y % 200 === 0 ? " major" : "");
       tick.style.top = yearToY(y) + "px";
-      // 분열왕국 이후(= 확정 연대)만 BC 숫자 표기
       if (y % 200 === 0 && y >= CONFIRMED_BOUNDARY - 10) tick.textContent = "BC " + Math.abs(y);
       axis.appendChild(tick);
     }
-    // "연대 불확실" / "확정 연대" 구역 라벨
-    const disputedLabel = document.createElement("div");
-    disputedLabel.className = "axis-era-label axis-era-disputed";
-    disputedLabel.style.top = yearToY(MIN_YEAR) + "px";
-    disputedLabel.style.height = (yearToY(CONFIRMED_BOUNDARY) - yearToY(MIN_YEAR)) + "px";
-    disputedLabel.innerHTML = '<span>연대<br>논란<br>구간</span>';
-    axis.appendChild(disputedLabel);
-    const confirmedLabel = document.createElement("div");
-    confirmedLabel.className = "axis-era-label axis-era-confirmed";
-    confirmedLabel.style.top = yearToY(CONFIRMED_BOUNDARY) + "px";
-    confirmedLabel.style.height = (yearToY(MAX_YEAR) - yearToY(CONFIRMED_BOUNDARY)) + "px";
-    axis.appendChild(confirmedLabel);
     timeline.appendChild(axis);
 
     // ===== 차트 영역 =====
