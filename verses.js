@@ -274,7 +274,7 @@ const BIBLE_LIBRARY = {
   },
 };
 
-const DEFAULT_BOOK_KEY = "romans-8";
+const DEFAULT_BOOK_KEY = "ministry-training-2";
 
 // 자동 등록: build_bible.py가 만든 BIBLE_DATA + BIBLE_MANIFEST에서
 // EXPOSED_BIBLE_BOOKS에 지정된 책을 BIBLE_LIBRARY에 추가한다.
