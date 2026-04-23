@@ -266,6 +266,15 @@
   .tooltip.visible { opacity: 1; transform: translateY(0); }
   .tooltip-title { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
   .tooltip-meta { font-size: 13px; opacity: 0.75; margin-bottom: 4px; }
+  .tooltip-person {
+    margin-top: 8px; padding-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .tooltip-person-label {
+    opacity: 0.65; margin-right: 2px; font-weight: 600;
+  }
 
   /* ===== Periods cards ===== */
   .period { margin-bottom: 2.5rem; }
@@ -935,7 +944,7 @@
     { name: "역대상",     eng: "1 Chronicles",  cat: "history",  start: -450,  end: -430,  era: "포로 귀환기 편찬",           summary: "아담~다윗 계보 (귀환 공동체용)" },
     { name: "역대하",     eng: "2 Chronicles",  cat: "history",  start: -450,  end: -430,  era: "포로 귀환기 편찬",           summary: "솔로몬~귀환까지 재조명" },
     { name: "에스라",     eng: "Ezra",          cat: "history",  start: -450,  end: -430,  era: "에스라 당대",               summary: "포로 귀환·성전 재건" },
-    { name: "말라기",     eng: "Malachi",       cat: "prophecy", start: -435,  end: -425,  era: "~BC 430",                   summary: "구약 마지막 선지자" },
+    { name: "말라기",     eng: "Malachi",       cat: "prophecy", start: -430,  end: -425,  era: "~BC 430",                   summary: "구약 마지막 선지자" },
     { name: "느헤미야",   eng: "Nehemiah",      cat: "history",  start: -430,  end: -400,  era: "느헤미야 당대",              summary: "예루살렘 성벽 재건 기록" }
   ];
 
@@ -964,6 +973,49 @@
     prophecy: { barClass: "bar-prophecy", label: "예언서"  }
   };
 
+  // 책 이름 → 인물 연대기 요약 (hover 시 툴팁 하단에 표시)
+  const PERSON_INFO = {
+    "창세기":     { person: "모세",                   note: "광야에서 기록 · 창조·타락·홍수·족장사" },
+    "출애굽기":   { person: "모세",                   note: "출애굽의 지도자 · 십계명·성막 수여" },
+    "레위기":     { person: "모세",                   note: "제사법과 성결의 규례" },
+    "민수기":     { person: "모세",                   note: "광야 40년의 인도자" },
+    "신명기":     { person: "모세",                   note: "모세의 고별 설교 (요단 동편)" },
+    "여호수아":   { person: "여호수아",               note: "가나안 정복의 장군 · 12지파 분배" },
+    "사사기":     { person: "사무엘 (편찬) · 12사사", note: "기드온·삼손 외 · 타락과 구원의 반복" },
+    "룻기":       { person: "룻·보아스",              note: "이방 여인의 신실함 · 다윗의 증조모" },
+    "사무엘상":   { person: "사무엘·사울·다윗",       note: "마지막 사사 · 초대·2대 왕의 등장" },
+    "사무엘하":   { person: "다윗",                   note: "통일왕국 다윗의 통치" },
+    "열왕기상":   { person: "솔로몬·엘리야",          note: "솔로몬 성전 · 왕국 분열 · 엘리야 사역" },
+    "열왕기하":   { person: "엘리사·히스기야·요시야", note: "엘리사 기적 · 남북 왕국 멸망" },
+    "역대상":     { person: "다윗 (편찬자: 에스라 추정)", note: "아담~다윗 계보 · 다윗의 통치 재조명" },
+    "역대하":     { person: "솔로몬~포로 귀환 왕들 (편찬자: 에스라 추정)", note: "성전 중심으로 본 남유다" },
+    "에스라":     { person: "에스라",                 note: "제사장 겸 서기관 · 성전 재건·율법 회복" },
+    "느헤미야":   { person: "느헤미야",               note: "공동체 재건자 · 예루살렘 성벽 재건" },
+    "에스더":     { person: "에스더·모르드개",        note: "페르시아에서 유대 민족 구원" },
+    "욥기":       { person: "욥",                     note: "의인의 고난과 하나님의 주권" },
+    "시편":       { person: "다윗 외 (모세·아삽·고라·솔로몬…)", note: "여러 시대 다양한 저자의 찬양·기도 150편" },
+    "잠언":       { person: "솔로몬 (편집: 히스기야)", note: "지혜의 왕 · 히스기야 대에 추가 편집" },
+    "전도서":     { person: "솔로몬",                 note: "인생 말기의 회고 · 헛됨과 본분" },
+    "아가":       { person: "솔로몬",                 note: "사랑의 노래" },
+    "이사야":     { person: "이사야",                 note: "남유다 선지자 · 메시아 예언 (웃시야~히스기야)" },
+    "예레미야":   { person: "예레미야",               note: "눈물의 선지자 · 남유다 멸망 경고" },
+    "예레미야애가": { person: "예레미야",             note: "예루살렘 함락 후 애가" },
+    "에스겔":     { person: "에스겔",                 note: "바벨론 포로지 선지자 · 환상과 회복" },
+    "다니엘":     { person: "다니엘",                 note: "포로기 선지자 · 바벨론·바사 궁정에서 사역" },
+    "호세아":     { person: "호세아",                 note: "북이스라엘 말기 선지자 · 하나님의 변함없는 사랑" },
+    "요엘":       { person: "요엘",                   note: "남유다 선지자 · 여호와의 날·성령 강림 예언" },
+    "아모스":     { person: "아모스",                 note: "드고아의 목자 · 북이스라엘에서 사회 정의 외침" },
+    "오바댜":     { person: "오바댜",                 note: "에돔 심판 예언 · 구약 최단 책 (1장)" },
+    "요나":       { person: "요나",                   note: "니느웨 선교 · 여로보암 2세 시대" },
+    "미가":       { person: "미가",                   note: "모레셋 선지자 · 베들레헴 탄생 예언" },
+    "나훔":       { person: "나훔",                   note: "니느웨 멸망 예언" },
+    "하박국":     { person: "하박국",                 note: "의인은 믿음으로 산다 · 바벨론 위협 앞에서" },
+    "스바냐":     { person: "스바냐",                 note: "요시야 시대 · 여호와의 날의 심판" },
+    "학개":       { person: "학개",                   note: "귀환 후 성전 재건 독려 (BC 520)" },
+    "스가랴":     { person: "스가랴",                 note: "귀환기 · 성전 재건·메시아 환상" },
+    "말라기":     { person: "말라기",                 note: "구약의 마지막 선지자" }
+  };
+
   const yearToY = (y) => (y - MIN_YEAR) * V_SCALE;
 
   // 같은 레인 내 시간 겹침이 있으면 서브컬럼(옆으로 분기) 배정
@@ -983,7 +1035,8 @@
       let placed = false;
       for (let i = 0; i < cols.length; i++) {
         const last = cols[i][cols[i].length - 1];
-        if (item.start >= last.end + 4) {
+        // 기록순: 시대가 겹치지만 않으면 즉시 이어붙임 (버퍼 0 — 신명기·말라기·느헤미야 등이 왼쪽 컬럼에 몰려 있도록)
+        if (item.start >= last.end) {
           cols[i].push(item);
           item._col = i;
           placed = true;
@@ -1063,19 +1116,20 @@
       bar.style.left = "calc(" + innerLeft + "% + 4px)";
       bar.style.width = "calc(" + subW + "% - 8px)";
 
-      // 긴 막대는 이름 + era(시대명 또는 확정 BC) 2줄, 짧으면 이름만
-      if (height >= 80) {
-        bar.innerHTML = '<div>' + b.name + '<br><span style="font-weight:400;font-size:12px;opacity:0.85">' + b.era + '</span></div>';
-      } else {
-        bar.textContent = b.name;
-      }
+      // 기록순: 막대에는 책 이름만 표기 (era/연대 정보는 tooltip에서 확인)
+      bar.textContent = b.name;
       bar.dataset.name = b.name;
 
       bar.addEventListener("mouseenter", () => {
+        const info = PERSON_INFO[b.name];
+        const personRow = info
+          ? '<div class="tooltip-person"><span class="tooltip-person-label">👤 인물</span> <b>' + info.person + '</b> · ' + info.note + '</div>'
+          : '';
         tooltip.innerHTML =
           '<div class="tooltip-title">' + b.name + ' <span style="font-weight:400;opacity:0.7">' + b.eng + '</span></div>' +
           '<div class="tooltip-meta">' + b.era + ' · ' + cfg.label + '</div>' +
-          '<div>' + b.summary + '</div>';
+          '<div>' + b.summary + '</div>' +
+          personRow;
         tooltip.classList.add("visible");
       });
       bar.addEventListener("mousemove", (e) => {
