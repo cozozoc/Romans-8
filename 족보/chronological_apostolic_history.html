@@ -107,6 +107,33 @@
     .ig-fail .ig-row-label { color: #F0997B; }
     .ig-adv .ig-row-label { color: #B4B2A9; }
   }
+  p.page-nav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
+    text-align: center; margin: 0 0 1.6rem;
+    font-size: 13px;
+  }
+  p.page-nav a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--color-background-secondary);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--color-border-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  p.page-nav a:hover {
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+  }
+  p.page-nav a.current {
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    cursor: default;
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -114,7 +141,13 @@
 <div class="container">
   <div class="ig">
     <h1 class="ig-title">성경 인물 연대기</h1>
-    <p class="ig-sub">구약 선지자 · 왕 · 지도자 18인 편 — 시대별 기쁨, 과오, 동시대 왕권과 선지자</p>
+    <p class="ig-sub">구약 선지자 · 왕 · 지도자 — 시대별 동시대 왕·선지자 · 개인 생애에 기록된 기쁨·아픔은 있는 경우에만 표시</p>
+    <p class="page-nav">
+      <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
+      <a href="old_testament_timeline_writing.html" target="_blank" rel="noopener">📚 구약 연대기 (기록순)</a>
+      <a href="divided_kingdom_kings.html" target="_blank" rel="noopener">👑 분열왕국 왕</a>
+      <a class="current" aria-current="page">📜 인물 연대기</a>
+    </p>
 
     <div class="ig-legend">
       <span class="ig-legend-item"><span class="ig-legend-dot" style="background:#6B46C1"></span>보필/동시대 왕 (Kings)</span>

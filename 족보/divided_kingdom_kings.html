@@ -141,6 +141,33 @@
     .ig-pill.pill-north { background: #4A1B1B; color: #FCA5A5; }
     .ig-pill.pill-south { background: #1E3A8A; color: #BFDBFE; }
   }
+  p.page-nav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
+    text-align: center; margin: 0 0 1.6rem;
+    font-size: 13px;
+  }
+  p.page-nav a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--color-background-tertiary, #f1efe8);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--color-border-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  p.page-nav a:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  p.page-nav a.current {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    cursor: default;
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -149,6 +176,12 @@
   <div class="ig">
     <h1 class="ig-title">분열 왕국 왕 연대기</h1>
     <p class="ig-sub">BC 931 분열 ~ BC 586 남유다 멸망 · 르호보암부터 시드기야까지 39인</p>
+    <p class="page-nav">
+      <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
+      <a href="old_testament_timeline_writing.html" target="_blank" rel="noopener">📚 구약 연대기 (기록순)</a>
+      <a class="current" aria-current="page">👑 분열왕국 왕</a>
+      <a href="chronological_apostolic_history.html" target="_blank" rel="noopener">📜 인물 연대기</a>
+    </p>
 
     <div class="ig-legend">
       <span class="ig-legend-item"><span class="ig-legend-pill pill-north">북</span>북이스라엘 (사마리아)</span>

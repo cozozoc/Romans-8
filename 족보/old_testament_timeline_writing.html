@@ -56,6 +56,8 @@
   h1.title { font-size: 38px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
   p.sub { font-size: 20px; text-align: center; color: var(--color-text-secondary); margin: 0 0 8px; }
   p.version-switch {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
     text-align: center; margin: 0 0 1.6rem;
     font-size: 13px;
   }
@@ -72,6 +74,13 @@
   p.version-switch a:hover {
     background: var(--color-background-secondary);
     color: var(--color-text-primary);
+  }
+  p.version-switch a.current {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    cursor: default;
+    pointer-events: none;
   }
 
   /* ===== Legend ===== */
@@ -390,7 +399,12 @@
 <div class="container">
   <h1 class="title">구약 성경 연대기 (기록순)</h1>
   <p class="sub">창세기 ~ 말라기 39권 · 각 책이 <b>저술·편찬된 시기</b> 기준 (보수적 전통 견해)</p>
-  <p class="version-switch"><a href="old_testament_timeline.html">→ 내용순 보기 (각 책이 다루는 사건의 시기)</a></p>
+  <p class="version-switch">
+    <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
+    <a class="current" aria-current="page">📚 구약 연대기 (기록순)</a>
+    <a href="divided_kingdom_kings.html" target="_blank" rel="noopener">👑 분열왕국 왕</a>
+    <a href="chronological_apostolic_history.html" target="_blank" rel="noopener">📜 인물 연대기</a>
+  </p>
 
   <div class="legend">
     <span class="legend-item"><span class="legend-chip chip-history"></span>역사서 (17권)</span>
@@ -912,7 +926,7 @@
     { name: "하박국",     eng: "Habakkuk",      cat: "prophecy", start: -609,  end: -598,  era: "여호야김 시대",             summary: "의인은 믿음으로 산다" },
     { name: "다니엘",     eng: "Daniel",        cat: "prophecy", start: -605,  end: -530,  era: "BC 605 ~ 530",              summary: "바벨론 궁정·종말 환상" },
     { name: "에스겔",     eng: "Ezekiel",       cat: "prophecy", start: -593,  end: -570,  era: "BC 593 ~ 570",              summary: "포로지의 환상과 회복" },
-    { name: "예레미야애가", eng: "Lamentations", cat: "prophecy", start: -586,  end: -580,  era: "예루살렘 함락 직후",        summary: "예루살렘 멸망 애가" },
+    { name: "예레미야애가", eng: "Lamentations", cat: "prophecy", start: -586,  end: -580,  era: "예루살렘 함락 직후",        summary: "예루살렘 멸망 애가", pairWith: "예레미야" },
     { name: "열왕기상",   eng: "1 Kings",       cat: "history",  start: -560,  end: -550,  era: "포로기 편찬",               summary: "솔로몬~왕국 분열 (포로기 회고)" },
     { name: "열왕기하",   eng: "2 Kings",       cat: "history",  start: -560,  end: -550,  era: "포로기 편찬",               summary: "남북 왕국의 멸망 (포로기 회고)" },
     { name: "학개",       eng: "Haggai",        cat: "prophecy", start: -520,  end: -520,  era: "BC 520",                    summary: "성전 재건 독려" },
@@ -956,7 +970,16 @@
   function packColumns(items) {
     items.sort((a, b) => a.start - b.start);
     const cols = [];
+    const byName = {};
     for (const item of items) {
+      // pairWith: 명시적으로 동일 저자의 책 등은 같은 컬럼에 겹쳐 배치 (시간적 겹침 허용)
+      if (item.pairWith && byName[item.pairWith] != null) {
+        const targetCol = byName[item.pairWith];
+        cols[targetCol].push(item);
+        item._col = targetCol;
+        byName[item.name] = targetCol;
+        continue;
+      }
       let placed = false;
       for (let i = 0; i < cols.length; i++) {
         const last = cols[i][cols[i].length - 1];
@@ -971,6 +994,7 @@
         cols.push([item]);
         item._col = cols.length - 1;
       }
+      byName[item.name] = item._col;
     }
     return cols.length;
   }
