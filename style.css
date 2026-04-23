@@ -584,6 +584,62 @@ button.ghost:hover { background: #f8fafc; }
   .pdf-font-select { min-width: 0; }
 }
 
+/* === PDF 섹션 접힘 (기본 접힘) === */
+.pdf-section-collapsible {
+  padding: 0;
+  overflow: hidden;
+}
+.pdf-section-collapsible > summary.pdf-section-title {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  margin: 0;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: background-color 0.15s;
+}
+.pdf-section-collapsible > summary.pdf-section-title::-webkit-details-marker {
+  display: none;
+}
+.pdf-section-collapsible > summary.pdf-section-title::after {
+  content: "▾";
+  margin-left: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+.pdf-section-collapsible[open] > summary.pdf-section-title::after {
+  transform: rotate(180deg);
+}
+.pdf-section-collapsible > summary.pdf-section-title:hover {
+  background: #eef2ff;
+}
+.pdf-section-collapsible > summary.pdf-section-title:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+.pdf-section-collapsible > .pdf-section-desc,
+.pdf-section-collapsible > .pdf-controls,
+.pdf-section-collapsible > .pdf-btn-row {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.pdf-section-collapsible > .pdf-btn-row {
+  margin-bottom: 14px;
+}
+.pdf-section-hint {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0;
+}
+@media (max-width: 640px) {
+  .pdf-section-hint { display: none; }
+}
+
 /* === Test screen === */
 .status-bar {
   display: grid;
