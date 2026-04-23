@@ -53,13 +53,13 @@
   }
   .container { max-width: 1100px; width: 100%; }
 
-  h1.title { font-size: 32px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
-  p.sub { font-size: 17px; text-align: center; color: var(--color-text-secondary); margin: 0 0 2rem; }
+  h1.title { font-size: 38px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
+  p.sub { font-size: 20px; text-align: center; color: var(--color-text-secondary); margin: 0 0 2rem; }
 
   /* ===== Legend ===== */
   .legend {
     display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
-    font-size: 13px; font-weight: 600; color: var(--color-text-secondary);
+    font-size: 15px; font-weight: 600; color: var(--color-text-secondary);
     margin-bottom: 1.5rem; padding: 12px;
     background: var(--color-background-secondary); border-radius: var(--border-radius-md);
   }
@@ -79,7 +79,7 @@
     margin-bottom: 2.5rem;
   }
   .timeline-hint {
-    font-size: 12px; color: var(--color-text-tertiary);
+    font-size: 14px; color: var(--color-text-tertiary);
     margin: 0 0 10px; text-align: center;
   }
 
@@ -96,7 +96,7 @@
     border-bottom: 1px solid var(--color-border-secondary);
   }
   .lane-header > div {
-    font-size: 12px; font-weight: 700;
+    font-size: 14px; font-weight: 700;
     text-align: center;
     padding: 6px 4px;
     border-radius: 6px;
@@ -120,7 +120,7 @@
   .axis-tick {
     position: absolute; left: 0; right: 0;
     border-top: 1px dashed var(--color-border-tertiary);
-    font-size: 11px; color: var(--color-text-tertiary);
+    font-size: 13px; color: var(--color-text-tertiary);
     padding: 2px 6px 0 0;
     text-align: right;
     user-select: none;
@@ -144,7 +144,7 @@
   .period-band.alt { opacity: 0.55; }
   .period-band-label {
     position: absolute; right: 6px;
-    font-size: 10px; font-weight: 700;
+    font-size: 12px; font-weight: 700;
     color: var(--color-text-tertiary);
     letter-spacing: 0.04em;
     padding: 3px 6px;
@@ -171,7 +171,7 @@
     border-radius: 5px;
     display: flex; align-items: flex-start; justify-content: center;
     padding: 6px 4px 4px;
-    font-size: 12px; font-weight: 700;
+    font-size: 14px; font-weight: 700;
     color: white;
     cursor: pointer;
     overflow: hidden;
@@ -190,7 +190,7 @@
   .bar-history  { background: var(--color-history); }
   .bar-poetry   { background: var(--color-poetry); color: #3a2b08; }
   .bar-prophecy { background: var(--color-prophecy); }
-  .bar-short { padding: 3px 2px; font-size: 11px; }
+  .bar-short { padding: 3px 2px; font-size: 13px; }
 
   /* Tooltip */
   .tooltip {
@@ -200,7 +200,7 @@
     color: var(--color-background-primary);
     padding: 10px 12px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.5;
     max-width: 260px;
     pointer-events: none;
@@ -210,8 +210,8 @@
     transition: opacity 0.12s, transform 0.12s;
   }
   .tooltip.visible { opacity: 1; transform: translateY(0); }
-  .tooltip-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-  .tooltip-meta { font-size: 11px; opacity: 0.75; margin-bottom: 4px; }
+  .tooltip-title { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .tooltip-meta { font-size: 13px; opacity: 0.75; margin-bottom: 4px; }
 
   /* ===== Periods cards ===== */
   .period { margin-bottom: 2.5rem; }
@@ -224,12 +224,12 @@
     width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%;
     background: #EEEDFE; color: #3C3489;
     display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 700;
+    font-size: 17px; font-weight: 700;
   }
-  .period-title { font-size: 20px; font-weight: 700; }
-  .period-era { font-size: 13px; color: var(--color-text-tertiary); margin-left: auto; }
+  .period-title { font-size: 24px; font-weight: 700; }
+  .period-era { font-size: 15px; color: var(--color-text-tertiary); margin-left: auto; }
   .period-note {
-    font-size: 14px; color: var(--color-text-secondary);
+    font-size: 16px; color: var(--color-text-secondary);
     margin: 0 0 1rem; padding: 0 4px;
   }
 
@@ -255,16 +255,16 @@
     flex-wrap: wrap;
   }
   .book-pill {
-    font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; padding: 2px 6px; border-radius: 999px;
     flex-shrink: 0;
   }
   .pill-history  { background: var(--color-history-light);  color: var(--color-history); }
   .pill-poetry   { background: var(--color-poetry-light);   color: #8B6914; }
   .pill-prophecy { background: var(--color-prophecy-light); color: var(--color-prophecy); }
-  .book-name { font-size: 17px; font-weight: 700; }
-  .book-eng { font-size: 12px; color: var(--color-text-tertiary); }
-  .book-era { font-size: 12px; color: var(--color-text-tertiary); margin-left: auto; }
-  .book-summary { font-size: 13px; color: var(--color-text-secondary); margin: 2px 0 0; }
+  .book-name { font-size: 20px; font-weight: 700; }
+  .book-eng { font-size: 14px; color: var(--color-text-tertiary); }
+  .book-era { font-size: 14px; color: var(--color-text-tertiary); margin-left: auto; }
+  .book-summary { font-size: 15px; color: var(--color-text-secondary); margin: 2px 0 0; }
 
   @media (prefers-color-scheme: dark) {
     .period-num { background: #3C3489; color: #CECBF6; }
@@ -283,20 +283,20 @@
     border-radius: var(--border-radius-md);
     padding: 1rem; text-align: center;
   }
-  .stat-num { font-size: 28px; font-weight: 700; line-height: 1.2; }
-  .stat-label { font-size: 12px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .stat-num { font-size: 32px; font-weight: 700; line-height: 1.2; }
+  .stat-label { font-size: 14px; color: var(--color-text-tertiary); margin-top: 2px; }
 
   footer {
     margin-top: 3rem; padding-top: 1.5rem;
     border-top: 1px solid var(--color-border-tertiary);
-    font-size: 12px; color: var(--color-text-tertiary);
+    font-size: 14px; color: var(--color-text-tertiary);
     text-align: center; line-height: 1.7;
   }
 
   @media (max-width: 640px) {
     body { padding: 12px; }
-    h1.title { font-size: 24px; }
-    p.sub { font-size: 14px; }
+    h1.title { font-size: 28px; }
+    p.sub { font-size: 16px; }
     .timeline { height: 440px; }
   }
 </style>
@@ -969,7 +969,7 @@
 
         // 긴 막대는 이름 + era(시대명 또는 확정 BC) 2줄, 짧으면 이름만
         if (height >= 80) {
-          bar.innerHTML = '<div>' + b.name + '<br><span style="font-weight:400;font-size:10px;opacity:0.85">' + b.era + '</span></div>';
+          bar.innerHTML = '<div>' + b.name + '<br><span style="font-weight:400;font-size:12px;opacity:0.85">' + b.era + '</span></div>';
         } else {
           bar.textContent = b.name;
         }

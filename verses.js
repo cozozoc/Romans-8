@@ -127,6 +127,20 @@ const MINISTRY_TRAINING_2_LABELS = {
   10: "10. 당신은 왕 같은 제사장이다 (벧전2:9)"
 };
 
+// " / "로 구분된 각 세그먼트의 구절 번호. 라벨의 참조 범위 순서와 일치.
+const MINISTRY_TRAINING_2_SEG_VERSES = {
+  1: ["19", "20"],
+  2: ["23", "24"],
+  3: ["11", "12", "13"],
+  4: ["11", "12"],
+  5: ["26", "27", "33"],
+  6: ["46", "47", "48"],
+  7: ["5"],
+  8: ["16", "17"],
+  9: ["10"],
+  10: ["9"]
+};
+
 // 개역개정 사역훈련 3권 (소그룹 환경과 리더십) 암송구절 5개
 const MINISTRY_TRAINING_3 = {
   1: "우리는 그리스도의 사도로서 마땅히 권위를 주장할 수 있으나 도리어 너희 가운데서 유순한 자가 되어 유모가 자기 자녀를 기름과 같이 하였으니 / 우리가 이같이 너희를 사모하여 하나님의 복음뿐 아니라 우리의 목숨까지도 너희에게 주기를 기뻐함은 너희가 우리의 사랑하는 자 됨이라",
@@ -142,6 +156,14 @@ const MINISTRY_TRAINING_3_LABELS = {
   3: "5. 귀납적 성경 공부의 실제(2): 해석 (약1:5)",
   4: "6. 귀납적 성경 공부의 실제(3): 적용 (히3:13)",
   5: "7. 소그룹 커뮤니케이션: 질문과 경청 (잠18:13)"
+};
+
+const MINISTRY_TRAINING_3_SEG_VERSES = {
+  1: ["7", "8"],
+  2: ["16"],
+  3: ["5"],
+  4: ["13"],
+  5: ["13"]
 };
 
 // 개역개정 제자훈련 1권 암송구절 6개
@@ -161,6 +183,15 @@ const DISCIPLESHIP_TRAINING_1_LABELS = {
   4: "4. 살았고 운동력 있는 말씀 (롬1:16, 딤후3:16)",
   5: "5. 무엇이 바른 기도인가 (빌4:6-7, 마6:6)",
   6: "6. 기도의 응답 (요15:7, 마7:11)",
+};
+
+const DISCIPLESHIP_TRAINING_1_SEG_VERSES = {
+  1: ["9-10", "16"],
+  2: ["16", "22-23"],
+  3: ["1-2", "105"],
+  4: ["16", "16"],
+  5: ["6-7", "6"],
+  6: ["7", "11"]
 };
 
 // 개역개정 제자훈련 2권 암송구절 14개
@@ -198,6 +229,23 @@ const DISCIPLESHIP_TRAINING_2_LABELS = {
   14: "14. 예수 그리스도의 재림 (계22:7, 살전4:16-17)",
 };
 
+const DISCIPLESHIP_TRAINING_2_SEG_VERSES = {
+  1: ["21", "8"],
+  2: ["36상", "3하"],
+  3: ["15", "6"],
+  4: ["1", "13"],
+  5: ["12", "27"],
+  6: ["8", "13"],
+  7: ["25", "20"],
+  8: ["38", "13"],
+  9: ["5", "3-4"],
+  10: ["8-9", "18"],
+  11: ["21-22", "32"],
+  12: ["26", "22-23"],
+  13: ["1", "3"],
+  14: ["7", "16-17"]
+};
+
 // 개역개정 제자훈련 3권 암송구절 12개
 const DISCIPLESHIP_TRAINING_3 = {
   1: "그러므로 누구든지 나의 이 말을 듣고 행하는 자는 그 집을 반석 위에 지은 지혜로운 사람 같으리니 / 나의 계명을 지키는 자라야 나를 사랑하는 자니 나를 사랑하는 자는 내 아버지께 사랑을 받을 것이요 나도 그를 사랑하여 그에게 나를 나타내리라",
@@ -227,6 +275,21 @@ const DISCIPLESHIP_TRAINING_3_LABELS = {
   10: "10. 청지기 직 (엡5:15-16, 딤전6:17)",
   11: "11. 영적 전투 (벧전5:8, 엡6:10-11)",
   12: "12. 새 계명: 사랑하라 (요13:34-35, 요일3:18)",
+};
+
+const DISCIPLESHIP_TRAINING_3_SEG_VERSES = {
+  1: ["24", "21"],
+  2: ["3-4", "11상"],
+  3: ["19-20", "16"],
+  4: ["45", "23"],
+  5: ["13", "12"],
+  6: ["19-20", "22"],
+  7: ["1-3", "6-7"],
+  8: ["71", "28"],
+  9: ["7-8", "20"],
+  10: ["15-16", "17"],
+  11: ["8", "10-11"],
+  12: ["34-35", "18"]
 };
 
 // 본문 풀(다중-장 책)을 노출하려면 이 배열에 키를 추가하세요.
@@ -294,6 +357,7 @@ const BIBLE_LIBRARY = {
     endVerse: 10,
     verses: MINISTRY_TRAINING_2,
     verseLabels: MINISTRY_TRAINING_2_LABELS,
+    segmentVerses: MINISTRY_TRAINING_2_SEG_VERSES,
   },
   "ministry-training-3": {
     key: "ministry-training-3",
@@ -303,6 +367,7 @@ const BIBLE_LIBRARY = {
     endVerse: 5,
     verses: MINISTRY_TRAINING_3,
     verseLabels: MINISTRY_TRAINING_3_LABELS,
+    segmentVerses: MINISTRY_TRAINING_3_SEG_VERSES,
   },
   "discipleship-training-1": {
     key: "discipleship-training-1",
@@ -312,6 +377,7 @@ const BIBLE_LIBRARY = {
     endVerse: 6,
     verses: DISCIPLESHIP_TRAINING_1,
     verseLabels: DISCIPLESHIP_TRAINING_1_LABELS,
+    segmentVerses: DISCIPLESHIP_TRAINING_1_SEG_VERSES,
   },
   "discipleship-training-2": {
     key: "discipleship-training-2",
@@ -321,6 +387,7 @@ const BIBLE_LIBRARY = {
     endVerse: 14,
     verses: DISCIPLESHIP_TRAINING_2,
     verseLabels: DISCIPLESHIP_TRAINING_2_LABELS,
+    segmentVerses: DISCIPLESHIP_TRAINING_2_SEG_VERSES,
   },
   "discipleship-training-3": {
     key: "discipleship-training-3",
@@ -330,6 +397,7 @@ const BIBLE_LIBRARY = {
     endVerse: 12,
     verses: DISCIPLESHIP_TRAINING_3,
     verseLabels: DISCIPLESHIP_TRAINING_3_LABELS,
+    segmentVerses: DISCIPLESHIP_TRAINING_3_SEG_VERSES,
   },
 };
 

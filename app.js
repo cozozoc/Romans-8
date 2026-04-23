@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.120";
+const APP_VERSION = "0.0.122";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -283,21 +283,40 @@ function wrapSyllables(escapedText) {
   return escapedText.replace(/[\uAC00-\uD7A3]/g, ch => `<span class="syl">${ch}</span>`);
 }
 
-function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = false) {
+function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = false, segmentVerses = null) {
   const merge = !revealAll && !!(state.config && state.config.mergeBlanks);
-  const parts = [];
+  const useSegments = Array.isArray(segmentVerses) && segmentVerses.length > 0;
+  const segments = [];
+  let segWords = [];
+  let segIdx = 0;
+  const flushSeg = () => {
+    const body = segWords.join(" ");
+    segWords = [];
+    if (useSegments) {
+      const num = segmentVerses[segIdx] != null ? String(segmentVerses[segIdx]) : "";
+      segments.push(`<div class="seg"><span class="seg-verse-num">${escapeHtml(num)}</span> ${body}</div>`);
+    } else {
+      segments.push(body);
+    }
+  };
   let i = 0;
   while (i < words.length) {
+    if (useSegments && words[i] === "/") {
+      flushSeg();
+      segIdx++;
+      i++;
+      continue;
+    }
     if (merge && blankSet.has(i) && !revealedSet.has(i)) {
       let j = i;
       const group = [];
-      while (j < words.length && blankSet.has(j) && !revealedSet.has(j)) {
+      while (j < words.length && blankSet.has(j) && !revealedSet.has(j) && (!useSegments || words[j] !== "/")) {
         group.push(j);
         j++;
       }
       if (group.length >= 2) {
         const groupText = group.map(k => words[k]).join(" ");
-        parts.push(`<span class="blank blank-merged" data-idx="${group.join(',')}">${escapeHtml(groupText)}</span>`);
+        segWords.push(`<span class="blank blank-merged" data-idx="${group.join(',')}">${escapeHtml(groupText)}</span>`);
         i = j;
         continue;
       }
@@ -305,18 +324,19 @@ function renderWordsHtml(words, blankSet, revealedSet = new Set(), revealAll = f
     const w = words[i];
     if (blankSet.has(i)) {
       if (revealAll) {
-        parts.push(`<span class="blank revealed">${wrapSyllables(escapeHtml(w))}</span>`);
+        segWords.push(`<span class="blank revealed">${wrapSyllables(escapeHtml(w))}</span>`);
       } else if (revealedSet.has(i)) {
-        parts.push(`<span class="blank revealed" data-idx="${i}">${wrapSyllables(escapeHtml(w))}</span>`);
+        segWords.push(`<span class="blank revealed" data-idx="${i}">${wrapSyllables(escapeHtml(w))}</span>`);
       } else {
-        parts.push(`<span class="blank" data-idx="${i}">${escapeHtml(w)}</span>`);
+        segWords.push(`<span class="blank" data-idx="${i}">${escapeHtml(w)}</span>`);
       }
     } else {
-      parts.push(wrapSyllables(escapeHtml(w)));
+      segWords.push(wrapSyllables(escapeHtml(w)));
     }
     i++;
   }
-  return parts.join(" ");
+  flushSeg();
+  return useSegments ? segments.join("") : segments.join(" ");
 }
 
 function secureRandomInt(maxExclusive) {
@@ -638,8 +658,14 @@ function verseLabelHtml() {
   return `<span class="verse-label">${state.currentVerse}절</span>`;
 }
 
+function getCurrentSegmentVerses() {
+  const book = state.book;
+  if (!book || !book.segmentVerses) return null;
+  return book.segmentVerses[state.currentVerse] || null;
+}
+
 function renderQuestionBody() {
-  const body = renderWordsHtml(state.currentWords, state.currentBlankSet);
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), false, getCurrentSegmentVerses());
   $("questionText").innerHTML = verseLabelHtml() + body;
 }
 
@@ -823,7 +849,7 @@ function showAll() {
   box.classList.remove("wrong", "correct");
   box.classList.add("reveal-all");
   const labelHtml = verseLabelHtml();
-  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true, getCurrentSegmentVerses());
   $("questionText").innerHTML = labelHtml + body;
 
   $("hintBtn").disabled = false;
@@ -1035,7 +1061,7 @@ function showHint() {
   state.hintLastIdx = idx;
 
   const labelHtml = verseLabelHtml();
-  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set([idx]));
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set([idx]), false, getCurrentSegmentVerses());
   $("questionText").innerHTML = labelHtml + body;
 
   state.hintShown = true;
@@ -1134,7 +1160,7 @@ function revealAllThenAdvance() {
   const box = $("questionBox");
   box.classList.add("reveal-all", "correct");
   const labelHtml = verseLabelHtml();
-  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true, getCurrentSegmentVerses());
   $("questionText").innerHTML = labelHtml + body;
   $("hintBtn").disabled = true;
   $("submitBtn").disabled = true;
@@ -1202,7 +1228,7 @@ function previewThenRun(fn) {
   box.classList.remove("wrong", "correct");
   box.classList.add("reveal-all");
   const labelHtml = verseLabelHtml();
-  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true);
+  const body = renderWordsHtml(state.currentWords, state.currentBlankSet, new Set(), true, getCurrentSegmentVerses());
   $("questionText").innerHTML = labelHtml + body;
   updateViewToggleBtn();
   const previewMs = state.currentWords.length * 1000;
@@ -1312,13 +1338,25 @@ function renderPdfAnswersOnlyHtml(words, blankSet, mergeBlanks) {
   return items.join(" ");
 }
 
-function renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle) {
+function renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle, segmentVerses = null) {
+  const useSegments = Array.isArray(segmentVerses) && segmentVerses.length > 0;
   const parts = [];
+  let segIdx = 0;
+  if (useSegments) {
+    const num = segmentVerses[0] != null ? String(segmentVerses[0]) : "";
+    parts.push(`<span class="pdf-seg-verse-num">${escapeHtml(num)}</span> `);
+  }
   let i = 0;
   while (i < words.length) {
     const w = words[i];
     if (w === "/") {
-      parts.push(`<span class="pdf-sep">/</span>`);
+      if (useSegments) {
+        segIdx++;
+        const num = segmentVerses[segIdx] != null ? String(segmentVerses[segIdx]) : "";
+        parts.push(`<br><span class="pdf-seg-verse-num">${escapeHtml(num)}</span> `);
+      } else {
+        parts.push(`<span class="pdf-sep">/</span>`);
+      }
       i++;
       continue;
     }
@@ -1387,7 +1425,18 @@ function openPrintPractice() {
       } else {
         labelHtml = `<span class="v-label">${vnum}</span>`;
       }
-      blocks.push(`<div class="verse">${labelHtml}<span class="v-body">${escapeHtml(verse)}</span></div>`);
+      const segVerses = book.segmentVerses && book.segmentVerses[vnum] ? book.segmentVerses[vnum] : null;
+      let bodyHtml;
+      if (Array.isArray(segVerses) && segVerses.length > 0) {
+        const segments = verse.split(" / ");
+        bodyHtml = segments.map((seg, i) => {
+          const num = segVerses[i] != null ? String(segVerses[i]) : "";
+          return `<span class="pdf-seg-verse-num">${escapeHtml(num)}</span> ${escapeHtml(seg)}`;
+        }).join("<br>");
+      } else {
+        bodyHtml = escapeHtml(verse);
+      }
+      blocks.push(`<div class="verse">${labelHtml}<span class="v-body">${bodyHtml}</span></div>`);
     }
     return blocks.join("");
   };
@@ -1403,7 +1452,8 @@ function openPrintPractice() {
       if (!verse) continue;
       const words = splitWords(verse);
       const blankSet = pickBlankIndices(words, level, firstTwoMode);
-      const body = renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle);
+      const segVerses = book.segmentVerses && book.segmentVerses[vnum] ? book.segmentVerses[vnum] : null;
+      const body = renderPdfWordsHtml(words, blankSet, mergeBlanks, blankStyle, segVerses);
       let labelHtml;
       if (book.verseLabels && book.verseLabels[vnum]) {
         labelHtml = `<div class="v-header">${escapeHtml(book.verseLabels[vnum])}</div>`;
@@ -1532,6 +1582,10 @@ function openPrintPractice() {
   .pdf-blank.fixed-width { min-width: 3.2em; }
   .pdf-blank.merged.fixed-width { min-width: 6.5em; }
   .pdf-sep { color: #999; margin: 0 4px; }
+  .pdf-seg-verse-num {
+    display: inline-block; min-width: 1.4em;
+    font-weight: 700; color: #5568d3; margin-right: 4px;
+  }
   .ans-chip {
     display: inline-block;
     background: #fff8e6;
@@ -1591,7 +1645,7 @@ document.addEventListener("DOMContentLoaded", () => {
   populateAutoNextGapOptions();
   loadSettings();
   if ($("bookKey").options.length === 0) {
-    populateBookOptions($("category").value || "training");
+    populateBookOptions($("category").value || "training", DEFAULT_BOOK_KEY);
   }
   if (!$("chapterNum").options.length) {
     populateChapterOptions(getSelectedBookRaw(), 1);
