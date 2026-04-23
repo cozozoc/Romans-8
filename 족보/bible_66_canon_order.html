@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성경 66권 · 정경 순서</title>
+<style>
+  :root {
+    --color-text-primary: #1f1f1d;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f1efe8;
+    --color-background-tertiary: #e9e6dd;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.18);
+    /* 구약 */
+    --color-pentateuch: #8B6914;   /* 모세오경: 황갈 */
+    --color-ot-history: #3B7EA1;   /* 구약 역사서: 파랑 */
+    --color-poetry:     #C08B3A;   /* 시가서: 호박 */
+    --color-major:      #B23A3A;   /* 대선지서: 진홍 */
+    --color-minor:      #8C3A9C;   /* 소선지서: 보라 */
+    /* 신약 */
+    --color-gospels:    #1D9E75;   /* 복음서: 짙은 초록 */
+    --color-nt-history: #2B7A5C;   /* 사도행전: 녹청 */
+    --color-pauline:    #4A6CB3;   /* 바울서신: 청보라 */
+    --color-general:    #6C5B95;   /* 일반서신: 자주 */
+    --color-rev:        #C93A3A;   /* 요한계시록: 강렬한 붉은 */
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #f0eee6;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-background-primary: #181816;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #3a3a38;
+      --color-border-tertiary: rgba(255,255,255,0.12);
+      --color-border-secondary: rgba(255,255,255,0.2);
+      --color-pentateuch: #E0A93A;
+      --color-ot-history: #6FB0D1;
+      --color-poetry:     #E0A93A;
+      --color-major:      #E07070;
+      --color-minor:      #C08AD8;
+      --color-gospels:    #5DCAA5;
+      --color-nt-history: #5DB590;
+      --color-pauline:    #7A98D8;
+      --color-general:    #9B8DB8;
+      --color-rev:        #F06060;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px;
+    background-color: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    display: flex; justify-content: center;
+  }
+  .container { max-width: 1000px; width: 100%; }
+
+  h1.title { font-size: 34px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
+  p.sub { font-size: 16px; text-align: center; color: var(--color-text-secondary); margin: 0 0 8px; }
+
+  p.page-nav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
+    text-align: center; margin: 0 0 1.6rem;
+    font-size: 13px;
+  }
+  p.page-nav a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--color-background-tertiary);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--color-border-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  p.page-nav a:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  p.page-nav a.current {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .testament {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.2rem 1.2rem 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+  .testament-header {
+    display: flex; align-items: baseline; gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .testament-title {
+    font-size: 22px; font-weight: 800;
+  }
+  .testament-count {
+    font-size: 14px; color: var(--color-text-tertiary);
+  }
+
+  .section {
+    margin-bottom: 1.2rem;
+  }
+  .section:last-child { margin-bottom: 0; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 0.6rem;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--section-color, var(--color-border-secondary));
+  }
+  .section-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--section-color, var(--color-text-tertiary));
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 17px; font-weight: 700;
+    color: var(--section-color, var(--color-text-primary));
+  }
+  .section-count {
+    font-size: 13px; color: var(--color-text-tertiary);
+    margin-left: auto;
+  }
+
+  .books {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 6px;
+  }
+
+  .book {
+    display: flex; flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 10px;
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-tertiary);
+    border-left: 3px solid var(--section-color, var(--color-border-secondary));
+    border-radius: var(--border-radius-md);
+    min-height: 52px;
+  }
+  .book-head {
+    display: flex; align-items: baseline; gap: 6px; width: 100%;
+  }
+  .book-num {
+    font-size: 11px; font-weight: 700; color: var(--color-text-tertiary);
+    min-width: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+  .book-name {
+    font-size: 15px; font-weight: 700;
+    color: var(--color-text-primary);
+  }
+  .book-eng {
+    font-size: 11px; color: var(--color-text-tertiary);
+    margin-top: 1px;
+    padding-left: 26px;
+    letter-spacing: 0.01em;
+  }
+
+  /* 섹션 색 적용 */
+  .sec-pentateuch  { --section-color: var(--color-pentateuch); }
+  .sec-ot-history  { --section-color: var(--color-ot-history); }
+  .sec-poetry      { --section-color: var(--color-poetry); }
+  .sec-major       { --section-color: var(--color-major); }
+  .sec-minor       { --section-color: var(--color-minor); }
+  .sec-gospels     { --section-color: var(--color-gospels); }
+  .sec-nt-history  { --section-color: var(--color-nt-history); }
+  .sec-pauline     { --section-color: var(--color-pauline); }
+  .sec-general     { --section-color: var(--color-general); }
+  .sec-rev         { --section-color: var(--color-rev); }
+
+  footer {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-tertiary);
+    font-size: 13px; color: var(--color-text-tertiary);
+    text-align: center; line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    h1.title { font-size: 26px; }
+    p.sub { font-size: 14px; }
+    .books { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 5px; }
+    .book { min-height: 48px; padding: 6px 8px; }
+    .book-name { font-size: 14px; }
+    .book-eng { font-size: 10px; padding-left: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="title">성경 66권 · 정경 순서</h1>
+  <p class="sub">구약 39권 · 신약 27권 — 개신교 정경 순서 · 부분(division)별 색으로 구분</p>
+  <p class="page-nav">
+    <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
+    <a href="old_testament_timeline_writing.html" target="_blank" rel="noopener">📚 구약 연대기 (기록순)</a>
+    <a href="divided_kingdom_kings.html" target="_blank" rel="noopener">👑 분열왕국 왕</a>
+    <a href="chronological_apostolic_history.html" target="_blank" rel="noopener">📜 인물 연대기</a>
+    <a href="adam_to_jesus_genealogy.html" target="_blank" rel="noopener">🌳 아담→예수 족보</a>
+    <a class="current" aria-current="page">📚 성경 66권 순서</a>
+  </p>
+
+  <!-- ============ 구약 39권 ============ -->
+  <div class="testament">
+    <div class="testament-header">
+      <span class="testament-title">📖 구약 (舊約)</span>
+      <span class="testament-count">39권 · 창세기 ~ 말라기</span>
+    </div>
+
+    <!-- 모세오경 -->
+    <div class="section sec-pentateuch">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">모세오경 (율법서)</span>
+        <span class="section-count">5권 · 1~5</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">1</span><span class="book-name">창세기</span></div><span class="book-eng">Genesis</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">2</span><span class="book-name">출애굽기</span></div><span class="book-eng">Exodus</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">3</span><span class="book-name">레위기</span></div><span class="book-eng">Leviticus</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">4</span><span class="book-name">민수기</span></div><span class="book-eng">Numbers</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">5</span><span class="book-name">신명기</span></div><span class="book-eng">Deuteronomy</span></div>
+      </div>
+    </div>
+
+    <!-- 역사서 -->
+    <div class="section sec-ot-history">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">역사서</span>
+        <span class="section-count">12권 · 6~17</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">6</span><span class="book-name">여호수아</span></div><span class="book-eng">Joshua</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">7</span><span class="book-name">사사기</span></div><span class="book-eng">Judges</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">8</span><span class="book-name">룻기</span></div><span class="book-eng">Ruth</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">9</span><span class="book-name">사무엘상</span></div><span class="book-eng">1 Samuel</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">10</span><span class="book-name">사무엘하</span></div><span class="book-eng">2 Samuel</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">11</span><span class="book-name">열왕기상</span></div><span class="book-eng">1 Kings</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">12</span><span class="book-name">열왕기하</span></div><span class="book-eng">2 Kings</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">13</span><span class="book-name">역대상</span></div><span class="book-eng">1 Chronicles</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">14</span><span class="book-name">역대하</span></div><span class="book-eng">2 Chronicles</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">15</span><span class="book-name">에스라</span></div><span class="book-eng">Ezra</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">16</span><span class="book-name">느헤미야</span></div><span class="book-eng">Nehemiah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">17</span><span class="book-name">에스더</span></div><span class="book-eng">Esther</span></div>
+      </div>
+    </div>
+
+    <!-- 시가서 -->
+    <div class="section sec-poetry">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">시가서 (지혜서)</span>
+        <span class="section-count">5권 · 18~22</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">18</span><span class="book-name">욥기</span></div><span class="book-eng">Job</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">19</span><span class="book-name">시편</span></div><span class="book-eng">Psalms</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">20</span><span class="book-name">잠언</span></div><span class="book-eng">Proverbs</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">21</span><span class="book-name">전도서</span></div><span class="book-eng">Ecclesiastes</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">22</span><span class="book-name">아가</span></div><span class="book-eng">Song of Songs</span></div>
+      </div>
+    </div>
+
+    <!-- 대선지서 -->
+    <div class="section sec-major">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">대선지서</span>
+        <span class="section-count">5권 · 23~27</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">23</span><span class="book-name">이사야</span></div><span class="book-eng">Isaiah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">24</span><span class="book-name">예레미야</span></div><span class="book-eng">Jeremiah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">25</span><span class="book-name">예레미야애가</span></div><span class="book-eng">Lamentations</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">26</span><span class="book-name">에스겔</span></div><span class="book-eng">Ezekiel</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">27</span><span class="book-name">다니엘</span></div><span class="book-eng">Daniel</span></div>
+      </div>
+    </div>
+
+    <!-- 소선지서 -->
+    <div class="section sec-minor">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">소선지서</span>
+        <span class="section-count">12권 · 28~39</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">28</span><span class="book-name">호세아</span></div><span class="book-eng">Hosea</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">29</span><span class="book-name">요엘</span></div><span class="book-eng">Joel</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">30</span><span class="book-name">아모스</span></div><span class="book-eng">Amos</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">31</span><span class="book-name">오바댜</span></div><span class="book-eng">Obadiah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">32</span><span class="book-name">요나</span></div><span class="book-eng">Jonah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">33</span><span class="book-name">미가</span></div><span class="book-eng">Micah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">34</span><span class="book-name">나훔</span></div><span class="book-eng">Nahum</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">35</span><span class="book-name">하박국</span></div><span class="book-eng">Habakkuk</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">36</span><span class="book-name">스바냐</span></div><span class="book-eng">Zephaniah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">37</span><span class="book-name">학개</span></div><span class="book-eng">Haggai</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">38</span><span class="book-name">스가랴</span></div><span class="book-eng">Zechariah</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">39</span><span class="book-name">말라기</span></div><span class="book-eng">Malachi</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 신약 27권 ============ -->
+  <div class="testament">
+    <div class="testament-header">
+      <span class="testament-title">✝️ 신약 (新約)</span>
+      <span class="testament-count">27권 · 마태복음 ~ 요한계시록</span>
+    </div>
+
+    <!-- 복음서 -->
+    <div class="section sec-gospels">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">복음서</span>
+        <span class="section-count">4권 · 40~43</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">40</span><span class="book-name">마태복음</span></div><span class="book-eng">Matthew</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">41</span><span class="book-name">마가복음</span></div><span class="book-eng">Mark</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">42</span><span class="book-name">누가복음</span></div><span class="book-eng">Luke</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">43</span><span class="book-name">요한복음</span></div><span class="book-eng">John</span></div>
+      </div>
+    </div>
+
+    <!-- 역사서 -->
+    <div class="section sec-nt-history">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">역사서</span>
+        <span class="section-count">1권 · 44</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">44</span><span class="book-name">사도행전</span></div><span class="book-eng">Acts</span></div>
+      </div>
+    </div>
+
+    <!-- 바울서신 -->
+    <div class="section sec-pauline">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">바울서신</span>
+        <span class="section-count">13권 · 45~57</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">45</span><span class="book-name">로마서</span></div><span class="book-eng">Romans</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">46</span><span class="book-name">고린도전서</span></div><span class="book-eng">1 Corinthians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">47</span><span class="book-name">고린도후서</span></div><span class="book-eng">2 Corinthians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">48</span><span class="book-name">갈라디아서</span></div><span class="book-eng">Galatians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">49</span><span class="book-name">에베소서</span></div><span class="book-eng">Ephesians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">50</span><span class="book-name">빌립보서</span></div><span class="book-eng">Philippians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">51</span><span class="book-name">골로새서</span></div><span class="book-eng">Colossians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">52</span><span class="book-name">데살로니가전서</span></div><span class="book-eng">1 Thessalonians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">53</span><span class="book-name">데살로니가후서</span></div><span class="book-eng">2 Thessalonians</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">54</span><span class="book-name">디모데전서</span></div><span class="book-eng">1 Timothy</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">55</span><span class="book-name">디모데후서</span></div><span class="book-eng">2 Timothy</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">56</span><span class="book-name">디도서</span></div><span class="book-eng">Titus</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">57</span><span class="book-name">빌레몬서</span></div><span class="book-eng">Philemon</span></div>
+      </div>
+    </div>
+
+    <!-- 일반서신 -->
+    <div class="section sec-general">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">일반서신 (공동서신)</span>
+        <span class="section-count">8권 · 58~65</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">58</span><span class="book-name">히브리서</span></div><span class="book-eng">Hebrews</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">59</span><span class="book-name">야고보서</span></div><span class="book-eng">James</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">60</span><span class="book-name">베드로전서</span></div><span class="book-eng">1 Peter</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">61</span><span class="book-name">베드로후서</span></div><span class="book-eng">2 Peter</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">62</span><span class="book-name">요한1서</span></div><span class="book-eng">1 John</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">63</span><span class="book-name">요한2서</span></div><span class="book-eng">2 John</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">64</span><span class="book-name">요한3서</span></div><span class="book-eng">3 John</span></div>
+        <div class="book"><div class="book-head"><span class="book-num">65</span><span class="book-name">유다서</span></div><span class="book-eng">Jude</span></div>
+      </div>
+    </div>
+
+    <!-- 예언서 -->
+    <div class="section sec-rev">
+      <div class="section-header">
+        <span class="section-dot"></span>
+        <span class="section-title">예언서</span>
+        <span class="section-count">1권 · 66</span>
+      </div>
+      <div class="books">
+        <div class="book"><div class="book-head"><span class="book-num">66</span><span class="book-name">요한계시록</span></div><span class="book-eng">Revelation</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    * 개신교 정경 순서 기준 (구약 39권 + 신약 27권 = 총 66권).<br>
+    * 히브리어 성경(타나크)은 율법(Torah)·예언서(Nevi'im)·성문서(Ketuvim) 3부로 24권으로 세며, 같은 책이지만 묶음이 다릅니다.
+  </footer>
+</div>
+
+</body>
+</html>
