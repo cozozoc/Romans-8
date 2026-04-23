@@ -247,6 +247,9 @@ const BIBLE_LIBRARY = {
     startVerse: 15,
     endVerse: 23,
     verses: EPHESIANS_1_PAUL_PRAYER,
+    sermons: [
+      { title: "교회 중심-여진호 목사님", url: "https://youtu.be/RTr19PQhg7o?si=IUKuttUd6Qx16UHw" },
+    ],
   },
   "ministry-training-2": {
     key: "ministry-training-2",

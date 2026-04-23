@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.117";
+const APP_VERSION = "0.0.118";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -450,6 +450,26 @@ function applyBookRangeToInputs(clamp = true) {
     sv.value = String(s);
     ev.value = String(e);
   }
+  updateSermonLinks();
+}
+
+function updateSermonLinks() {
+  const row = $("sermonRow");
+  const list = $("sermonList");
+  if (!row || !list) return;
+  const book = getSelectedBook();
+  const sermons = Array.isArray(book && book.sermons) ? book.sermons : [];
+  if (!sermons.length) {
+    row.classList.add("hidden");
+    list.innerHTML = "";
+    return;
+  }
+  row.classList.remove("hidden");
+  list.innerHTML = sermons.map(s => {
+    const title = escapeHtml(s.title || "");
+    const url = encodeURI(s.url || "");
+    return `<a class="sermon-link" href="${url}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+  }).join("");
 }
 
 function startTest() {

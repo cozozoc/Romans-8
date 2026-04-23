@@ -1192,3 +1192,30 @@ summary:focus-visible,
     font-size: 14px;
   }
 }
+
+.sermon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sermon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.sermon-link:hover {
+  background: var(--primary);
+  color: #fff;
+}
+.sermon-link::before {
+  content: "▶";
+  font-size: 11px;
+}

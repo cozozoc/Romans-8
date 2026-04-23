@@ -20,7 +20,7 @@
       <button id="helpBtn" class="header-icon-btn help-btn" aria-label="도움말" title="도움말">?</button>
     </div>
     <h1>Bible Memorization</h1>
-    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.117</span></p>
+    <p class="subtitle">개역개정 · 직접 입력 하면서 외우기 · <span id="appVersion">v0.0.118</span></p>
   </header>
 
   <!-- 도움말 모달 -->
@@ -132,6 +132,10 @@
         <div class="form-row full-width hidden" id="chapterRow">
           <label for="chapterNum"><span id="chapterUnitLabel">장</span> 선택</label>
           <select id="chapterNum"></select>
+        </div>
+        <div class="form-row full-width hidden" id="sermonRow">
+          <label>🎧 설교 듣기</label>
+          <div id="sermonList" class="sermon-list"></div>
         </div>
         <div class="form-row">
           <label for="startVerse">시작 <span id="startVerseUnit">구절</span> <span id="startVerseHint" class="hint">1~39</span></label>
