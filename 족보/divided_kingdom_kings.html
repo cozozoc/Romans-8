@@ -77,22 +77,14 @@
     display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 16px;
   }
+  /* single-row: 이전에 가로 스크롤이었으나, 세로 그리드로 통일해 가독성 개선 */
   .ig-figures.single-row {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 12px;
-    padding-bottom: 8px;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
   }
   .ig-figures.single-row .ig-card {
-    flex: 0 0 280px;
-    scroll-snap-align: start;
-  }
-  .ig-figures.single-row::-webkit-scrollbar { height: 8px; }
-  .ig-figures.single-row::-webkit-scrollbar-thumb {
-    background: var(--color-border-secondary); border-radius: 4px;
+    flex: unset;
   }
   .ig-card {
     background: var(--color-background-primary);
