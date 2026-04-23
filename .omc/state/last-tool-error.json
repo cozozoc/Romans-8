@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"node -e \\\"\\nconst fs = require('fs');\\nconst code = fs.readFileSync('verses.js', 'utf8');\\n// Evaluate the constants\\neval(code.replace(/^const BIBLE_LIBRARY[\\\\\\\\s\\\\\\\\S]*/m, '').replace(/\\...",
-  "error": "Exit code 1\n<anonymous_script>:1\r\nMINISTRY_TRAINING_2\r\n^\r\n\r\nReferenceError: MINISTRY_TRAINING_2 is not defined\r\n    at eval (eval at <anonymous> ([eval]:15:13), <anonymous>:1:1)\r\n    at [eval]:15:13\r\n    at runScriptInThisContext (node:internal/vm:219:10)\r\n    at node:internal/process/execution:451:12\r\n    at [eval]-wrapper:6:24\r\n    at runScriptInContext (node:internal/process/execution:449:60)\r\n    at evalFunction (node:internal/process/execution:283:30)\r\n    at evalTypeScript (node:internal/p...",
-  "timestamp": "2026-04-23T01:40:46.329Z",
-  "retry_count": 1
-}

@@ -68,6 +68,18 @@ const PSALMS_1 = {
   6: "무릇 의인들의 길은 여호와께서 인정하시나 악인들의 길은 망하리로다"
 };
 
+// 개역개정 전도서 선별 암송구절 (1:2, 3:11, 12:13)
+const ECCLESIASTES_SELECTED = {
+  1: "전도자가 이르되 헛되고 헛되며 헛되고 헛되니 모든 것이 헛되도다",
+  2: "하나님이 모든 것을 지으시되 때를 따라 아름답게 하셨고 또 사람들에게는 영원을 사모하는 마음을 주셨느니라",
+  3: "일의 결국을 다 들었으니 하나님을 경외하고 그의 명령들을 지킬지어다 이것이 모든 사람의 본분이니라"
+};
+const ECCLESIASTES_SELECTED_LABELS = {
+  1: "전도서 1:2",
+  2: "전도서 3:11",
+  3: "전도서 12:13"
+};
+
 // 개역개정 마태복음 21:12-17 (성전을 깨끗하게 하시다)
 const MATTHEW_21_TEMPLE_CLEANSING = {
   12: "예수께서 성전에 들어가사 성전 안에서 매매하는 모든 사람들을 내쫓으시며 돈 바꾸는 사람들의 상과 비둘기 파는 사람들의 의자를 둘러 엎으시고",
@@ -348,6 +360,16 @@ const BIBLE_LIBRARY = {
     startVerse: 18,
     endVerse: 22,
     verses: MATTHEW_21_FIG_TREE,
+  },
+  "ecclesiastes-selected": {
+    key: "ecclesiastes-selected",
+    category: "bible-memory",
+    name: "전도서 선별 (1:2, 3:11, 12:13)",
+    startVerse: 1,
+    endVerse: 3,
+    verses: ECCLESIASTES_SELECTED,
+    verseLabels: ECCLESIASTES_SELECTED_LABELS,
+    itemUnit: "절",
   },
   "ministry-training-2": {
     key: "ministry-training-2",

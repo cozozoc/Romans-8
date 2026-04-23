@@ -192,6 +192,32 @@
   .bar-prophecy { background: var(--color-prophecy); }
   .bar-short { padding: 3px 2px; font-size: 13px; }
 
+  /* 기록된 책이 없는 빈 구간 주석 (예: 애굽 체류기) */
+  .lane-note {
+    position: absolute;
+    border: 1.5px dashed var(--color-border-secondary);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.025);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-tertiary);
+    font-size: 12px; font-weight: 700;
+    line-height: 1.35;
+    text-align: center;
+    padding: 6px 4px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+  }
+  .lane-note-sub {
+    display: inline-block;
+    margin-top: 2px;
+    font-size: 10px; font-weight: 500;
+    opacity: 0.85;
+  }
+  @media (prefers-color-scheme: dark) {
+    .lane-note { background: rgba(255,255,255,0.03); }
+  }
+
   /* Tooltip */
   .tooltip {
     position: absolute;
@@ -321,6 +347,14 @@
       padding: 2px 2px;
       font-size: 10px;
     }
+    /* 레인 주석도 좁은 레인에 맞춰 세로쓰기 */
+    .lane-note {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      padding: 6px 2px;
+      font-size: 12px;
+    }
+    .lane-note-sub { font-size: 10px; margin-top: 0; margin-left: 2px; }
 
     /* 축 폭 조금 줄여 차트 영역 확보 (JS 상수와 맞추려면 AXIS_WIDTH도 수정해야 함) */
     .axis { width: 48px; }
@@ -884,6 +918,11 @@
     { label: "귀환",     start: -538,  end: -400 }
   ];
 
+  // 특정 레인(카테고리) 안에서만 표시되는 주석 — 책이 기록되지 않은 빈 구간 설명
+  const LANE_NOTES = [
+    { lane: "history", start: -1800, end: -1500, text: "애굽 체류기", sub: "400년간의 침묵" }
+  ];
+
   // 세로 스케일: 1년 = 1.1px → 1700년 ≈ 1870px
   const V_SCALE = 1.1;
   const MIN_BAR_HEIGHT = 40;
@@ -1029,6 +1068,22 @@
         });
 
         chart.appendChild(bar);
+      });
+
+      // 이 레인(카테고리)에 속하는 빈 구간 주석 렌더링
+      LANE_NOTES.filter(n => n.lane === key).forEach((n) => {
+        const note = document.createElement("div");
+        note.className = "lane-note";
+        const top = yearToY(n.start);
+        const height = yearToY(n.end) - top;
+        note.style.top = top + "px";
+        note.style.height = height + "px";
+        note.style.left = "calc(" + laneLeftPct + "% + 4px)";
+        note.style.width = "calc(" + widthPct + "% - 8px)";
+        note.innerHTML = '<div class="lane-note-text">' + n.text
+          + (n.sub ? '<br><span class="lane-note-sub">' + n.sub + '</span>' : '')
+          + '</div>';
+        chart.appendChild(note);
       });
 
       laneLeftPct += widthPct;

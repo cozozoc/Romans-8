@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.123";
+const APP_VERSION = "0.0.124";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -116,7 +116,7 @@ function populateBookOptions(category, preserveKey) {
     opt.value = b.key;
     let rangeText;
     if (b.chapters) rangeText = `전 ${b.chapterCount}장`;
-    else if (b.verseLabels) rangeText = `${b.endVerse}과`;
+    else if (b.verseLabels) rangeText = `${b.endVerse}${b.itemUnit || "과"}`;
     else rangeText = `${b.startVerse}~${b.endVerse}절`;
     opt.textContent = b.prefix
       ? `${b.prefix} (${b.name} ${rangeText})`
@@ -650,7 +650,9 @@ function announceSubmit(msg) {
 }
 
 function verseUnit() {
-  return (state.book && state.book.verseLabels) ? "과" : "절";
+  const b = state.book;
+  if (b && b.itemUnit) return b.itemUnit;
+  return (b && b.verseLabels) ? "과" : "절";
 }
 
 function verseLabelHtml() {
@@ -678,9 +680,12 @@ function renderStatusBar() {
   const target = Math.max(1, parseInt(state.config.continuousCount, 10) || 1);
   const streak = Math.max(0, Math.min(state.correctStreak || 0, target));
 
+  const customLabel = state.book && state.book.verseLabels && state.book.verseLabels[state.currentVerse];
+  const shortLabel = (customLabel && !customLabel.includes("(") && customLabel.length <= 16) ? customLabel : null;
+  const verseSub = shortLabel || `${state.currentVerse}${unit}`;
   const verseEl = $("verseInfo");
   if (verseEl) verseEl.innerHTML =
-    `${pos} / ${totalInList} <span class="sub">${state.currentVerse}${unit}</span>`;
+    `${pos} / ${totalInList} <span class="sub">${escapeHtml(verseSub)}</span>`;
 
   const levelEl = $("levelInfo");
   if (levelEl) levelEl.innerHTML =
