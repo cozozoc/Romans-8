@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성경 헬라어/히브리어 어휘 (30개)</title>
+<style>
+  :root {
+    --color-text-primary: #1f1f1d;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f1efe8;
+    --color-background-tertiary: #e9e6dd;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.2);
+    --border-radius-md: 8px;
+    --border-radius-lg: 14px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --font-serif-gr: "SBL Greek", "GFS Didot", "Times New Roman", serif;
+    --font-serif-hb: "SBL Hebrew", "Ezra SIL", "Times New Roman", serif;
+    --color-hebrew: #B58A3A;
+    --color-greek:  #3B6FB5;
+    --color-aram:   #8E5EB7;
+    --color-rank-top: #B23A3A;    /* 1-5 */
+    --color-rank-high: #C08B3A;   /* 6-15 */
+    --color-rank-mid: #3B7EA1;    /* 16-25 */
+    --color-rank-low: #6B6B6B;    /* 26-30 */
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #f0eee6;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-background-primary: #181816;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #3a3a38;
+      --color-border-tertiary: rgba(255,255,255,0.12);
+      --color-border-secondary: rgba(255,255,255,0.2);
+      --color-hebrew: #E0A93A;
+      --color-greek:  #6FA0D8;
+      --color-aram:   #B891D8;
+      --color-rank-top:  #E07070;
+      --color-rank-high: #E0A93A;
+      --color-rank-mid:  #6FB0D1;
+      --color-rank-low:  #b0b0b0;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px;
+    background-color: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    display: flex; justify-content: center;
+  }
+  .container { max-width: 1100px; width: 100%; }
+
+  h1.title { font-size: 32px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
+  p.sub { font-size: 16px; text-align: center; color: var(--color-text-secondary); margin: 0 0 10px; }
+  p.hint {
+    text-align: center; margin: 0 0 1.4rem;
+    font-size: 13px; color: var(--color-text-tertiary);
+  }
+  p.hint b { color: var(--color-text-secondary); }
+
+  p.page-nav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
+    text-align: center; margin: 0 0 1.6rem;
+    font-size: 13px;
+  }
+  p.page-nav a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--color-background-tertiary);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--color-border-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  p.page-nav a:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  p.page-nav a.current {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .legend {
+    display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
+    font-size: 13px; font-weight: 600; color: var(--color-text-secondary);
+    margin-bottom: 2rem; padding: 10px 12px;
+    background: var(--color-background-secondary); border-radius: var(--border-radius-md);
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .term {
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-tertiary);
+    border-left: 4px solid var(--lang-color, var(--color-border-secondary));
+    border-radius: var(--border-radius-lg);
+    padding: 14px 16px 16px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+  .term.lang-heb  { --lang-color: var(--color-hebrew); }
+  .term.lang-grk  { --lang-color: var(--color-greek); }
+  .term.lang-aram { --lang-color: var(--color-aram); }
+
+  .term-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+  }
+  .rank {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 36px; height: 26px; padding: 0 8px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    background: var(--rank-bg, var(--color-background-tertiary));
+    color: var(--rank-fg, var(--color-text-secondary));
+    letter-spacing: 0.02em;
+  }
+  .rank-top  { --rank-bg: rgba(178,58,58,0.12);   --rank-fg: var(--color-rank-top); }
+  .rank-high { --rank-bg: rgba(192,139,58,0.14);  --rank-fg: var(--color-rank-high); }
+  .rank-mid  { --rank-bg: rgba(59,126,161,0.12);  --rank-fg: var(--color-rank-mid); }
+  .rank-low  { --rank-bg: rgba(107,107,107,0.12); --rank-fg: var(--color-rank-low); }
+
+  .lang-chip {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 2px 8px; border-radius: 999px;
+    background: color-mix(in srgb, var(--lang-color) 14%, transparent);
+    color: var(--lang-color);
+    white-space: nowrap;
+  }
+  .lang-chip.aram { /* keeps color from term parent */ }
+
+  .korean-name {
+    font-size: 22px; font-weight: 800;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .original {
+    font-size: 22px; font-weight: 700;
+    color: var(--lang-color);
+    margin: 0 0 2px;
+    letter-spacing: 0.02em;
+  }
+  .term.lang-heb .original { font-family: var(--font-serif-hb); direction: rtl; unicode-bidi: isolate; }
+  .term.lang-grk .original { font-family: var(--font-serif-gr); }
+  .romanization {
+    font-size: 13px; font-style: italic;
+    color: var(--color-text-tertiary);
+    margin: 0 0 10px;
+    letter-spacing: 0.02em;
+  }
+  .meaning {
+    font-size: 14.5px; font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 6px;
+  }
+  .ref {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .note {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    word-break: keep-all;
+  }
+
+  footer {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-tertiary);
+    font-size: 13px; color: var(--color-text-tertiary);
+    text-align: center; line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    h1.title { font-size: 24px; }
+    .grid { grid-template-columns: 1fr; gap: 10px; }
+    .korean-name { font-size: 19px; }
+    .original { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="title">성경 헬라어/히브리어 어휘</h1>
+  <p class="sub">성경 원어 중 가장 중요한 <b>30개</b> 단어 · 히브리어 · 헬라어 · 아람어</p>
+  <p class="hint">성경적 중요성 <b>역순(30 → 1)</b>으로 정렬 · 아래로 내려갈수록 중요도가 높아집니다</p>
+
+  <p class="page-nav">
+    <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
+    <a href="old_testament_timeline_writing.html" target="_blank" rel="noopener">📚 구약 연대기 (기록순)</a>
+    <a href="divided_kingdom_kings.html" target="_blank" rel="noopener">👑 분열왕국 왕</a>
+    <a href="chronological_apostolic_history.html" target="_blank" rel="noopener">📜 인물 연대기</a>
+    <a href="adam_to_jesus_genealogy.html" target="_blank" rel="noopener">🌳 아담→예수 족보</a>
+    <a href="bible_66_canon_order.html" target="_blank" rel="noopener">📚 성경 66권 순서</a>
+    <a class="current" aria-current="page">🔤 성경 원어 어휘</a>
+  </p>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--color-hebrew)"></span>히브리어 (구약)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--color-greek)"></span>헬라어 (신약)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--color-aram)"></span>아람어</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- 30 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-low">No. 30</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">코이노니아</div>
+      <div class="original">κοινωνία</div>
+      <div class="romanization">koinōnia</div>
+      <div class="meaning">교제 · 나눔 · 참여 · 공동체</div>
+      <div class="ref">행 2:42; 고후 13:13; 빌 1:5; 요일 1:3</div>
+      <div class="note">초대교회의 본질을 나타내는 단어. 단순한 친목이 아니라 성령 안에서 한 몸 된 자들의 깊은 연합과 물질·고난까지 함께 나누는 생명의 사귐.</div>
+    </div>
+
+    <!-- 29 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-low">No. 29</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">아멘</div>
+      <div class="original">אָמֵן</div>
+      <div class="romanization">ʾāmēn</div>
+      <div class="meaning">참으로 · 진실로 · 그렇게 되기를</div>
+      <div class="ref">신 27:15-26; 고후 1:20; 계 3:14</div>
+      <div class="note">'견고하다'는 어근에서 온 말로, 선포된 말씀에 대한 확고한 동의. 그리스도 자신이 "아멘이시요 충성되고 참된 증인"(계 3:14)으로 불린다.</div>
+    </div>
+
+    <!-- 28 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-low">No. 28</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">할렐루야</div>
+      <div class="original">הַלְלוּיָהּ</div>
+      <div class="romanization">halĕlû-yāh</div>
+      <div class="meaning">여호와를 찬양하라</div>
+      <div class="ref">시 113-118 · 146-150 (할렐 시편); 계 19:1-6</div>
+      <div class="note">'할렐(찬양하라)' + '야(YHWH의 약칭)'. 구약 시편과 신약 계시록의 천상 예배가 동일한 찬양으로 하나님을 높인다.</div>
+    </div>
+
+    <!-- 27 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-low">No. 27</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">호산나</div>
+      <div class="original">הוֹשִׁיעָה־נָּא</div>
+      <div class="romanization">hôšîʿâ-nāʾ</div>
+      <div class="meaning">지금 구원하소서</div>
+      <div class="ref">시 118:25; 마 21:9; 막 11:9-10; 요 12:13</div>
+      <div class="note">본래 탄원의 외침이었으나 예수님의 예루살렘 입성 시 '다윗의 자손 메시아여 구원하소서'의 환호로 바뀜. 왕적 구원자에 대한 고백.</div>
+    </div>
+
+    <!-- 26 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-low">No. 26</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">하마르티아</div>
+      <div class="original">ἁμαρτία</div>
+      <div class="romanization">hamartia</div>
+      <div class="meaning">죄 · 과녁을 빗나감</div>
+      <div class="ref">롬 3:23; 6:23; 요일 1:8-9</div>
+      <div class="note">본래 활이 과녁을 맞히지 못함을 뜻함. 하나님이 정하신 영광에 이르지 못하는 상태 전체를 가리키며, 그리스도의 속죄가 이 단어에 대한 응답.</div>
+    </div>
+
+    <!-- 25 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 25</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">여호와 체바오트</div>
+      <div class="original">יהוה צְבָאוֹת</div>
+      <div class="romanization">YHWH Ṣĕbāʾôt</div>
+      <div class="meaning">만군의 여호와 · 천군의 주</div>
+      <div class="ref">삼상 1:3; 17:45; 사 6:3; 말 1:6</div>
+      <div class="note">하늘의 군대(별, 천사, 그리고 그의 백성)를 통솔하시는 왕. 다윗이 골리앗 앞에 "나는 만군의 여호와의 이름으로 네게 나아가노라"(삼상 17:45).</div>
+    </div>
+
+    <!-- 24 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 24</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">여호와 닛시</div>
+      <div class="original">יהוה נִסִּי</div>
+      <div class="romanization">YHWH Nissî</div>
+      <div class="meaning">여호와는 나의 깃발</div>
+      <div class="ref">출 17:15</div>
+      <div class="note">아말렉과의 르비딤 전투 후 모세가 쌓은 단의 이름. 전쟁의 승리가 사람의 힘이 아니라 깃발 되신 여호와께 달려 있음을 선포.</div>
+    </div>
+
+    <!-- 23 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 23</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">여호와 라파</div>
+      <div class="original">יהוה רֹפְאֶךָ</div>
+      <div class="romanization">YHWH Rōpheʾekhā</div>
+      <div class="meaning">나는 너를 치료하는 여호와</div>
+      <div class="ref">출 15:26</div>
+      <div class="note">마라의 쓴 물 사건 직후 주신 이름. 육체·영혼·관계의 모든 쓴맛을 달게 하시는 치유자 하나님. 예수님의 치유 사역의 뿌리가 되는 이름.</div>
+    </div>
+
+    <!-- 22 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 22</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">여호와 이레</div>
+      <div class="original">יהוה יִרְאֶה</div>
+      <div class="romanization">YHWH Yirʾeh</div>
+      <div class="meaning">여호와께서 준비(예비)하신다 · 친히 보신다</div>
+      <div class="ref">창 22:14</div>
+      <div class="note">이삭 대신 수풀의 숫양을 준비하신 모리아 산의 이름. "여호와의 산에서 준비되리라"는 예언은 같은 산에서 있게 될 그리스도의 대속을 예표.</div>
+    </div>
+
+    <!-- 21 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 21</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">엘샤다이</div>
+      <div class="original">אֵל שַׁדַּי</div>
+      <div class="romanization">ʾĒl Šadday</div>
+      <div class="meaning">전능하신 하나님</div>
+      <div class="ref">창 17:1; 35:11; 48:3; 출 6:3</div>
+      <div class="note">아브라함·이삭·야곱에게 나타나신 족장 시대의 이름. 불임의 자궁과 죽음 같은 땅에서도 풍성한 생명을 주시는 자족하신 전능자.</div>
+    </div>
+
+    <!-- 20 -->
+    <div class="term lang-aram">
+      <div class="term-head"><span class="rank rank-mid">No. 20</span><span class="lang-chip">아람어 · Aramaic</span></div>
+      <div class="korean-name">아바</div>
+      <div class="original">אַבָּא</div>
+      <div class="romanization">ʾabbāʾ</div>
+      <div class="meaning">아버지 · 친밀한 아빠</div>
+      <div class="ref">막 14:36; 롬 8:15; 갈 4:6</div>
+      <div class="note">예수께서 겟세마네에서 하나님을 부르신 친밀한 호칭. 성령을 받은 자녀들은 이 아람어 단어로 하나님을 '아빠 아버지'라 부를 수 있게 됨.</div>
+    </div>
+
+    <!-- 19 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-mid">No. 19</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">디카이오시네</div>
+      <div class="original">δικαιοσύνη</div>
+      <div class="romanization">dikaiosynē</div>
+      <div class="meaning">의 · 하나님과 올바른 관계</div>
+      <div class="ref">마 5:6; 롬 1:17; 3:21-22</div>
+      <div class="note">바울 서신의 핵심어. 스스로 쌓는 공로의 의가 아니라 그리스도를 믿음으로 하나님께로부터 오는 '전가된 의'. 이신칭의의 신학적 중심.</div>
+    </div>
+
+    <!-- 18 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 18</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">코데쉬</div>
+      <div class="original">קֹדֶשׁ</div>
+      <div class="romanization">qōdeš</div>
+      <div class="meaning">거룩 · 구별됨</div>
+      <div class="ref">레 11:44; 19:2; 사 6:3</div>
+      <div class="note">하나님의 본질을 나타내는 속성. '구별하여 성별하다'는 뜻으로, 그의 백성도 동일하게 '거룩' 할 것이 요구됨. 예배·성전·제사장의 기초.</div>
+    </div>
+
+    <!-- 17 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 17</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">브리트</div>
+      <div class="original">בְּרִית</div>
+      <div class="romanization">bĕrît</div>
+      <div class="meaning">언약</div>
+      <div class="ref">창 15:18; 17:2; 출 24:8; 렘 31:31</div>
+      <div class="note">성경 전체의 골격. 아담·노아·아브라함·모세·다윗 언약을 거쳐 그리스도의 피로 세워진 새 언약(렘 31:31)으로 완성.</div>
+    </div>
+
+    <!-- 16 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-mid">No. 16</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">샬롬 / 에이레네</div>
+      <div class="original">שָׁלוֹם · εἰρήνη</div>
+      <div class="romanization">šālôm / eirēnē</div>
+      <div class="meaning">평강 · 온전함 · 관계의 회복</div>
+      <div class="ref">민 6:24-26; 사 9:6; 요 14:27; 엡 2:14</div>
+      <div class="note">단순한 전쟁의 부재가 아니라 하나님·이웃·피조세계와의 온전한 조화. 예수 그리스도가 친히 '우리의 화평'이 되심(엡 2:14).</div>
+    </div>
+
+    <!-- 15 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-high">No. 15</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">바실레이아</div>
+      <div class="original">βασιλεία τοῦ Θεοῦ</div>
+      <div class="romanization">basileia tou Theou</div>
+      <div class="meaning">하나님의 나라 · 통치</div>
+      <div class="ref">마 4:17; 6:33; 막 1:15; 눅 17:21</div>
+      <div class="note">예수 공생애의 중심 메시지. 영토 개념이 아니라 '왕 되신 하나님의 통치'. 이미 임했으나 장차 완성될 이중 국면(already / not yet).</div>
+    </div>
+
+    <!-- 14 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-high">No. 14</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">메타노이아</div>
+      <div class="original">μετάνοια</div>
+      <div class="romanization">metanoia</div>
+      <div class="meaning">회개 · 생각(방향)의 전환</div>
+      <div class="ref">마 3:2; 4:17; 행 2:38; 롬 2:4</div>
+      <div class="note">단순한 후회(μεταμέλεια)와 구별되는 '마음 전체의 돌이킴'. 세례 요한과 예수께서 나라를 선포하며 가장 먼저 요구하신 응답.</div>
+    </div>
+
+    <!-- 13 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-high">No. 13</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">소테리아</div>
+      <div class="original">σωτηρία</div>
+      <div class="romanization">sōtēria</div>
+      <div class="meaning">구원 · 건짐 · 온전함</div>
+      <div class="ref">눅 19:9; 롬 1:16; 엡 2:8-9</div>
+      <div class="note">죄·사망·진노로부터의 건짐이자 영원한 생명과 영광에 이름. 예수(Ἰησοῦς, 여호수아)라는 이름 자체가 '여호와는 구원이시다'를 뜻함.</div>
+    </div>
+
+    <!-- 12 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-high">No. 12</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">엘로힘</div>
+      <div class="original">אֱלֹהִים</div>
+      <div class="romanization">ʾĕlōhîm</div>
+      <div class="meaning">하나님 · 창조주</div>
+      <div class="ref">창 1:1; 시 19:1; 전 12:1</div>
+      <div class="note">성경 첫 절의 주어. 복수 형태로 쓰이나 단수 동사를 취하는 '장엄의 복수'. 만물의 창조주·재판장 되시는 하나님의 보편적 이름.</div>
+    </div>
+
+    <!-- 11 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-high">No. 11</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">헤세드</div>
+      <div class="original">חֶסֶד</div>
+      <div class="romanization">ḥesed</div>
+      <div class="meaning">인애 · 언약적 사랑 · 한결같은 자비</div>
+      <div class="ref">출 34:6-7; 시 136편(전체); 호 6:6; 미 6:8</div>
+      <div class="note">구약의 '아가페'. 언약을 지키시는 신실한 사랑으로, 시편 136편 전체가 "그의 인자하심이 영원함이로다"로 후렴을 이룬다.</div>
+    </div>
+
+    <!-- 10 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-high">No. 10</span><span class="lang-chip">히브리어/헬라어</span></div>
+      <div class="korean-name">루아흐 / 프뉴마</div>
+      <div class="original">רוּחַ · πνεῦμα</div>
+      <div class="romanization">rûaḥ / pneuma</div>
+      <div class="meaning">성령 · 영 · 숨 · 바람</div>
+      <div class="ref">창 1:2; 겔 37:9-14; 요 3:8; 행 2:2-4</div>
+      <div class="note">창조의 수면 위를 운행하신 하나님의 영, 마른 뼈에 생기를 주시는 바람, 오순절 급하고 강한 바람. 같은 단어로 세 장면이 이어짐.</div>
+    </div>
+
+    <!-- 9 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-high">No. 9</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">임마누엘</div>
+      <div class="original">עִמָּנוּאֵל</div>
+      <div class="romanization">ʿImmānûʾēl</div>
+      <div class="meaning">하나님이 우리와 함께 계시다</div>
+      <div class="ref">사 7:14; 8:8; 마 1:23; 28:20</div>
+      <div class="note">이사야의 예언이 마태복음의 수육 선언으로 성취되고, 마태복음 결미의 "볼지어다 내가 세상 끝날까지 너희와 항상 함께 있으리라"로 완성.</div>
+    </div>
+
+    <!-- 8 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-high">No. 8</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">유앙겔리온</div>
+      <div class="original">εὐαγγέλιον</div>
+      <div class="romanization">euangelion</div>
+      <div class="meaning">복음 · 기쁜 소식</div>
+      <div class="ref">막 1:1; 롬 1:16; 고전 15:3-4</div>
+      <div class="note">황제 즉위의 '기쁜 소식'을 뜻하던 단어를 교회가 차용함. 참된 왕 예수 그리스도의 죽으심·부활·통치 선포가 진짜 '기쁜 소식'임을 선언.</div>
+    </div>
+
+    <!-- 7 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-high">No. 7</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">에클레시아</div>
+      <div class="original">ἐκκλησία</div>
+      <div class="romanization">ekklēsia</div>
+      <div class="meaning">교회 · 불러냄 받은 회중</div>
+      <div class="ref">마 16:18; 행 2:47; 엡 1:22-23; 계 1:4</div>
+      <div class="note">'에크(밖으로) + 칼레오(부르다)' — 세상에서 불러내 그리스도께로 모이게 한 무리. 건물이 아니라 그리스도의 몸, 성령의 성전.</div>
+    </div>
+
+    <!-- 6 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-high">No. 6</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">피스티스</div>
+      <div class="original">πίστις</div>
+      <div class="romanization">pistis</div>
+      <div class="meaning">믿음 · 신실함</div>
+      <div class="ref">창 15:6(LXX); 합 2:4; 롬 1:17; 히 11:1</div>
+      <div class="note">"의인은 믿음으로 말미암아 살리라" — 구약(합 2:4)·로마서·갈라디아서·히브리서를 관통하는 구원의 유일한 통로. 바라는 것들의 실상.</div>
+    </div>
+
+    <!-- 5 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-top">No. 5</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">카리스</div>
+      <div class="original">χάρις</div>
+      <div class="romanization">charis</div>
+      <div class="meaning">은혜 · 값없이 주시는 호의</div>
+      <div class="ref">요 1:14,16-17; 롬 3:24; 엡 2:8-9; 딛 2:11</div>
+      <div class="note">공로 없이 부어지는 하나님의 사랑. 율법과 대비되는 복음의 본질. "너희는 그 은혜에 의하여 믿음으로 말미암아 구원을 받았으니".</div>
+    </div>
+
+    <!-- 4 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-top">No. 4</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">아가페</div>
+      <div class="original">ἀγάπη</div>
+      <div class="romanization">agapē</div>
+      <div class="meaning">하나님의 자기희생적 사랑</div>
+      <div class="ref">요 3:16; 요 13:34-35; 고전 13장; 요일 4:8-10</div>
+      <div class="note">인간의 사랑(에로스·필리아)과 구별되는 사랑. 대상의 자격이 아니라 사랑하는 자의 본성에서 흘러나오는 사랑. "하나님은 사랑이시라".</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="term lang-grk">
+      <div class="term-head"><span class="rank rank-top">No. 3</span><span class="lang-chip">헬라어 · Greek</span></div>
+      <div class="korean-name">로고스</div>
+      <div class="original">ὁ Λόγος</div>
+      <div class="romanization">ho Logos</div>
+      <div class="meaning">말씀 · 영원하신 말씀 되신 그리스도</div>
+      <div class="ref">요 1:1-14; 요일 1:1; 계 19:13</div>
+      <div class="note">"태초에 말씀이 계시니라 … 말씀이 육신이 되어 우리 가운데 거하시매". 창조의 말씀이며 육신이 되어 오신 하나님 자신.</div>
+    </div>
+
+    <!-- 2 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-top">No. 2</span><span class="lang-chip">히브리어/헬라어</span></div>
+      <div class="korean-name">메시아 / 크리스토스</div>
+      <div class="original">מָשִׁיחַ · Χριστός</div>
+      <div class="romanization">māšîaḥ / Christos</div>
+      <div class="meaning">기름 부음 받은 자 · 그리스도</div>
+      <div class="ref">단 9:25-26; 시 2:2; 마 16:16; 요 1:41; 4:25-26</div>
+      <div class="note">선지자·제사장·왕을 세울 때 부어진 기름. 모든 직분이 가리키던 한 분 궁극의 '기름 부음 받은 자' — 예수 그리스도.</div>
+    </div>
+
+    <!-- 1 -->
+    <div class="term lang-heb">
+      <div class="term-head"><span class="rank rank-top">No. 1</span><span class="lang-chip">히브리어 · Hebrew</span></div>
+      <div class="korean-name">여호와 (YHWH)</div>
+      <div class="original">יהוה</div>
+      <div class="romanization">YHWH · "나는 스스로 있는 자니라"</div>
+      <div class="meaning">언약의 하나님의 이름 (테트라그람마톤)</div>
+      <div class="ref">출 3:14-15; 6:2-3; 신 6:4; 사 42:8</div>
+      <div class="note">모세에게 친히 알려주신 언약 이름 "에흐예 아쉘 에흐예(I AM WHO I AM)"의 3인칭 형태. 유대인들은 거룩해서 '아도나이(주)'로 읽는다. 성경 전체가 이 한 이름을 거룩하게 하는 이야기이며, 예수께서 "나는 …이니라(ἐγώ εἰμι)"로 친히 자기에게 돌리신 이름.</div>
+    </div>
+
+  </div>
+
+  <footer>
+    * 음역·표기는 주요 신학사전(BDAG · HALOT · TDNT)과 개역개정 음역 관례를 따름.<br>
+    * 순위는 성경 전체의 신학적 비중과 본문 빈도·구속사적 의미를 종합한 편집자의 평가.
+  </footer>
+</div>
+
+</body>
+</html>
