@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>성경 인물 연대기 인포그래픽 (18인)</title>
+<title>성경 인물 연대기 인포그래픽 (60인)</title>
 <style>
   :root {
     --color-text-primary: #1f1f1d;
@@ -42,51 +42,58 @@
   .container { max-width: 1200px; width: 100%; }
   .ig { padding: 1.25rem 0; }
   .ig-title { font-size: 32px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .ig-title .ig-total-count {
+    display: inline-block; margin-left: 8px;
+    font-size: 18px; font-weight: 700;
+    color: #3C3489; background: #EEEDFE;
+    padding: 3px 10px; border-radius: 999px;
+    vertical-align: middle;
+  }
   .ig-sub { font-size: 17px; text-align: center; color: var(--color-text-secondary); margin: 0 0 2rem; }
 
-  .ig-legend { 
-    display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; 
+  .ig-legend {
+    display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
     font-size: 13px; font-weight: 600; color: var(--color-text-secondary);
-    margin-bottom: 2.5rem; padding: 12px; 
-    background: var(--color-background-secondary); border-radius: var(--border-radius-md); 
+    margin-bottom: 2.5rem; padding: 12px;
+    background: var(--color-background-secondary); border-radius: var(--border-radius-md);
   }
   .ig-legend-item { display: flex; align-items: center; gap: 5px; }
   .ig-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
   .ig-period { margin-bottom: 3rem; }
-  .ig-period-header { 
-    display: flex; align-items: center; gap: 12px; margin-bottom: 1.2rem; 
-    padding-bottom: 10px; border-bottom: 1px solid var(--color-border-secondary); 
+  .ig-period-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 1.2rem;
+    padding-bottom: 10px; border-bottom: 1px solid var(--color-border-secondary);
   }
-  .ig-period-num { 
-    width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; 
-    background: #EEEDFE; color: #3C3489; display: flex; align-items: center; 
+  .ig-period-num {
+    width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%;
+    background: #EEEDFE; color: #3C3489; display: flex; align-items: center;
     justify-content: center; font-size: 16px; font-weight: 700;
   }
   .ig-period-title { font-size: 22px; font-weight: 600; }
   .ig-period-meta { font-size: 14px; color: var(--color-text-tertiary); margin-left: auto; }
 
-  .ig-figures { 
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-    gap: 16px; 
+  .ig-figures {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
   }
-  .ig-card { 
-    background: var(--color-background-primary); 
-    border: 1px solid var(--color-border-tertiary); 
+  .ig-card {
+    background: var(--color-background-primary);
+    border: 1px solid var(--color-border-tertiary);
     border-radius: var(--border-radius-lg); padding: 1.25rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
   }
 
-  .ig-name-row { 
-    display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px; 
-    padding-bottom: 10px; border-bottom: 1px solid var(--color-border-tertiary); 
+  .ig-name-row {
+    display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--color-border-tertiary);
   }
   .ig-name { font-size: 20px; font-weight: 700; }
   .ig-tag { font-size: 14px; color: var(--color-text-tertiary); }
 
   .ig-row { display: flex; gap: 10px; margin-bottom: 10px; font-size: 15px; }
   .ig-row-label {
-    display: inline-flex; align-items: center; gap: 6px; font-weight: 700; 
+    display: inline-flex; align-items: center; gap: 6px; font-weight: 700;
     font-size: 13px; flex-shrink: 0; min-width: 75px;
   }
   .ig-row-dot { width: 7px; height: 7px; border-radius: 50%; }
@@ -101,6 +108,7 @@
 
   @media (prefers-color-scheme: dark) {
     .ig-period-num { background: #3C3489; color: #CECBF6; }
+    .ig-title .ig-total-count { background: #3C3489; color: #CECBF6; }
     .ig-kings .ig-row-label { color: #B794F4; }
     .ig-prop .ig-row-label { color: #93C5FD; }
     .ig-ach .ig-row-label { color: #5DCAA5; }
@@ -140,8 +148,8 @@
 
 <div class="container">
   <div class="ig">
-    <h1 class="ig-title">성경 인물 연대기</h1>
-    <p class="ig-sub">구약 선지자 · 왕 · 지도자 — 시대별 동시대 왕·선지자 · 개인 생애에 기록된 기쁨·아픔은 있는 경우에만 표시</p>
+    <h1 class="ig-title">성경 인물 연대기 <span class="ig-total-count">총 60인</span></h1>
+    <p class="ig-sub">태초·족장·출애굽·사사·왕정·포로·귀환·신약 시대 주요 인물 60인 — 동시대 왕·선지자·기쁨·아픔·대적을 한 장에</p>
     <p class="page-nav">
       <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
       <a href="old_testament_timeline_writing.html" target="_blank" rel="noopener">📚 구약 연대기 (기록순)</a>
@@ -159,11 +167,54 @@
       <span class="ig-legend-item"><span class="ig-legend-dot" style="background:#888780"></span>주요 대적 (Adversary)</span>
     </div>
 
+    <!-- ============ Period 1: 태초 시대 ============ -->
     <div class="ig-period">
       <div class="ig-period-header">
         <div class="ig-period-num">1</div>
+        <div class="ig-period-title">태초·홍수 이전 시대</div>
+        <div class="ig-period-meta">창조–BC 2500년경 · 4인</div>
+      </div>
+      <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">아담</span><span class="ig-tag">최초의 인간</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전) · 에덴 동산의 청지기</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">하나님과 직접 교제 · 모든 생물에 이름을 부여(창 2:19-20)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">하나님의 형상으로 지음 받고 하와와 한 몸을 이룸, 창조 세계의 관리자</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">선악과 범죄로 낙원에서 쫓겨나고 장자 가인이 아벨을 살해</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">뱀(사탄), 죄의 권세</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">하와</span><span class="ig-tag">모든 산 자의 어머니</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전) · 아담과 한 몸</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">하나님과 직접 대면(창 3), 가정 안에서의 예배</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">'생명의 어머니' 명명 · 셋을 낳아 경건한 계보를 이음(창 4:25-26)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">뱀의 유혹에 넘어진 최초의 범죄, 아들 간 살인의 슬픔</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">뱀(사탄)</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">에녹</span><span class="ig-tag">하나님과 동행한 사람</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">제도적 선지자 이전, 가장이 예배를 인도 · 심판 예언이 유다서에 인용(유 14-15)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">300년간 하나님과 동행하다 죽음을 보지 않고 옮겨짐(창 5:21-24; 히 11:5)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">대홍수 이전의 부패한 세대</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">노아</span><span class="ig-tag">대홍수의 의인</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">방주에서 나와 여호와께 번제를 드림(창 8:20) · '의의 전파자'(벧후 2:5)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">방주로 가족과 생물들을 구원, 무지개 언약(창 9) — 인류 재출발의 출발점</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">홍수 후 포도주에 취해 벌거벗은 실수, 아들 함의 조롱(창 9:20-27)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">홍수 이전의 타락한 세대</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Period 2: 족장 시대 ============ -->
+    <div class="ig-period">
+      <div class="ig-period-header">
+        <div class="ig-period-num">2</div>
         <div class="ig-period-title">족장 시대</div>
-        <div class="ig-period-meta">BC 2000년경 · 5인</div>
+        <div class="ig-period-meta">BC 2000년경 · 9인</div>
       </div>
       <div class="ig-figures">
         <div class="ig-card">
@@ -175,6 +226,14 @@
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">불신앙, 가나안 현지 왕들</span></div>
         </div>
         <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">사라</span><span class="ig-tag">믿음의 어머니</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">애굽 바로·그랄 아비멜렉 앞에 불려감(창 12, 20)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">가장 아브라함이 제사장 역할 · 여호와의 사자가 직접 방문(창 18)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">90세에 약속의 아들 이삭을 낳음(창 21) — 히 11:11의 믿음의 여인</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">오랜 불임 · 하갈에게 이스마엘을 낳게 한 뒤 시기로 내쫓음(창 16, 21)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">불임의 수치, 하갈과의 갈등</span></div>
+        </div>
+        <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">이삭</span><span class="ig-tag">약속의 아들</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아비멜렉 (그랄 왕, 창 26장)</span></div>
           <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">제도적 선지자 이전, 족장(가장)이 제사장 역할을 함</span></div>
@@ -183,12 +242,36 @@
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">그랄 목자들, 기근</span></div>
         </div>
         <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">리브가</span><span class="ig-tag">약속의 며느리</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">그랄 왕 아비멜렉 앞에서 이삭과 지냄(창 26)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">하나님께 직접 묻고 두 민족의 신탁을 받음(창 25:22-23)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">아브라함의 종의 기도에 우물가에서 순종, 쌍둥이 야곱·에서의 어머니가 됨(창 24)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">야곱 편애로 축복권 탈취를 주도 → 야곱을 외삼촌에게로 도피시킴(창 27)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">에서의 이방 결혼이 준 근심</span></div>
+        </div>
+        <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">야곱</span><span class="ig-tag">이스라엘의 조상</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">바로 (애굽 왕, 창 47:7-10에서 야곱이 바로를 축복)</span></div>
           <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">제도적 선지자 이전, 족장(가장)이 제사장 역할을 함</span></div>
           <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">벧엘에서 사닥다리 환상(창 28), 얍복 나루에서 하나님과 씨름 후 '이스라엘' 이름 획득(창 32:22-32), 12지파의 조상</span></div>
           <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">에서의 축복권 탈취(창 27), 디나 사건 방치(창 34), 라헬의 이른 죽음(창 35:19)</span></div>
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">에서 (초기), 라반 (외삼촌)</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">라헬</span><span class="ig-tag">야곱의 사랑</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전) · 아버지 라반의 집</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">가정 제사 — 그러나 라반의 드라빔(가정 우상)을 훔쳐 가져감(창 31:19)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">야곱의 사랑받는 아내가 되고 요셉과 베냐민의 어머니가 됨</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">오랜 불임, 베냐민 출산 중 에브랏 길에서 사망(창 35:16-19)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">라반의 속임수, 언니 레아와의 경쟁</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">레아</span><span class="ig-tag">열두 지파의 주된 어머니</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">가정 안에서의 예배</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">여섯 아들과 디나 출산 — 유다(메시아 계보)·레위(제사장 계보)의 어머니</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">"사랑받지 못함"의 결혼 · 라헬과의 계속된 경쟁(창 29-30)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">소외감, 자매 간 경쟁</span></div>
         </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">유다</span><span class="ig-tag">메시아 계보의 아버지</span></div>
@@ -209,13 +292,38 @@
       </div>
     </div>
 
+    <!-- ============ Period 3: 공동체 형성 및 정복 시대 ============ -->
     <div class="ig-period">
       <div class="ig-period-header">
-        <div class="ig-period-num">2</div>
+        <div class="ig-period-num">3</div>
         <div class="ig-period-title">공동체 형성 및 정복 시대</div>
-        <div class="ig-period-meta">약 BC 1446–1375 · 2인</div>
+        <div class="ig-period-meta">약 BC 1526–1375 · 7인</div>
       </div>
       <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">요게벳</span><span class="ig-tag">모세의 친어머니</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">애굽 바로의 박해 아래 — 바로의 딸이 모세의 양모가 되게 함(출 2)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>제사장</span><span class="ig-row-text">제도적 선지자 이전 · 믿음의 어머니로 하나님을 두려워하지 않는 결단(출 1:17; 히 11:23)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">갈대 상자에 숨긴 아들이 왕궁에서 자라고, 유모로 친자를 다시 돌봄 · 모세·아론·미리암 세 지도자를 길러낸 레위 여인</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">남아 살해령 속에서 석 달 후 아들을 나일강에 띄워 보내야 했던 어미의 고통(출 2:1-3)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">바로의 영아 살해령</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">아론</span><span class="ig-tag">초대 대제사장</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">애굽의 바로 앞에서 모세의 대변인 · 광야 공동체의 모세</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">모세, 미리암 (누이·여선지자), 아들 엘르아살</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">제사장 위임식(레 8-9)과 싹난 지팡이(민 17)로 제사장직 확증</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">백성의 요구에 금송아지를 만듦(출 32), 모세를 훼방하여 미리암과 함께 책망 받음(민 12), 두 아들 나답·아비후가 다른 불을 드려 죽음(레 10)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">백성의 불평, 고라 자손의 반역</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">미리암</span><span class="ig-tag">여선지자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">애굽 바로의 박해 아래 어린 모세를 지킴</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">본인이 여선지자(출 15:20), 동생 모세·아론</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">갈대 상자에 담긴 어린 모세를 지킴(출 2:4-8) · 홍해 건넌 후 소고를 잡고 여인들의 찬양을 인도(출 15:20-21)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">구스 여인 문제로 모세를 비방하다가 나병에 걸려 7일간 진영 밖 격리(민 12)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">교만, 지도력 시기</span></div>
+        </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">모세</span><span class="ig-tag">출애굽의 지도자</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">애굽의 바로 ("바로"는 이집트 왕의 칭호 '파라오')</span></div>
@@ -232,16 +340,40 @@
           <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">기브온 거민과 하나님께 묻지 않고 화친</span></div>
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">가나안 7부족</span></div>
         </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">갈렙</span><span class="ig-tag">충성된 정탐꾼</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전) · 모세·여호수아를 보필</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">대제사장 엘르아살, 선지자 모세</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">"여호와를 온전히 좇았다"는 평가(민 14:24) · 85세에 "이 산지를 내게 주소서"라 청하여 헤브론을 기업으로 받음(수 14:6-15)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">열 정탐꾼의 악평으로 온 세대가 광야에서 40년을 유리(민 13-14)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">불신앙의 다수, 아낙 자손</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">라합</span><span class="ig-tag">여리고의 이방 여인</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">여리고 왕을 피해 정탐꾼을 숨김(수 2) → 여호수아 진영에 귀속</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">대제사장 엘르아살, 여호수아</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">붉은 줄로 가족을 구원(수 6:22-25) · 살몬과 결혼해 보아스를 낳아 다윗·그리스도의 계보에 오름(마 1:5; 히 11:31)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">이방 기생 출신의 멍에 · 고향 여리고의 멸망 목격</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">여리고 왕과 그 백성</span></div>
+        </div>
       </div>
     </div>
 
+    <!-- ============ Period 4: 사사 시대 ============ -->
     <div class="ig-period">
       <div class="ig-period-header">
-        <div class="ig-period-num">3</div>
+        <div class="ig-period-num">4</div>
         <div class="ig-period-title">사사 시대</div>
-        <div class="ig-period-meta">약 BC 1375–1050 · 1인</div>
+        <div class="ig-period-meta">약 BC 1375–1050 · 5인</div>
       </div>
       <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">드보라</span><span class="ig-tag">여사사·여선지자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 이전) · 장군 바락을 불러 파견</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">본인이 여선지자(삿 4:4) · 랍비돗의 아내</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">바락과 함께 하솔의 900병거를 격파 · 구약 여인의 대표적 찬양 '드보라의 노래'(삿 5)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">하솔 왕 야빈, 장군 시스라</span></div>
+        </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">기드온</span><span class="ig-tag">미디안을 꺾은 사사</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">세바, 살문나 (미디안의 왕들)</span></div>
@@ -250,16 +382,48 @@
           <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">전리품으로 금 에봇을 만들어 가문과 이스라엘이 우상처럼 섬기게 함</span></div>
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">미디안, 아말렉, 동방 사람 연합군</span></div>
         </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">삼손</span><span class="ig-tag">나실인 사사</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(사사) · 블레셋 방백들 치하</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">출생 시 등장한 여호와의 사자(삿 13)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">나귀 턱뼈로 블레셋 1000명 격파(삿 15) · 죽음으로 더 많은 적을 무너뜨림(삿 16:30)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">딤나 여인과 들릴라에 빠져 머리카락과 힘을 잃고 두 눈이 뽑혀 맷돌을 돌림(삿 16)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">블레셋, 들릴라</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">룻</span><span class="ig-tag">모압 여인·다윗의 증조모</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(사사 시대) · 시어머니 나오미와 남편 보아스</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">성문 장로들과 마을의 축복(룻 4:11-12)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">"어머니의 하나님이 나의 하나님이 되시리이다"(룻 1:16) · 보아스와 결혼해 오벳을 낳고 다윗의 증조모가 됨(마 1:5)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">남편 말론의 죽음, 이방인의 신분으로 시어머니와 함께 이삭 줍기</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">기근, 이방인이라는 사회적 장벽</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">보아스</span><span class="ig-tag">기업 무를 자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(사사 시대)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">성문 장로들의 축복(룻 4)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">기업 무를 자의 권리를 행사해 룻을 아내로 맞이 · 다윗·그리스도의 계보에 들어감(룻 4:13-22; 마 1:5)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">이름을 밝히지 않은 가까운 친족(기업 무르기를 거부)</span></div>
+        </div>
       </div>
     </div>
 
+    <!-- ============ Period 5: 초기 왕정 시대 ============ -->
     <div class="ig-period">
       <div class="ig-period-header">
-        <div class="ig-period-num">4</div>
+        <div class="ig-period-num">5</div>
         <div class="ig-period-title">초기 왕정 시대</div>
-        <div class="ig-period-meta">약 BC 1050–930 · 3인</div>
+        <div class="ig-period-meta">약 BC 1100–930 · 8인</div>
       </div>
       <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">한나</span><span class="ig-tag">사무엘의 어머니</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(왕정 직전) · 실로 성소의 대제사장 엘리</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">엘리 제사장, 서원으로 얻은 아들 사무엘</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">오랜 기도 끝에 사무엘을 얻어 성전에 드림 · 마리아 찬가의 원형 '한나의 기도'(삼상 2)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">브닌나의 조롱과 오랜 불임, 엘리의 오해로 주정뱅이 취급 받음(삼상 1)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">브닌나의 조롱, 불임의 고통</span></div>
+        </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">사무엘</span><span class="ig-tag">마지막 사사 · 선지자</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">사울 (초대 왕으로 기름 부음), 다윗 (2대 왕으로 기름 부음)</span></div>
@@ -269,12 +433,43 @@
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">블레셋</span></div>
         </div>
         <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">사울</span><span class="ig-tag">이스라엘 초대 왕</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">(본인 초대 왕) · 아들 요나단 · 사무엘의 기름 부음</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">사무엘, 라마의 선지자의 무리</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">야베스 길르앗을 구원(삼상 11) · 블레셋·암몬·아말렉과의 전쟁 초기 승리</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">아말렉에 대한 불순종으로 왕권 박탈(삼상 15), 다윗 추격과 엔돌 신접한 여인 방문(삼상 28) · 길보아 전투에서 자결(삼상 31)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">블레셋, 자기 안의 시기와 불신앙</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">요나단</span><span class="ig-tag">다윗의 언약 친구</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">부왕 사울 · 장차 왕이 될 다윗과 언약</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">사무엘, 선지자 갓</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">믹마스에서 병기 든 자와 둘이 블레셋 진영을 무너뜨림(삼상 14) · "여호와의 구원하심은 사람이 많고 적음에 달리지 아니하였느니라"</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">아버지 사울의 분노, 길보아에서 아버지와 함께 전사 · 다윗의 애가(삼하 1:25-27)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">블레셋, 아버지의 질투</span></div>
+        </div>
+        <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">다윗</span><span class="ig-tag">통일 왕국의 왕</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">사울 (전임자), 히람 (두로 왕)</span></div>
           <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">나단 (책망의 선지자), 갓 (다윗의 선견자), 아삽·헤만·여두둔 (예언적 찬양)</span></div>
           <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">예루살렘 정복 및 메시아 언약의 통로</span></div>
           <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">밧세바 간음 및 우리아 살인 교사</span></div>
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">블레셋, 모압, 암몬, 에돔</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">아비가일</span><span class="ig-tag">지혜의 여인</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">도피 중의 다윗 (후에 그의 아내가 됨)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">선지자 갓, 선지자 나단</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">지혜로운 간청으로 다윗의 피 흘림을 막음(삼상 25:32-35) · 나발의 죽음 후 다윗의 아내가 됨</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">어리석은 남편 나발의 대적 행위로 집 전체가 위기에 처함(삼상 25)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">나발의 어리석음</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">나단</span><span class="ig-tag">책망의 선지자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">다윗, 솔로몬 (즉위 지원)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">본인, 갓 (다윗의 선견자)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">다윗 언약 전달(삼하 7) · "당신이 그 사람이라"로 밧세바의 죄 정면 책망(삼하 12) · 솔로몬 즉위 확정(왕상 1)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">아도니야의 쿠데타 시도</span></div>
         </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">솔로몬</span><span class="ig-tag">지혜의 왕</span></div>
@@ -287,13 +482,22 @@
       </div>
     </div>
 
+    <!-- ============ Period 6: 분열 왕정 및 심판 시대 ============ -->
     <div class="ig-period">
       <div class="ig-period-header">
-        <div class="ig-period-num">5</div>
+        <div class="ig-period-num">6</div>
         <div class="ig-period-title">분열 왕정 및 심판 시대</div>
-        <div class="ig-period-meta">약 BC 930–586 · 5인</div>
+        <div class="ig-period-meta">약 BC 930–586 · 8인</div>
       </div>
       <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">여호사밧</span><span class="ig-tag">남유다 경건한 왕</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아합·여호람 (북이스라엘, 불행한 동맹)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">미가야 (왕상 22), 야하시엘 (대하 20:14), 엘리에셀 (대하 20:37), 엘리사 (왕하 3)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">율법 교육 순회단 파견(대하 17) · 모압·암몬 연합군 앞에 찬양대를 앞세워 승리(대하 20)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">아합의 딸 아달랴를 며느리로 맞아 다윗 왕조를 위기에 빠뜨림 · 북이스라엘과의 혼합 동맹이 자녀 대에 재앙으로 이어짐</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">모압·암몬·에돔 연합군, 북이스라엘과의 혼합</span></div>
+        </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">엘리야</span><span class="ig-tag">북이스라엘 선지자</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아합, 아하시야 (북이스라엘)</span></div>
@@ -309,6 +513,14 @@
           <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">엘리야의 갑절 영감 계승 및 수많은 기적 수행</span></div>
           <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">엘리사 본인의 뚜렷한 허물은 기록되어 있지 않음. 다만 제자 게하시의 탐욕(나아만 사건, 왕하 5장)을 곁에서 막지 못하고 나병의 심판을 선고해야 했음</span></div>
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">아람(벤 하닷), 북이스라엘의 불신앙</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">호세아</span><span class="ig-tag">북왕국 마지막 선지자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">여로보암 2세 이후 북이스라엘 말기 왕들 · 동시대 남유다 웃시야·요담·아하스·히스기야</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">아모스 (동시대 북왕국), 이사야·미가 (남유다)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">북왕국 멸망 직전의 마지막 회개 촉구 · "인애를 구하시고 제사를 구하지 아니하며"(호 6:6)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">음란한 아내 고멜과의 결혼·속량으로 배신당한 하나님의 마음을 몸으로 살아낸 고통(호 1-3)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">북왕국의 우상 숭배와 정치적 혼란, 앗수르의 부상</span></div>
         </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">히스기야</span><span class="ig-tag">남유다 개혁 왕</span></div>
@@ -327,6 +539,14 @@
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">앗수르 (산헤립)</span></div>
         </div>
         <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">요시야</span><span class="ig-tag">남유다 개혁왕</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">앗수르 약화 · 애굽 바로 느고 · 바벨론 부상기</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">예레미야, 스바냐, 훌다 (여선지자, 왕하 22:14)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">성전 수리 중 율법책을 발견하고 전국적 종교 개혁 · 여호수아 이후 최대의 유월절 대회복(왕하 23; 대하 35)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">하나님이 막으신 말을 듣지 않고 므깃도에서 애굽 느고와 전투 중 전사(대하 35:20-24)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">우상 숭배의 잔재, 애굽 바로 느고</span></div>
+        </div>
+        <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">예레미야</span><span class="ig-tag">눈물의 선지자</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">요시야, 여호아하스, 여호야킴, 여호야긴, 시드기야</span></div>
           <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">스바냐·하박국·나훔 (남유다 말기), 훌다 (여선지자, 왕하 22), 다니엘·에스겔 (포로지에서 병행)</span></div>
@@ -337,13 +557,22 @@
       </div>
     </div>
 
+    <!-- ============ Period 7: 포로 및 포로 귀환 시대 ============ -->
     <div class="ig-period">
       <div class="ig-period-header">
-        <div class="ig-period-num">6</div>
+        <div class="ig-period-num">7</div>
         <div class="ig-period-title">포로 및 포로 귀환 시대</div>
-        <div class="ig-period-meta">약 BC 605–445 · 2인</div>
+        <div class="ig-period-meta">약 BC 605–430 · 7인</div>
       </div>
       <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">에스겔</span><span class="ig-tag">포로지의 파수꾼</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">느부갓네살 (바벨론) · 동시대 남유다 여호야긴·시드기야</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">예레미야 (예루살렘), 다니엘 (바벨론 궁정), 다니엘이 "의의 귀감"으로 언급됨(겔 14:14, 20; 28:3)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">마른 뼈 골짜기 환상(겔 37)과 새 성전 환상(겔 40-48) — 포로 공동체에 회복의 소망 선포</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">아내가 죽어도 애곡하지 못하게 하심 — 예루살렘 심판을 몸으로 예표(겔 24:15-18)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">완고한 포로 공동체, 거짓 선지자들</span></div>
+        </div>
         <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">다니엘</span><span class="ig-tag">포로기 선지자</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">느부갓네살, 벨사살 (바벨론), 메대 사람 다리오(정체 논쟁 — 구바루/고레스 동일인설 등), 고레스 (바사)</span></div>
@@ -353,12 +582,145 @@
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">바벨론 술사들, 시기하는 관료들</span></div>
         </div>
         <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">에스더</span><span class="ig-tag">바사의 유대인 왕비</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아하수에로 (크세르크세스 1세, 바사)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">(에스더서에는 선지자 명시 없음) · 말라기 직전 시대</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">"죽으면 죽으리이다"의 결단으로 유다 민족을 구원(에 4-9) · 부림절의 기원</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">이방 궁에서 신분을 숨긴 채 지낸 고독 · 민족 전체의 몰살 위기 앞의 공포</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">하만 (아각 사람)</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">모르드개</span><span class="ig-tag">에스더의 양부</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아하수에로 (바사) · 암살 음모 제보(에 2:21-23)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">(에스더서에는 선지자 명시 없음)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">"네가 이 때를 위함이 아닌 줄을 어찌 알겠느냐"(에 4:14)로 에스더를 설득 · 하만 처형 후 총리에 오름(에 10)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">하만, 페르시아 궁의 반유대 세력</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">스룹바벨</span><span class="ig-tag">1차 귀환 지도자·성전 재건</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">고레스, 다리오 1세 (바사)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">학개, 스가랴 (성전 재건을 독려)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">1차 귀환 유다 총독으로 성전 재건(스 3-6; 학 2:23) · 메시아 계보의 예표(마 1:12-13)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">사마리아 대적들(르훔·심새), 공사 중단 세력</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">에스라</span><span class="ig-tag">제사장 · 서기관</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아닥사스다 1세 (바사)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">말라기 (동시대 구약 마지막 선지자)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">2차 귀환을 인도하고 율법을 공적으로 낭독(느 8) · 공동체의 영적 개혁</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">이방 결혼 문제 앞에서 옷을 찢고 금식하며 민족을 위한 중보 기도(스 9)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">이방 문화와의 혼합, 공동체 내 분열</span></div>
+        </div>
+        <div class="ig-card">
           <div class="ig-name-row"><span class="ig-name">느헤미야</span><span class="ig-tag">공동체 재건자</span></div>
           <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>보필한 왕</span><span class="ig-row-text">아닥사스다 1세 (바사 왕)</span></div>
           <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자</span><span class="ig-row-text">말라기 (구약 마지막 선지자), 에스라 (제사장 겸 서기관)</span></div>
           <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">예루살렘 성벽 재건 및 공동체 영적/사회적 정비</span></div>
           <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">이방 결혼자들을 때리고 머리털을 뽑는 등 과격한 방식으로 징계 (느 13:25) — 언약 공동체 회복의 열심으로도, 지나친 강압으로도 평가됨</span></div>
           <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">산발랏(호론 사람), 도비야(암몬 사람), 게셈(아라비아 사람) — 느 2:19; 6:1–2</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Period 8: 예수 그리스도의 12제자 (공생애·초대교회) ============ -->
+    <div class="ig-period">
+      <div class="ig-period-header">
+        <div class="ig-period-num">8</div>
+        <div class="ig-period-title">예수 그리스도의 12제자 (공생애 · 초대교회)</div>
+        <div class="ig-period-meta">AD 27–100년경 · 12인</div>
+      </div>
+      <div class="ig-figures">
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">베드로</span><span class="ig-tag">반석 · 사도의 수제자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·클라우디우스·네로 (로마 황제), 헤롯 아그립바 1세 (유대 분봉왕)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도, 형제 안드레, 사도 요한·야고보, 사도 바울</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">가이사랴 빌립보의 고백 "주는 그리스도시요 살아 계신 하나님의 아들이시니이다"(마 16:16) · 오순절 3000명 회심(행 2) · 고넬료 가정에 이방 성령 강림(행 10)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">예수를 세 번 부인(마 26:69-75) · 안디옥에서 이방인과의 식탁을 피하다 바울에게 책망 받음(갈 2:11-14)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">산헤드린, 헤롯 아그립바 1세, 네로 치하 로마</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">안드레</span><span class="ig-tag">첫 부름 받은 제자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·네로 (로마 황제)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">세례 요한(본래 그의 제자, 요 1:40), 예수 그리스도, 형제 베드로</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">형 시몬을 예수께 인도(요 1:41-42) · 오병이어의 어린아이를 소개(요 6:8-9) · 헬라인들을 예수께 안내(요 12:20-22)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 X자형 십자가로 순교</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">야고보 (세베대의 아들)</span><span class="ig-tag">최초 순교 사도</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스, 헤롯 아그립바 1세 (그의 손에 참수됨, 행 12:2)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도, 동생 요한, 베드로와 함께 '내부 3인'</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">변화산·회당장 야이로의 딸 부활·겟세마네 기도에 동행한 3인에 속함(막 5:37; 9:2; 14:33)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">"보아너게(우레의 아들)"로 불릴 만큼 격한 성격 · 사마리아에 불을 내리기 원함(눅 9:54) · 어머니를 통해 우편 자리를 구함(마 20:20-23)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">헤롯 아그립바 1세 (AD 44 순교)</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">요한 (세베대의 아들)</span><span class="ig-tag">사랑받은 제자 · 사도 요한</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·네로·도미티아누스 (로마 황제) — 밧모섬 유배는 도미티아누스 시대로 전해짐</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도, 형 야고보, 베드로 (행 3; 8장 동행)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">요한복음·요한1·2·3서·요한계시록의 저자 · 십자가 아래에서 마리아를 어머니로 모심(요 19:26-27) · 밧모섬에서 주의 날에 환상을 받아 계시록을 기록(계 1:9-10)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">보아너게의 격정으로 사마리아에 불을 청함(눅 9:54) · 우편·좌편 자리를 구한 일(마 20:20-23) · 말년의 박해와 밧모섬 유배</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">도미티아누스 치하 로마, 에베소 지역 영지주의·니골라당</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">빌립</span><span class="ig-tag">벳새다 출신 제자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·네로 (로마 황제)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도, 친구 나다나엘(바돌로매), 안드레</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">나다나엘에게 "와서 보라"고 전도(요 1:45-46) · "주여 아버지를 우리에게 보여 주옵소서"의 질문으로 요 14:8-11의 계시를 이끌어 냄</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">오병이어 앞에서 "이백 데나리온의 떡이라도 부족하리이다"(요 6:7) — 계산은 정확했으나 주님의 능력을 보지 못함</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 히에라볼리에서 순교</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">바돌로매 (나다나엘)</span><span class="ig-tag">참 이스라엘 사람</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·네로 (로마 황제)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도 · 빌립의 소개로 예수께 나아감</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">예수로부터 "보라 이는 참으로 이스라엘 사람이라 그 속에 간사한 것이 없도다" 칭찬을 받고 "랍비여 당신은 하나님의 아들이시요 이스라엘의 임금이로소이다"라 고백(요 1:47-49)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">"나사렛에서 무슨 선한 것이 날 수 있느냐"는 편견이 있었음(요 1:46)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 아르메니아에서 산 채 살가죽을 벗김당하고 순교</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">도마 (디두모)</span><span class="ig-tag">믿음 고백의 쌍둥이</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·클라우디우스 (로마 황제)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">나사로 사건에서 "우리도 주와 함께 죽으러 가자"는 충성 고백(요 11:16) · 부활하신 주님 앞에 "나의 주님이시요 나의 하나님이시니이다"라는 최고의 신앙 고백(요 20:28)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">"내가 그 손의 못 자국을 보며 …"의 의심(요 20:25)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 인도에서 복음 전하다 창에 찔려 순교</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">마태 (레위)</span><span class="ig-tag">세리에서 복음서 기자로</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스 (로마 황제) · 세관 주인이던 헤롯 안티파스 (갈릴리 분봉왕)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도 · 마가·누가와 함께 공관복음 저자군</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">세관에서 "나를 따르라" 한마디에 모든 것을 버리고 따라 감(마 9:9; 눅 5:27-28) · 자기 집에 세리·죄인들을 불러 잔치를 베풂 · 마태복음의 저자로 구약과 예수의 메시아 성취를 증언</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">세리 출신이라는 사회적 낙인과 "세리와 죄인의 친구"라는 비난을 예수와 함께 짊어짐</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">바리새인·서기관, 세리에 대한 민족적 멸시</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">야고보 (알패오의 아들)</span><span class="ig-tag">작은 야고보</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·네로 (로마 황제)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도 · 12인 공동체 안 함께 섬김</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">조용히 12사도 명단에 이름을 올리고(마 10:3) 초대교회의 기초에 자리함(엡 2:20)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 순교 · 세베대의 아들 큰 야고보와 혼동되기 쉬운 자리</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">다대오 (야고보의 아들 유다)</span><span class="ig-tag">렙베오 · 가룟이 아닌 유다</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스·클라우디우스 (로마 황제)</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">마지막 만찬에서 "주여 어찌하여 자기를 우리에게는 나타내시고 세상에는 아니하려 하시나이까"라고 물어 요 14:22-24의 계시를 이끌어 냄</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 페르시아 지역에서 순교</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">시몬 (셀롯인)</span><span class="ig-tag">가나나인 · 열심당 출신</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스 (로마 황제) · 반로마 열심당 활동기의 유대</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도 · 정치적 대척점에 있던 세리 마태와 한 공동체가 됨</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">열심당원의 반로마 열정을 주의 나라에 대한 충성으로 전환 · 세리와 열심당원을 한 식탁에 앉히신 예수 공동체의 표지</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">전승상 페르시아 또는 영국 등지에서 순교</span></div>
+        </div>
+        <div class="ig-card">
+          <div class="ig-name-row"><span class="ig-name">가룟 유다</span><span class="ig-tag">배반한 열두 제자</span></div>
+          <div class="ig-row ig-kings"><span class="ig-row-label"><span class="ig-row-dot"></span>동시대 왕</span><span class="ig-row-text">티베리우스 (로마 황제), 헤롯 안티파스, 총독 본디오 빌라도</span></div>
+          <div class="ig-row ig-prop"><span class="ig-row-label"><span class="ig-row-dot"></span>선지자/사도</span><span class="ig-row-text">예수 그리스도 (3년간 함께 다닌 제자)</span></div>
+          <div class="ig-row ig-ach"><span class="ig-row-label"><span class="ig-row-dot"></span>기쁨</span><span class="ig-row-text">12제자 중 돈궤를 맡을 만큼의 신뢰를 받았고(요 13:29) 다른 사도들과 똑같이 파송 받음(마 10:1-4)</span></div>
+          <div class="ig-row ig-fail"><span class="ig-row-label"><span class="ig-row-dot"></span>아픔</span><span class="ig-row-text">돈궤에서 돈을 훔치던 습관(요 12:6) · 은 30에 예수를 팔고(마 26:14-16), 후회하나 회개에 이르지 못하고 스스로 목매어 죽음(마 27:3-5; 행 1:18)</span></div>
+          <div class="ig-row ig-adv"><span class="ig-row-label"><span class="ig-row-dot"></span>대적</span><span class="ig-row-text">대제사장 가야바와 산헤드린, 탐심, 사탄의 충동(눅 22:3)</span></div>
         </div>
       </div>
     </div>
