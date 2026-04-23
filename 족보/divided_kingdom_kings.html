@@ -73,18 +73,62 @@
     padding: 0 4px;
   }
 
+  /* 분열왕국: 2개 컬럼 — 왼쪽 남유다, 오른쪽 북이스라엘 (한 왕국에서 같은 행에 두 왕이 오지 않도록) */
   .ig-figures {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    row-gap: 16px;
+    grid-auto-flow: row dense;
+    align-items: start;
   }
-  /* single-row: 이전에 가로 스크롤이었으나, 세로 그리드로 통일해 가독성 개선 */
+  .ig-figures > .ig-card.kingdom-south { grid-column: 1; }
+  .ig-figures > .ig-card.kingdom-north { grid-column: 2; }
+  /* single-row 레거시 오버라이드 — 기본 2열 레이아웃을 그대로 사용 */
   .ig-figures.single-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    row-gap: 16px;
+    grid-auto-flow: row dense;
   }
-  .ig-figures.single-row .ig-card {
-    flex: unset;
+  .ig-figures.single-row .ig-card { flex: unset; }
+
+  /* 컬럼 헤더 (각 왕국 이름을 컬럼 위에 고정 표시) */
+  .kingdom-head {
+    position: sticky; top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    padding: 8px 0 10px;
+    margin-bottom: 8px;
+    background: var(--color-background-primary);
+    z-index: 4;
+    border-bottom: 1px solid var(--color-border-secondary);
+  }
+  .kingdom-head > div {
+    text-align: center; font-size: 14px; font-weight: 700;
+    padding: 6px 8px; border-radius: 6px;
+  }
+  .kingdom-head .head-south { background: #DBEAFE; color: #1E40AF; }
+  .kingdom-head .head-north { background: #FCE7E7; color: #9B2C2C; }
+
+  @media (prefers-color-scheme: dark) {
+    .kingdom-head { background: var(--color-background-primary); }
+    .kingdom-head .head-south { background: #1E3A8A; color: #BFDBFE; }
+    .kingdom-head .head-north { background: #4A1B1B; color: #FCA5A5; }
+  }
+
+  @media (max-width: 640px) {
+    .ig-figures,
+    .ig-figures.single-row {
+      grid-template-columns: 1fr;
+    }
+    .ig-figures > .ig-card.kingdom-south,
+    .ig-figures > .ig-card.kingdom-north {
+      grid-column: auto;
+    }
+    .kingdom-head { display: none; }
   }
   .ig-card {
     background: var(--color-background-primary);
@@ -183,6 +227,12 @@
       <span class="ig-legend-item"><span class="ig-legend-dot" style="background:#1D9E75"></span>기쁨</span>
       <span class="ig-legend-item"><span class="ig-legend-dot" style="background:#D85A30"></span>아픔</span>
       <span class="ig-legend-item"><span class="ig-legend-dot" style="background:#888780"></span>주요 대적</span>
+    </div>
+
+    <!-- 두 왕국 컬럼 헤더 (스크롤 시 화면 상단에 고정) -->
+    <div class="kingdom-head">
+      <div class="head-south">남유다 (예루살렘)</div>
+      <div class="head-north">북이스라엘 (사마리아)</div>
     </div>
 
     <!-- ============ Period 1 ============ -->
