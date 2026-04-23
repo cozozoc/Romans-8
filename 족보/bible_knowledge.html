@@ -64,7 +64,7 @@
   .bk-close:hover { background: var(--bg3); color: var(--text); }
 
   .bk-tabs {
-    display: flex; gap: 4px;
+    display: flex; justify-content: center;
     overflow-x: auto; overflow-y: hidden;
     padding: 8px 12px;
     border-bottom: 1px solid var(--border);
@@ -72,6 +72,11 @@
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
     flex-shrink: 0;
+  }
+  .bk-tabs-inner {
+    display: flex; gap: 4px;
+    flex-shrink: 0;
+    margin: 0 auto;
   }
   .bk-tabs::-webkit-scrollbar { height: 4px; }
   .bk-tabs::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
@@ -126,13 +131,15 @@
 </header>
 
 <nav class="bk-tabs" role="tablist" aria-label="Bible Knowledge 탭">
-  <button class="bk-tab active" role="tab" data-tab="ot-content"  data-src="old_testament_timeline.html?embed=1">📖 구약 연대기 (내용순)</button>
-  <button class="bk-tab"        role="tab" data-tab="ot-writing"  data-src="old_testament_timeline_writing.html?embed=1">📚 구약 연대기 (기록순)</button>
-  <button class="bk-tab"        role="tab" data-tab="kings"       data-src="divided_kingdom_kings.html?embed=1">👑 분열왕국 왕</button>
-  <button class="bk-tab"        role="tab" data-tab="figures"     data-src="chronological_apostolic_history.html?embed=1">📜 인물 연대기</button>
-  <button class="bk-tab"        role="tab" data-tab="adam-jesus"  data-src="adam_to_jesus_genealogy.html?embed=1">🌳 아담→예수 족보</button>
-  <button class="bk-tab"        role="tab" data-tab="canon"       data-src="bible_66_canon_order.html?embed=1">📚 성경 66권 순서</button>
-  <button class="bk-tab"        role="tab" data-tab="vocab"       data-src="biblical_greek_hebrew_vocabulary.html?embed=1">🔤 성경 원어 어휘</button>
+  <div class="bk-tabs-inner">
+    <button class="bk-tab active" role="tab" data-tab="ot-content"  data-src="old_testament_timeline.html?embed=1">📖 구약 연대기 (내용순)</button>
+    <button class="bk-tab"        role="tab" data-tab="ot-writing"  data-src="old_testament_timeline_writing.html?embed=1">📚 구약 연대기 (기록순)</button>
+    <button class="bk-tab"        role="tab" data-tab="kings"       data-src="divided_kingdom_kings.html?embed=1">👑 분열왕국 왕</button>
+    <button class="bk-tab"        role="tab" data-tab="figures"     data-src="chronological_apostolic_history.html?embed=1">📜 인물 연대기</button>
+    <button class="bk-tab"        role="tab" data-tab="adam-jesus"  data-src="adam_to_jesus_genealogy.html?embed=1">🌳 아담→예수 족보</button>
+    <button class="bk-tab"        role="tab" data-tab="canon"       data-src="bible_66_canon_order.html?embed=1">📚 성경 66권 순서</button>
+    <button class="bk-tab"        role="tab" data-tab="vocab"       data-src="biblical_greek_hebrew_vocabulary.html?embed=1">🔤 성경 원어 어휘</button>
+  </div>
 </nav>
 
 <main class="bk-main">
