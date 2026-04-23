@@ -96,6 +96,47 @@
     pointer-events: none;
   }
 
+  p.song-link {
+    text-align: center;
+    margin: 0 0 1.6rem;
+    font-size: 14px;
+  }
+  .bgm-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: #ff0000;
+    color: #ffffff;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(255,0,0,0.25);
+    transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  }
+  .bgm-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(255,0,0,0.35);
+  }
+  .bgm-toggle.playing {
+    background: #c62828;
+  }
+  .bgm-toggle .bgm-label {
+    opacity: 0.95;
+  }
+  #yt-bgm-holder {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
   .testament {
     background: var(--color-background-secondary);
     border-radius: var(--border-radius-lg);
@@ -215,6 +256,13 @@
     <a href="adam_to_jesus_genealogy.html" target="_blank" rel="noopener">🌳 아담→예수 족보</a>
     <a class="current" aria-current="page">📚 성경 66권 순서</a>
   </p>
+  <p class="song-link">
+    <button id="bgmToggle" class="bgm-toggle" type="button" aria-pressed="false">
+      <span class="bgm-icon">▶</span>
+      <span class="bgm-label">성경 66권 순서 노래 BGM</span>
+    </button>
+  </p>
+  <div id="yt-bgm-holder"><div id="yt-bgm-player"></div></div>
 
   <!-- ============ 구약 39권 ============ -->
   <div class="testament">
@@ -413,6 +461,82 @@
     * 히브리어 성경(타나크)은 율법(Torah)·예언서(Nevi'im)·성문서(Ketuvim) 3부로 24권으로 세며, 같은 책이지만 묶음이 다릅니다.
   </footer>
 </div>
+
+<script>
+(function(){
+  var btn = document.getElementById("bgmToggle");
+  var iconEl = btn.querySelector(".bgm-icon");
+  var labelEl = btn.querySelector(".bgm-label");
+  var player = null;
+  var playerReady = false;
+  var pendingAction = null;
+
+  function setPlayingUI(playing) {
+    if (playing) {
+      btn.classList.add("playing");
+      btn.setAttribute("aria-pressed", "true");
+      iconEl.textContent = "⏸";
+      labelEl.textContent = "BGM 재생 중 · 클릭하여 정지";
+    } else {
+      btn.classList.remove("playing");
+      btn.setAttribute("aria-pressed", "false");
+      iconEl.textContent = "▶";
+      labelEl.textContent = "성경 66권 순서 노래 BGM";
+    }
+  }
+
+  window.onYouTubeIframeAPIReady = function() {
+    player = new YT.Player("yt-bgm-player", {
+      width: "1",
+      height: "1",
+      videoId: "gVVE_kA-jps",
+      playerVars: { autoplay: 0, controls: 0, playsinline: 1, rel: 0 },
+      events: {
+        onReady: function() {
+          playerReady = true;
+          if (pendingAction === "play") {
+            pendingAction = null;
+            player.playVideo();
+          }
+        },
+        onStateChange: function(e) {
+          if (!window.YT) return;
+          if (e.data === YT.PlayerState.PLAYING) {
+            setPlayingUI(true);
+          } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+            setPlayingUI(false);
+          }
+        }
+      }
+    });
+  };
+
+  function loadApi() {
+    if (window.YT && window.YT.Player) { window.onYouTubeIframeAPIReady(); return; }
+    if (document.getElementById("yt-iframe-api-script")) return;
+    var tag = document.createElement("script");
+    tag.id = "yt-iframe-api-script";
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  }
+
+  btn.addEventListener("click", function() {
+    if (!playerReady) {
+      pendingAction = "play";
+      setPlayingUI(true);
+      labelEl.textContent = "로딩 중…";
+      loadApi();
+      return;
+    }
+    var state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
