@@ -86,7 +86,7 @@
   /* Lane header (sticky 카테고리 라벨) */
   .lane-header {
     display: grid;
-    grid-template-columns: 64px 1fr 0.5fr 1fr;
+    grid-template-columns: 64px 1fr;
     gap: 4px;
     position: sticky;
     top: 0;
@@ -102,9 +102,10 @@
     border-radius: 6px;
   }
   .lane-header .h-axis { color: var(--color-text-tertiary); }
-  .lane-header .h-history  { background: rgba(59, 126, 161, 0.12); color: var(--color-history); }
-  .lane-header .h-poetry   { background: rgba(224, 169, 58, 0.18); color: #8B6914; }
-  .lane-header .h-prophecy { background: rgba(178, 56, 58, 0.12); color: var(--color-prophecy); }
+  .lane-header .h-books {
+    background: var(--color-background-tertiary);
+    color: var(--color-text-secondary);
+  }
 
   .timeline {
     position: relative;
@@ -359,7 +360,7 @@
     /* 축 폭 조금 줄여 차트 영역 확보 (JS 상수와 맞추려면 AXIS_WIDTH도 수정해야 함) */
     .axis { width: 48px; }
     .chart { left: 48px; }
-    .lane-header { grid-template-columns: 48px 1fr 0.5fr 1fr; }
+    .lane-header { grid-template-columns: 48px 1fr; }
     .axis-tick { font-size: 11px; padding: 2px 4px 0 0; }
     .lane-header > div { font-size: 12px; padding: 5px 2px; }
     .period-band-label { font-size: 10px; padding: 2px 4px; }
@@ -383,9 +384,7 @@
     <p class="timeline-hint">⬇ 위(오래됨) → 아래(최근) · BC 2100 ~ BC 400 · 막대 hover 시 요약</p>
     <div class="lane-header">
       <div class="h-axis">연대</div>
-      <div class="h-history">📘 역사서</div>
-      <div class="h-poetry">📕 시가서</div>
-      <div class="h-prophecy">📙 예언서</div>
+      <div class="h-books">📖 구약 39권 (색으로 분류)</div>
     </div>
     <div id="timeline" class="timeline"></div>
   </div>
@@ -928,13 +927,12 @@
   const MIN_BAR_HEIGHT = 40;
   const AXIS_WIDTH = 64;
 
-  // 레인(카테고리) 가중치: grid-template-columns와 동일 비율 (1 : 0.5 : 1)
-  const LANE_CONFIG = {
-    history:  { weight: 1.0, barClass: "bar-history",  label: "역사서",  bgClass: "lane-history"  },
-    poetry:   { weight: 0.5, barClass: "bar-poetry",   label: "시가서",  bgClass: "lane-poetry"   },
-    prophecy: { weight: 1.0, barClass: "bar-prophecy", label: "예언서",  bgClass: "lane-prophecy" }
+  // 카테고리별 색/라벨 — 단일 컬럼에서 색으로만 구분 (레인 분리 없음)
+  const CAT_STYLES = {
+    history:  { barClass: "bar-history",  label: "역사서"  },
+    poetry:   { barClass: "bar-poetry",   label: "시가서"  },
+    prophecy: { barClass: "bar-prophecy", label: "예언서"  }
   };
-  const LANE_ORDER = ["history", "poetry", "prophecy"];
 
   const yearToY = (y) => (y - MIN_YEAR) * V_SCALE;
 
@@ -1001,93 +999,78 @@
       chart.appendChild(label);
     });
 
-    // ===== 레인(카테고리 세로 기둥) + 막대 배치 =====
-    const byCat = { history: [], poetry: [], prophecy: [] };
-    books.forEach((b) => byCat[b.cat].push(b));
+    // ===== 단일 컬럼: 모든 책을 함께 sub-column 패킹, 카테고리는 색으로만 구분 =====
+    const lane = document.createElement("div");
+    lane.className = "lane lane-merged";
+    lane.style.left = "0%";
+    lane.style.width = "100%";
+    chart.appendChild(lane);
 
-    const totalWeight = LANE_ORDER.reduce((s, k) => s + LANE_CONFIG[k].weight, 0);
-    let laneLeftPct = 0;
+    const subCols = packColumns(books);
+    const subW = 100 / subCols;
 
-    for (const key of LANE_ORDER) {
-      const cfg = LANE_CONFIG[key];
-      const widthPct = (cfg.weight / totalWeight) * 100;
+    books.forEach((b) => {
+      const cfg = CAT_STYLES[b.cat];
+      const top = yearToY(b.start);
+      let height = yearToY(b.end) - top;
+      if (height < MIN_BAR_HEIGHT) height = MIN_BAR_HEIGHT;
 
-      const lane = document.createElement("div");
-      lane.className = "lane " + cfg.bgClass;
-      lane.style.left = laneLeftPct + "%";
-      lane.style.width = widthPct + "%";
-      chart.appendChild(lane);
+      const bar = document.createElement("div");
+      bar.className = "bar " + cfg.barClass + (height < 50 ? " bar-short" : "");
+      bar.style.top = top + "px";
+      bar.style.height = height + "px";
+      const innerLeft = b._col * subW;
+      bar.style.left = "calc(" + innerLeft + "% + 4px)";
+      bar.style.width = "calc(" + subW + "% - 8px)";
 
-      // 서브컬럼 수 계산
-      const subCols = packColumns(byCat[key]);
+      // 긴 막대는 이름 + era(시대명 또는 확정 BC) 2줄, 짧으면 이름만
+      if (height >= 80) {
+        bar.innerHTML = '<div>' + b.name + '<br><span style="font-weight:400;font-size:12px;opacity:0.85">' + b.era + '</span></div>';
+      } else {
+        bar.textContent = b.name;
+      }
+      bar.dataset.name = b.name;
 
-      byCat[key].forEach((b) => {
-        const top = yearToY(b.start);
-        let height = yearToY(b.end) - top;
-        if (height < MIN_BAR_HEIGHT) height = MIN_BAR_HEIGHT;
-
-        const subW = 100 / subCols;
-        const bar = document.createElement("div");
-        bar.className = "bar " + cfg.barClass + (height < 50 ? " bar-short" : "");
-        bar.style.top = top + "px";
-        bar.style.height = height + "px";
-        // lane 내부 좌/우를 subW% 단위로 분할 (간격 6%)
-        const innerLeft = b._col * subW;
-        const innerWidth = subW;
-        bar.style.left = "calc(" + laneLeftPct + "% + " + innerLeft + "% * " + (widthPct / 100) + " + 4px)";
-        bar.style.width = "calc(" + innerWidth + "% * " + (widthPct / 100) + " - 8px)";
-
-        // 긴 막대는 이름 + era(시대명 또는 확정 BC) 2줄, 짧으면 이름만
-        if (height >= 80) {
-          bar.innerHTML = '<div>' + b.name + '<br><span style="font-weight:400;font-size:12px;opacity:0.85">' + b.era + '</span></div>';
-        } else {
-          bar.textContent = b.name;
-        }
-        bar.dataset.name = b.name;
-
-        bar.addEventListener("mouseenter", () => {
-          tooltip.innerHTML =
-            '<div class="tooltip-title">' + b.name + ' <span style="font-weight:400;opacity:0.7">' + b.eng + '</span></div>' +
-            '<div class="tooltip-meta">' + b.era + ' · ' + cfg.label + '</div>' +
-            '<div>' + b.summary + '</div>';
-          tooltip.classList.add("visible");
-        });
-        bar.addEventListener("mousemove", (e) => {
-          const pad = 14;
-          let x = e.clientX + pad;
-          let y = e.clientY + pad;
-          const tw = tooltip.offsetWidth;
-          const th = tooltip.offsetHeight;
-          if (x + tw > window.innerWidth - 8) x = e.clientX - tw - pad;
-          if (y + th > window.innerHeight - 8) y = e.clientY - th - pad;
-          tooltip.style.left = x + "px";
-          tooltip.style.top = y + "px";
-        });
-        bar.addEventListener("mouseleave", () => {
-          tooltip.classList.remove("visible");
-        });
-
-        chart.appendChild(bar);
+      bar.addEventListener("mouseenter", () => {
+        tooltip.innerHTML =
+          '<div class="tooltip-title">' + b.name + ' <span style="font-weight:400;opacity:0.7">' + b.eng + '</span></div>' +
+          '<div class="tooltip-meta">' + b.era + ' · ' + cfg.label + '</div>' +
+          '<div>' + b.summary + '</div>';
+        tooltip.classList.add("visible");
+      });
+      bar.addEventListener("mousemove", (e) => {
+        const pad = 14;
+        let x = e.clientX + pad;
+        let y = e.clientY + pad;
+        const tw = tooltip.offsetWidth;
+        const th = tooltip.offsetHeight;
+        if (x + tw > window.innerWidth - 8) x = e.clientX - tw - pad;
+        if (y + th > window.innerHeight - 8) y = e.clientY - th - pad;
+        tooltip.style.left = x + "px";
+        tooltip.style.top = y + "px";
+      });
+      bar.addEventListener("mouseleave", () => {
+        tooltip.classList.remove("visible");
       });
 
-      // 이 레인(카테고리)에 속하는 빈 구간 주석 렌더링
-      LANE_NOTES.filter(n => n.lane === key).forEach((n) => {
-        const note = document.createElement("div");
-        note.className = "lane-note";
-        const top = yearToY(n.start);
-        const height = yearToY(n.end) - top;
-        note.style.top = top + "px";
-        note.style.height = height + "px";
-        note.style.left = "calc(" + laneLeftPct + "% + 4px)";
-        note.style.width = "calc(" + widthPct + "% - 8px)";
-        note.innerHTML = '<div class="lane-note-text">' + n.text
-          + (n.sub ? '<br><span class="lane-note-sub">' + n.sub + '</span>' : '')
-          + '</div>';
-        chart.appendChild(note);
-      });
+      chart.appendChild(bar);
+    });
 
-      laneLeftPct += widthPct;
-    }
+    // 빈 구간 주석 — 단일 컬럼 전체 폭 차지
+    LANE_NOTES.forEach((n) => {
+      const note = document.createElement("div");
+      note.className = "lane-note";
+      const top = yearToY(n.start);
+      const height = yearToY(n.end) - top;
+      note.style.top = top + "px";
+      note.style.height = height + "px";
+      note.style.left = "4px";
+      note.style.width = "calc(100% - 8px)";
+      note.innerHTML = '<div class="lane-note-text">' + n.text
+        + (n.sub ? '<br><span class="lane-note-sub">' + n.sub + '</span>' : '')
+        + '</div>';
+      chart.appendChild(note);
+    });
   }
 
   render();

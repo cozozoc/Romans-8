@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.125";
+const APP_VERSION = "0.0.127";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1719,7 +1719,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("levelUpBtn").addEventListener("click", () => changeLevel(+1));
   $("levelDownBtn").addEventListener("click", () => changeLevel(-1));
   $("quitBtn").addEventListener("click", () => {
-    if (confirm("테스트를 종료하고 설정 화면으로 돌아갈까요?")) {
+    if (confirm("테스트를 종료하고 전체 설정 화면으로 이동할까요?")) {
       clearTimers();
       showScreen("setup-screen");
     }
@@ -1828,4 +1828,8 @@ document.addEventListener("DOMContentLoaded", () => {
       else forcePrevVerse();
     }
   });
+
+  // 앱 진입 시 설정 화면을 건너뛰고 저장된 설정(또는 기본값)으로 바로 테스트 시작.
+  // startTest() 내부에서 검증 실패 시 alert 후 setup-screen이 그대로 보이는 것을 폴백으로 허용.
+  startTest();
 });
