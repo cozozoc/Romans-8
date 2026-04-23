@@ -1,4 +1,4 @@
-const APP_VERSION = "0.0.139";
+const APP_VERSION = "0.0.140";
 const VERSION_KEY = "romans8_app_version";
 
 const LEVEL_RATIO = { 0: 0, 1: 0.1, 2: 0.2, 3: 0.3, 4: 0.4, 5: 0.5, 6: 0.6, 7: 0.7, 8: 0.8, 9: 0.9, 10: 1.0 };
@@ -1737,12 +1737,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === helpModal) closeHelp();
   });
 
-  $("genealogyBtn").addEventListener("click", () => window.open("족보/chronological_apostolic_history.html", "_blank", "noopener"));
-  $("kingsBtn").addEventListener("click", () => window.open("족보/divided_kingdom_kings.html", "_blank", "noopener"));
-  $("otTimelineBtn").addEventListener("click", () => window.open("족보/old_testament_timeline.html", "_blank", "noopener"));
-  $("adamToJesusBtn").addEventListener("click", () => window.open("족보/adam_to_jesus_genealogy.html", "_blank", "noopener"));
-  $("canonOrderBtn").addEventListener("click", () => window.open("족보/bible_66_canon_order.html", "_blank", "noopener"));
-  $("vocabBtn").addEventListener("click", () => window.open("족보/biblical_greek_hebrew_vocabulary.html", "_blank", "noopener"));
+  $("bibleKnowledgeBtn").addEventListener("click", () => window.open("족보/bible_knowledge.html", "bibleKnowledge", "noopener"));
 
   let ctrlComboUsed = false;
   let shiftComboUsed = false;

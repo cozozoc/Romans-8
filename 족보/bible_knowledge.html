@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Knowledge — 성경 지식 연대기</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f1efe8;
+    --bg3: #e9e6dd;
+    --text: #1f1f1d;
+    --text2: #5f5e5a;
+    --text3: #888780;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.18);
+    --accent: #3C3489;
+    --accent-bg: #EEEDFE;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #181816;
+      --bg2: #2c2c2a;
+      --bg3: #3a3a38;
+      --text: #f0eee6;
+      --text2: #b4b2a9;
+      --text3: #888780;
+      --border: rgba(255,255,255,0.12);
+      --border2: rgba(255,255,255,0.2);
+      --accent: #CECBF6;
+      --accent-bg: #3C3489;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: var(--font); color: var(--text); }
+  body { display: flex; flex-direction: column; overflow: hidden; }
+
+  .bk-header {
+    position: relative;
+    padding: 12px 64px 10px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .bk-title {
+    font-size: 20px; font-weight: 800; margin: 0 0 2px; letter-spacing: -0.01em;
+  }
+  .bk-subtitle {
+    font-size: 12px; color: var(--text3); margin: 0;
+    word-break: keep-all;
+  }
+  .bk-close {
+    position: absolute; top: 50%; right: 16px;
+    transform: translateY(-50%);
+    font-size: 18px; font-weight: 700; line-height: 1;
+    background: var(--bg2); color: var(--text2);
+    border: 1px solid var(--border);
+    width: 34px; height: 34px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.12s, color 0.12s;
+  }
+  .bk-close:hover { background: var(--bg3); color: var(--text); }
+
+  .bk-tabs {
+    display: flex; gap: 4px;
+    overflow-x: auto; overflow-y: hidden;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    flex-shrink: 0;
+  }
+  .bk-tabs::-webkit-scrollbar { height: 4px; }
+  .bk-tabs::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  .bk-tab {
+    font: inherit; color: var(--text2);
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    flex-shrink: 0;
+  }
+  .bk-tab:hover { background: var(--bg3); color: var(--text); }
+  .bk-tab.active {
+    background: var(--accent-bg); color: var(--accent);
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  .bk-main {
+    flex: 1;
+    display: flex;
+    position: relative;
+    min-height: 0;
+    background: var(--bg);
+  }
+  #bkFrame {
+    flex: 1;
+    width: 100%;
+    border: 0;
+    background: var(--bg);
+  }
+
+  @media (max-width: 640px) {
+    .bk-header { padding: 8px 54px 6px 12px; }
+    .bk-title { font-size: 16px; }
+    .bk-subtitle { font-size: 11px; }
+    .bk-close { width: 30px; height: 30px; font-size: 16px; right: 10px; }
+    .bk-tabs { padding: 6px 8px; }
+    .bk-tab { padding: 5px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bk-header">
+  <h1 class="bk-title">📚 Bible Knowledge</h1>
+  <p class="bk-subtitle">구약 연대기 · 분열왕국 · 인물 · 족보 · 정경 순서 · 원어 어휘를 한 곳에서</p>
+  <a href="../index.html" class="bk-close" aria-label="Bible Memorization으로 돌아가기" title="Bible Memorization으로 돌아가기">×</a>
+</header>
+
+<nav class="bk-tabs" role="tablist" aria-label="Bible Knowledge 탭">
+  <button class="bk-tab active" role="tab" data-tab="ot-content"  data-src="old_testament_timeline.html?embed=1">📖 구약 연대기 (내용순)</button>
+  <button class="bk-tab"        role="tab" data-tab="ot-writing"  data-src="old_testament_timeline_writing.html?embed=1">📚 구약 연대기 (기록순)</button>
+  <button class="bk-tab"        role="tab" data-tab="kings"       data-src="divided_kingdom_kings.html?embed=1">👑 분열왕국 왕</button>
+  <button class="bk-tab"        role="tab" data-tab="figures"     data-src="chronological_apostolic_history.html?embed=1">📜 인물 연대기</button>
+  <button class="bk-tab"        role="tab" data-tab="adam-jesus"  data-src="adam_to_jesus_genealogy.html?embed=1">🌳 아담→예수 족보</button>
+  <button class="bk-tab"        role="tab" data-tab="canon"       data-src="bible_66_canon_order.html?embed=1">📚 성경 66권 순서</button>
+  <button class="bk-tab"        role="tab" data-tab="vocab"       data-src="biblical_greek_hebrew_vocabulary.html?embed=1">🔤 성경 원어 어휘</button>
+</nav>
+
+<main class="bk-main">
+  <iframe id="bkFrame" title="Bible Knowledge 콘텐츠" referrerpolicy="no-referrer"></iframe>
+</main>
+
+<script>
+(function(){
+  var tabs  = Array.prototype.slice.call(document.querySelectorAll(".bk-tab"));
+  var frame = document.getElementById("bkFrame");
+
+  function activate(tabEl, pushHash){
+    if (!tabEl) return;
+    tabs.forEach(function(t){
+      var on = (t === tabEl);
+      t.classList.toggle("active", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    if (frame.getAttribute("data-src-current") !== tabEl.dataset.src) {
+      frame.src = tabEl.dataset.src;
+      frame.setAttribute("data-src-current", tabEl.dataset.src);
+    }
+    if (pushHash) {
+      try { history.replaceState(null, "", "#" + tabEl.dataset.tab); } catch(e){}
+    }
+    try { tabEl.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }); } catch(e){}
+  }
+
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ activate(t, true); });
+  });
+
+  function tabFromHash(){
+    var id = (location.hash || "").replace(/^#/, "");
+    if (!id) return null;
+    return tabs.find(function(t){ return t.dataset.tab === id; }) || null;
+  }
+
+  activate(tabFromHash() || tabs[0], false);
+
+  window.addEventListener("hashchange", function(){
+    var t = tabFromHash();
+    if (t) activate(t, false);
+  });
+})();
+</script>
+
+</body>
+</html>

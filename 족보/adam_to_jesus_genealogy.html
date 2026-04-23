@@ -188,6 +188,11 @@
   .seg-3 .person .connector::after { background: var(--color-seg-3); }
   .seg-3 .person .connector::before { background: color-mix(in srgb, var(--color-seg-3) 40%, transparent); }
 
+  /* 아담 → 이새까지는 성경 외 역사적 사료가 부족한 시기라 BC 연도를 표시하지 않음
+     (다윗 왕 이후부터만 BC 연도 표시) */
+  .seg-1 .person .year,
+  .seg-2 .person .year { visibility: hidden; }
+
   /* 주요 인물 강조 */
   .person.highlight .name { font-weight: 800; font-size: 20px; }
   .person.highlight .connector::after { width: 15px; height: 15px; box-shadow: 0 0 0 3px var(--color-background-primary); }
@@ -216,6 +221,8 @@
     .person.jesus .name { font-size: 20px; }
   }
 </style>
+<script>(function(){try{if(new URLSearchParams(location.search).get("embed")==="1"||window.self!==window.top)document.documentElement.classList.add("bk-embed");}catch(e){}})();</script>
+<style>html.bk-embed .page-nav,html.bk-embed p.page-nav{display:none!important;}html.bk-embed body{padding-top:10px!important;}</style>
 </head>
 <body>
 
@@ -319,8 +326,8 @@
   </div>
 
   <footer>
-    * BC 연도는 참고용 근사치 (Ussher 연대기 및 성경 내부 연대 기준, 마 1장 이후는 추정).<br>
-    * 마태복음 1장은 문학적 구조(14세대 × 3)를 위해 일부 왕(아하시야·요아스·아마샤)을 생략합니다.<br>
+    * BC 연도는 다윗 왕 이후(③ 구간)에만 표시 — 아담 ~ 이새는 성경 외 역사적 사료가 부족해 연대 논란이 커서 생략.<br>
+    * 표시된 BC 연도도 참고용 근사치이며, 마태복음 1장은 문학적 구조(14세대 × 3)를 위해 일부 왕(아하시야·요아스·아마샤)을 생략합니다.<br>
     * 세대 간격이 긴 이유는 성경 족보가 선별적 기록이기 때문입니다 (대표 세대만 열거).
   </footer>
 </div>
