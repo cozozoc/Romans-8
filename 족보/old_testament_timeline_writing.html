@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>구약 성경 연대기 (내용순)</title>
+<title>구약 성경 연대기 (기록순)</title>
 <style>
   :root {
     --color-text-primary: #1f1f1d;
@@ -388,9 +388,9 @@
 <body>
 
 <div class="container">
-  <h1 class="title">구약 성경 연대기 (내용순)</h1>
-  <p class="sub">창세기 ~ 말라기 39권 · 각 책이 <b>다루는 사건</b>의 발생 시기 기준</p>
-  <p class="version-switch"><a href="old_testament_timeline_writing.html">→ 기록순 보기 (각 책이 저술된 시기)</a></p>
+  <h1 class="title">구약 성경 연대기 (기록순)</h1>
+  <p class="sub">창세기 ~ 말라기 39권 · 각 책이 <b>저술·편찬된 시기</b> 기준 (보수적 전통 견해)</p>
+  <p class="version-switch"><a href="old_testament_timeline.html">→ 내용순 보기 (각 책이 다루는 사건의 시기)</a></p>
 
   <div class="legend">
     <span class="legend-item"><span class="legend-chip chip-history"></span>역사서 (17권)</span>
@@ -400,7 +400,7 @@
 
   <!-- ===== Timeline ===== -->
   <div class="timeline-section">
-    <p class="timeline-hint">⬇ 위(오래됨) → 아래(최근) · BC 2100 ~ BC 400 · 막대 hover 시 요약</p>
+    <p class="timeline-hint">⬇ 위(오래됨) → 아래(최근) · BC 1500 ~ BC 400 · 막대 hover 시 요약</p>
     <div class="lane-header">
       <div class="h-axis">연대</div>
       <div class="h-books">📖 구약 39권 (색으로 분류)</div>
@@ -876,7 +876,7 @@
 
 <script>
   // ===== Data =====
-  const MIN_YEAR = -2100;
+  const MIN_YEAR = -1500;
   const MAX_YEAR = -400;
   const SCALE = 1.4;
 
@@ -884,49 +884,48 @@
   //  - 분열왕국(BC 931) 이전 = 연대 논란 → 시대 명칭만 표기 (BC 숫자 없음)
   //  - 분열왕국 이후 = 앗수르·바벨론·페르시아 사료로 확정 → BC 연도 표기
   const books = [
-    { name: "창세기",     eng: "Genesis",       cat: "history",  start: -2100, end: -1800, era: "태초 ~ 족장사",            summary: "창조, 타락, 홍수, 족장사" },
-    { name: "욥기",       eng: "Job",           cat: "poetry",   start: -2000, end: -1800, era: "족장 시대",                 summary: "의인의 고난과 하나님의 주권" },
-    { name: "출애굽기",   eng: "Exodus",        cat: "history",  start: -1500, end: -1440, era: "출애굽 시대",               summary: "출애굽, 십계명, 성막" },
-    { name: "레위기",     eng: "Leviticus",     cat: "history",  start: -1445, end: -1435, era: "시내산 시대",               summary: "제사법과 거룩한 삶의 규례" },
-    { name: "민수기",     eng: "Numbers",       cat: "history",  start: -1440, end: -1400, era: "광야 시대",                 summary: "광야 40년의 여정" },
-    { name: "신명기",     eng: "Deuteronomy",   cat: "history",  start: -1405, end: -1395, era: "광야 말기",                 summary: "모세의 고별 설교" },
-    { name: "여호수아",   eng: "Joshua",        cat: "history",  start: -1400, end: -1375, era: "가나안 정복기",             summary: "가나안 정복과 분배" },
-    { name: "사사기",     eng: "Judges",        cat: "history",  start: -1375, end: -1050, era: "사사 시대",                 summary: "12사사와 반복되는 타락" },
-    { name: "룻기",       eng: "Ruth",          cat: "history",  start: -1105, end: -1095, era: "사사 말기",                 summary: "이방 여인의 신실함" },
-    { name: "사무엘상",   eng: "1 Samuel",      cat: "history",  start: -1050, end: -1010, era: "통일왕국 (사울·다윗 초기)", summary: "사무엘·사울·다윗의 등장" },
-    { name: "사무엘하",   eng: "2 Samuel",      cat: "history",  start: -1010, end: -970,  era: "통일왕국 (다윗 시대)",      summary: "다윗 왕의 통치" },
-    { name: "시편",       eng: "Psalms",        cat: "poetry",   start: -1410, end: -450,  era: "다윗 ~ 포로 귀환",          summary: "150편의 찬양과 기도" },
-    { name: "잠언",       eng: "Proverbs",      cat: "poetry",   start: -970,  end: -930,  era: "솔로몬 시대",               summary: "솔로몬의 지혜 모음" },
-    { name: "아가",       eng: "Song of Songs", cat: "poetry",   start: -965,  end: -955,  era: "솔로몬 시대",               summary: "사랑의 노래" },
+    { name: "창세기",     eng: "Genesis",       cat: "history",  start: -1446, end: -1406, era: "모세 저작",                 summary: "창조, 타락, 홍수, 족장사 · 모세가 광야에서 기록" },
+    { name: "출애굽기",   eng: "Exodus",        cat: "history",  start: -1446, end: -1406, era: "모세 저작",                 summary: "출애굽, 십계명, 성막" },
+    { name: "레위기",     eng: "Leviticus",     cat: "history",  start: -1446, end: -1406, era: "모세 저작",                 summary: "제사법과 거룩한 삶의 규례" },
+    { name: "민수기",     eng: "Numbers",       cat: "history",  start: -1446, end: -1406, era: "모세 저작",                 summary: "광야 40년의 여정" },
+    { name: "신명기",     eng: "Deuteronomy",   cat: "history",  start: -1406, end: -1406, era: "모세 저작 (고별 설교)",     summary: "모세의 고별 설교" },
+    { name: "여호수아",   eng: "Joshua",        cat: "history",  start: -1400, end: -1370, era: "여호수아 · 후대 편집",      summary: "가나안 정복과 분배" },
+    { name: "사사기",     eng: "Judges",        cat: "history",  start: -1050, end: -1000, era: "사무엘 전후 편찬",          summary: "12사사 시대를 왕정 초에 정리" },
+    { name: "룻기",       eng: "Ruth",          cat: "history",  start: -1010, end: -970,  era: "다윗 시대 편찬",            summary: "사사 시대 이방 여인 이야기" },
+    { name: "욥기",       eng: "Job",           cat: "poetry",   start: -1000, end: -950,  era: "솔로몬 시대 (추정)",         summary: "족장 시대 배경의 고난과 주권" },
+    { name: "사무엘상",   eng: "1 Samuel",      cat: "history",  start: -930,  end: -900,  era: "분열왕국 초 편찬",          summary: "사무엘·사울·다윗의 등장" },
+    { name: "사무엘하",   eng: "2 Samuel",      cat: "history",  start: -930,  end: -900,  era: "분열왕국 초 편찬",          summary: "다윗 왕의 통치 기록" },
+    { name: "시편",       eng: "Psalms",        cat: "poetry",   start: -1410, end: -430,  era: "모세 ~ 귀환기",             summary: "여러 시대·저자의 150편 찬양·기도" },
+    { name: "아가",       eng: "Song of Songs", cat: "poetry",   start: -965,  end: -955,  era: "솔로몬 시대",               summary: "솔로몬의 사랑의 노래" },
+    { name: "잠언",       eng: "Proverbs",      cat: "poetry",   start: -970,  end: -700,  era: "솔로몬 · 히스기야 편집",    summary: "솔로몬의 지혜 + 히스기야 편집" },
     { name: "전도서",     eng: "Ecclesiastes",  cat: "poetry",   start: -940,  end: -930,  era: "솔로몬 말기",               summary: "인생의 허무와 참된 의미" },
-    { name: "열왕기상",   eng: "1 Kings",       cat: "history",  start: -970,  end: -850,  era: "솔로몬 말 ~ BC 850",        summary: "솔로몬, 왕국 분열" },
-    { name: "요엘",       eng: "Joel",          cat: "prophecy", start: -840,  end: -830,  era: "~BC 835",                   summary: "여호와의 날, 성령 강림" },
-    { name: "요나",       eng: "Jonah",         cat: "prophecy", start: -785,  end: -775,  era: "~BC 780",                   summary: "니느웨 선교" },
-    { name: "아모스",     eng: "Amos",          cat: "prophecy", start: -765,  end: -755,  era: "~BC 760",                   summary: "사회 정의와 공의" },
+    { name: "오바댜",     eng: "Obadiah",       cat: "prophecy", start: -845,  end: -840,  era: "여호람 시대 (추정)",         summary: "에돔 심판 예언" },
+    { name: "요엘",       eng: "Joel",          cat: "prophecy", start: -840,  end: -830,  era: "요아스 시대 (전통설)",       summary: "여호와의 날, 성령 강림" },
+    { name: "요나",       eng: "Jonah",         cat: "prophecy", start: -785,  end: -775,  era: "여로보암 2세",               summary: "니느웨 선교" },
+    { name: "아모스",     eng: "Amos",          cat: "prophecy", start: -765,  end: -755,  era: "웃시야 시대",               summary: "사회 정의와 공의" },
     { name: "호세아",     eng: "Hosea",         cat: "prophecy", start: -755,  end: -715,  era: "BC 755 ~ 715",              summary: "하나님의 변함없는 사랑" },
     { name: "이사야",     eng: "Isaiah",        cat: "prophecy", start: -740,  end: -680,  era: "BC 740 ~ 680",              summary: "메시아 예언" },
     { name: "미가",       eng: "Micah",         cat: "prophecy", start: -735,  end: -700,  era: "BC 735 ~ 700",              summary: "베들레헴 탄생 예언" },
-    { name: "열왕기하",   eng: "2 Kings",       cat: "history",  start: -850,  end: -586,  era: "BC 850 ~ 586",              summary: "남북 왕국의 멸망" },
-    { name: "나훔",       eng: "Nahum",         cat: "prophecy", start: -655,  end: -645,  era: "~BC 650",                   summary: "니느웨 멸망 예언" },
-    { name: "스바냐",     eng: "Zephaniah",     cat: "prophecy", start: -640,  end: -609,  era: "BC 640 ~ 609",              summary: "여호와의 날의 심판" },
-    { name: "하박국",     eng: "Habakkuk",      cat: "prophecy", start: -614,  end: -604,  era: "~BC 609",                   summary: "의인은 믿음으로 산다" },
+    { name: "나훔",       eng: "Nahum",         cat: "prophecy", start: -650,  end: -615,  era: "요시야 전기",               summary: "니느웨 멸망 예언" },
+    { name: "스바냐",     eng: "Zephaniah",     cat: "prophecy", start: -640,  end: -609,  era: "요시야 시대",               summary: "여호와의 날의 심판" },
     { name: "예레미야",   eng: "Jeremiah",      cat: "prophecy", start: -627,  end: -580,  era: "BC 627 ~ 580",              summary: "눈물의 선지자" },
-    { name: "예레미야애가", eng: "Lamentations", cat: "prophecy", start: -591,  end: -581,  era: "~BC 586",                   summary: "예루살렘 멸망 애가" },
-    { name: "오바댜",     eng: "Obadiah",       cat: "prophecy", start: -591,  end: -581,  era: "~BC 586",                   summary: "에돔 심판 예언" },
+    { name: "하박국",     eng: "Habakkuk",      cat: "prophecy", start: -609,  end: -598,  era: "여호야김 시대",             summary: "의인은 믿음으로 산다" },
+    { name: "다니엘",     eng: "Daniel",        cat: "prophecy", start: -605,  end: -530,  era: "BC 605 ~ 530",              summary: "바벨론 궁정·종말 환상" },
     { name: "에스겔",     eng: "Ezekiel",       cat: "prophecy", start: -593,  end: -570,  era: "BC 593 ~ 570",              summary: "포로지의 환상과 회복" },
-    { name: "다니엘",     eng: "Daniel",        cat: "prophecy", start: -605,  end: -536,  era: "BC 605 ~ 536",              summary: "바벨론 궁정·종말 환상" },
-    { name: "역대상",     eng: "1 Chronicles",  cat: "history",  start: -1010, end: -970,  era: "다윗 시대",                 summary: "아담~다윗 계보, 다윗의 통치" },
-    { name: "역대하",     eng: "2 Chronicles",  cat: "history",  start: -970,  end: -538,  era: "솔로몬 ~ 포로 귀환",         summary: "솔로몬부터 포로 귀환까지의 남유다" },
-    { name: "학개",       eng: "Haggai",        cat: "prophecy", start: -525,  end: -515,  era: "~BC 520",                   summary: "성전 재건 독려" },
+    { name: "예레미야애가", eng: "Lamentations", cat: "prophecy", start: -586,  end: -580,  era: "예루살렘 함락 직후",        summary: "예루살렘 멸망 애가" },
+    { name: "열왕기상",   eng: "1 Kings",       cat: "history",  start: -560,  end: -550,  era: "포로기 편찬",               summary: "솔로몬~왕국 분열 (포로기 회고)" },
+    { name: "열왕기하",   eng: "2 Kings",       cat: "history",  start: -560,  end: -550,  era: "포로기 편찬",               summary: "남북 왕국의 멸망 (포로기 회고)" },
+    { name: "학개",       eng: "Haggai",        cat: "prophecy", start: -520,  end: -520,  era: "BC 520",                    summary: "성전 재건 독려" },
     { name: "스가랴",     eng: "Zechariah",     cat: "prophecy", start: -520,  end: -480,  era: "BC 520 ~ 480",              summary: "성전 재건·메시아 환상" },
-    { name: "에스더",     eng: "Esther",        cat: "history",  start: -483,  end: -473,  era: "BC 483 ~ 473",              summary: "페르시아에서 유대 민족 구원" },
-    { name: "에스라",     eng: "Ezra",          cat: "history",  start: -457,  end: -444,  era: "BC 457 ~ 444",              summary: "포로 귀환·성전 재건" },
-    { name: "느헤미야",   eng: "Nehemiah",      cat: "history",  start: -444,  end: -432,  era: "BC 444 ~ 432",              summary: "예루살렘 성벽 재건" },
-    { name: "말라기",     eng: "Malachi",       cat: "prophecy", start: -435,  end: -425,  era: "~BC 430",                   summary: "구약 마지막 선지자" }
+    { name: "에스더",     eng: "Esther",        cat: "history",  start: -470,  end: -430,  era: "페르시아 후반 편찬",         summary: "에스더 사건 이후 편찬" },
+    { name: "역대상",     eng: "1 Chronicles",  cat: "history",  start: -450,  end: -430,  era: "포로 귀환기 편찬",           summary: "아담~다윗 계보 (귀환 공동체용)" },
+    { name: "역대하",     eng: "2 Chronicles",  cat: "history",  start: -450,  end: -430,  era: "포로 귀환기 편찬",           summary: "솔로몬~귀환까지 재조명" },
+    { name: "에스라",     eng: "Ezra",          cat: "history",  start: -450,  end: -430,  era: "에스라 당대",               summary: "포로 귀환·성전 재건" },
+    { name: "말라기",     eng: "Malachi",       cat: "prophecy", start: -435,  end: -425,  era: "~BC 430",                   summary: "구약 마지막 선지자" },
+    { name: "느헤미야",   eng: "Nehemiah",      cat: "history",  start: -430,  end: -400,  era: "느헤미야 당대",              summary: "예루살렘 성벽 재건 기록" }
   ];
 
   const periods = [
-    { label: "족장",     start: -2100, end: -1800 },
     { label: "출애굽",   start: -1500, end: -1400 },
     { label: "사사",     start: -1400, end: -1050 },
     { label: "통일왕국", start: -1050, end: -930 },
@@ -936,10 +935,8 @@
     { label: "귀환",     start: -538,  end: -400 }
   ];
 
-  // 특정 레인(카테고리) 안에서만 표시되는 주석 — 책이 기록되지 않은 빈 구간 설명
-  const LANE_NOTES = [
-    { lane: "history", start: -1800, end: -1500, text: "애굽 체류기" }
-  ];
+  // 기록순에는 특정 빈 구간 주석이 필요 없음 (저술 공백은 자연스러운 여백으로 표현)
+  const LANE_NOTES = [];
 
   // 세로 스케일: 1년 = 1.1px → 1700년 ≈ 1870px
   const V_SCALE = 1.1;
