@@ -298,6 +298,37 @@
     h1.title { font-size: 28px; }
     p.sub { font-size: 16px; }
     .timeline { height: 440px; }
+
+    /* 모바일 세로 화면: 막대가 좁아 이름이 잘려서, 세로 쓰기(top→bottom)로 전환 */
+    .bar {
+      display: block;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      padding: 8px 2px 6px;
+      font-size: 14px;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      word-break: normal;
+      white-space: nowrap;
+      text-align: left;
+    }
+    .bar > div { writing-mode: inherit; display: block; }
+    /* era 부제(괄호/BC 표기)는 모바일에서 숨겨서 본문 이름에 집중 */
+    .bar br, .bar span { display: none; }
+    /* 너무 짧은(세로 높이 <50px) 막대는 세로쓰기가 안 맞으므로 가로쓰기 + 작게 */
+    .bar-short {
+      writing-mode: horizontal-tb;
+      padding: 2px 2px;
+      font-size: 10px;
+    }
+
+    /* 축 폭 조금 줄여 차트 영역 확보 (JS 상수와 맞추려면 AXIS_WIDTH도 수정해야 함) */
+    .axis { width: 48px; }
+    .chart { left: 48px; }
+    .lane-header { grid-template-columns: 48px 1fr 0.5fr 1fr; }
+    .axis-tick { font-size: 11px; padding: 2px 4px 0 0; }
+    .lane-header > div { font-size: 12px; padding: 5px 2px; }
+    .period-band-label { font-size: 10px; padding: 2px 4px; }
   }
 </style>
 </head>
