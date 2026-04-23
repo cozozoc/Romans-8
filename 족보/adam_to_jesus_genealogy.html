@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아담에서 예수까지 · 구속사 족보</title>
+<style>
+  :root {
+    --color-text-primary: #1f1f1d;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f1efe8;
+    --color-background-tertiary: #e9e6dd;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.18);
+    --color-seg-1: #8B6914;  /* 아담→아브라함: 태고 (황갈) */
+    --color-seg-2: #3B7EA1;  /* 아브라함→다윗: 족장·왕정 초 (파랑) */
+    --color-seg-3: #B23A3A;  /* 다윗→예수: 왕정·포로·복음 (진홍) */
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #f0eee6;
+      --color-text-secondary: #b4b2a9;
+      --color-text-tertiary: #888780;
+      --color-background-primary: #181816;
+      --color-background-secondary: #2c2c2a;
+      --color-background-tertiary: #3a3a38;
+      --color-border-tertiary: rgba(255,255,255,0.12);
+      --color-border-secondary: rgba(255,255,255,0.2);
+      --color-seg-1: #E0A93A;
+      --color-seg-2: #6FB0D1;
+      --color-seg-3: #D85A5A;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px;
+    background-color: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    display: flex; justify-content: center;
+  }
+  .container { max-width: 720px; width: 100%; }
+
+  h1.title { font-size: 34px; font-weight: 700; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; }
+  p.sub { font-size: 16px; text-align: center; color: var(--color-text-secondary); margin: 0 0 8px; }
+
+  p.page-nav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center;
+    text-align: center; margin: 0 0 1.6rem;
+    font-size: 13px;
+  }
+  p.page-nav a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--color-background-tertiary);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border: 1px solid var(--color-border-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  p.page-nav a:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  p.page-nav a.current {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .legend {
+    display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
+    font-size: 12px; font-weight: 600; color: var(--color-text-secondary);
+    margin-bottom: 1.4rem; padding: 10px;
+    background: var(--color-background-secondary); border-radius: var(--border-radius-md);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+
+  /* ===== Chain ===== */
+  .chain {
+    position: relative;
+    padding: 1rem 0 2rem;
+  }
+
+  .section {
+    position: relative;
+    padding: 1.2rem 0 0.4rem;
+  }
+  .section-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.6rem;
+    padding: 6px 10px;
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-background-secondary);
+    border-radius: 999px;
+  }
+  .section-source {
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin: 0 0 1rem;
+  }
+
+  .person {
+    display: grid;
+    grid-template-columns: 100px 40px 1fr;
+    align-items: center;
+    min-height: 38px;
+    position: relative;
+  }
+  .person .year {
+    text-align: right;
+    padding-right: 14px;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+  .person .connector {
+    position: relative;
+    height: 100%;
+  }
+  /* 연결선 (세로줄) */
+  .person .connector::before {
+    content: "";
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--color-border-secondary);
+    transform: translateX(-50%);
+  }
+  /* 마지막 사람은 아래쪽 연결선 생략 (세그먼트 끝 표시 외엔 체인 이음) */
+  .section-last .person:last-child .connector::before {
+    bottom: 50%;
+  }
+  .chain-top .person:first-child .connector::before {
+    top: 50%;
+  }
+  /* 사람 점 */
+  .person .connector::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--color-text-secondary);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 2px var(--color-background-primary);
+  }
+  .person .name {
+    font-size: 18px;
+    font-weight: 600;
+    padding-left: 14px;
+    color: var(--color-text-primary);
+  }
+  .person .name .eng {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--color-text-tertiary);
+    margin-left: 6px;
+  }
+
+  /* 세그먼트별 색 */
+  .seg-1 .person .connector::after { background: var(--color-seg-1); }
+  .seg-1 .person .connector::before { background: color-mix(in srgb, var(--color-seg-1) 40%, transparent); }
+  .seg-2 .person .connector::after { background: var(--color-seg-2); }
+  .seg-2 .person .connector::before { background: color-mix(in srgb, var(--color-seg-2) 40%, transparent); }
+  .seg-3 .person .connector::after { background: var(--color-seg-3); }
+  .seg-3 .person .connector::before { background: color-mix(in srgb, var(--color-seg-3) 40%, transparent); }
+
+  /* 주요 인물 강조 */
+  .person.highlight .name { font-weight: 800; font-size: 20px; }
+  .person.highlight .connector::after { width: 15px; height: 15px; box-shadow: 0 0 0 3px var(--color-background-primary); }
+
+  /* 예수 강조 */
+  .person.jesus .name { color: var(--color-seg-3); font-size: 22px; font-weight: 800; }
+  .person.jesus .connector::after { width: 18px; height: 18px; background: var(--color-seg-3); box-shadow: 0 0 0 3px var(--color-background-primary), 0 0 0 5px color-mix(in srgb, var(--color-seg-3) 30%, transparent); }
+
+  footer {
+    margin-top: 3rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-tertiary);
+    font-size: 13px; color: var(--color-text-tertiary);
+    text-align: center; line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    h1.title { font-size: 26px; }
+    p.sub { font-size: 14px; }
+    .person {
+      grid-template-columns: 78px 36px 1fr;
+    }
+    .person .name { font-size: 16px; padding-left: 10px; }
+    .person .year { font-size: 11px; padding-right: 8px; }
+    .person.highlight .name { font-size: 18px; }
+    .person.jesus .name { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="title">아담에서 예수까지</h1>
+  <p class="sub">구속사 족보 · 창세기 5·11장, 룻기 4장, 역대상 1–3장, 마태복음 1장</p>
+  <p class="page-nav">
+    <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
+    <a href="old_testament_timeline_writing.html" target="_blank" rel="noopener">📚 구약 연대기 (기록순)</a>
+    <a href="divided_kingdom_kings.html" target="_blank" rel="noopener">👑 분열왕국 왕</a>
+    <a href="chronological_apostolic_history.html" target="_blank" rel="noopener">📜 인물 연대기</a>
+    <a class="current" aria-current="page">🌳 아담→예수 족보</a>
+  </p>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--color-seg-1)"></span>아담 → 아브라함 (창 5, 11)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--color-seg-2)"></span>아브라함 → 다윗 (룻 4 · 대상 2)</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--color-seg-3)"></span>다윗 → 예수 (마 1)</span>
+  </div>
+
+  <div class="chain">
+    <!-- ===== 아담 → 아브라함 (창 5, 11) — 20세대 ===== -->
+    <div class="section seg-1 chain-top">
+      <div style="text-align:center;"><span class="section-title">① 아담 → 아브라함 · 20세대</span></div>
+      <p class="section-source">창세기 5, 11장</p>
+      <div class="person highlight"><span class="year">~BC 4000</span><span class="connector"></span><span class="name">아담 <span class="eng">Adam</span></span></div>
+      <div class="person"><span class="year">~BC 3870</span><span class="connector"></span><span class="name">셋 <span class="eng">Seth</span></span></div>
+      <div class="person"><span class="year">~BC 3770</span><span class="connector"></span><span class="name">에노스 <span class="eng">Enosh</span></span></div>
+      <div class="person"><span class="year">~BC 3680</span><span class="connector"></span><span class="name">게난 <span class="eng">Kenan</span></span></div>
+      <div class="person"><span class="year">~BC 3610</span><span class="connector"></span><span class="name">마할랄렐 <span class="eng">Mahalalel</span></span></div>
+      <div class="person"><span class="year">~BC 3540</span><span class="connector"></span><span class="name">야렛 <span class="eng">Jared</span></span></div>
+      <div class="person"><span class="year">~BC 3380</span><span class="connector"></span><span class="name">에녹 <span class="eng">Enoch</span></span></div>
+      <div class="person"><span class="year">~BC 3320</span><span class="connector"></span><span class="name">므두셀라 <span class="eng">Methuselah</span></span></div>
+      <div class="person"><span class="year">~BC 3130</span><span class="connector"></span><span class="name">라멕 <span class="eng">Lamech</span></span></div>
+      <div class="person highlight"><span class="year">~BC 2950</span><span class="connector"></span><span class="name">노아 <span class="eng">Noah</span></span></div>
+      <div class="person"><span class="year">~BC 2450</span><span class="connector"></span><span class="name">셈 <span class="eng">Shem</span></span></div>
+      <div class="person"><span class="year">~BC 2350</span><span class="connector"></span><span class="name">아르박삿 <span class="eng">Arphaxad</span></span></div>
+      <div class="person"><span class="year">~BC 2310</span><span class="connector"></span><span class="name">셀라 <span class="eng">Shelah</span></span></div>
+      <div class="person"><span class="year">~BC 2280</span><span class="connector"></span><span class="name">에벨 <span class="eng">Eber</span></span></div>
+      <div class="person"><span class="year">~BC 2250</span><span class="connector"></span><span class="name">벨렉 <span class="eng">Peleg</span></span></div>
+      <div class="person"><span class="year">~BC 2220</span><span class="connector"></span><span class="name">르우 <span class="eng">Reu</span></span></div>
+      <div class="person"><span class="year">~BC 2190</span><span class="connector"></span><span class="name">스룩 <span class="eng">Serug</span></span></div>
+      <div class="person"><span class="year">~BC 2160</span><span class="connector"></span><span class="name">나홀 <span class="eng">Nahor</span></span></div>
+      <div class="person"><span class="year">~BC 2130</span><span class="connector"></span><span class="name">데라 <span class="eng">Terah</span></span></div>
+    </div>
+
+    <!-- ===== 아브라함 → 다윗 (룻 4·대상 2) — 14세대 ===== -->
+    <div class="section seg-2">
+      <div style="text-align:center;"><span class="section-title">② 아브라함 → 다윗 · 14세대</span></div>
+      <p class="section-source">룻기 4:18–22 · 역대상 2:1–15 · 마태복음 1:2–6</p>
+      <div class="person highlight"><span class="year">~BC 2100</span><span class="connector"></span><span class="name">아브라함 <span class="eng">Abraham</span></span></div>
+      <div class="person"><span class="year">~BC 2000</span><span class="connector"></span><span class="name">이삭 <span class="eng">Isaac</span></span></div>
+      <div class="person"><span class="year">~BC 1940</span><span class="connector"></span><span class="name">야곱 <span class="eng">Jacob</span></span></div>
+      <div class="person"><span class="year">~BC 1880</span><span class="connector"></span><span class="name">유다 <span class="eng">Judah</span></span></div>
+      <div class="person"><span class="year">~BC 1800</span><span class="connector"></span><span class="name">베레스 <span class="eng">Perez</span></span></div>
+      <div class="person"><span class="year">~BC 1700</span><span class="connector"></span><span class="name">헤스론 <span class="eng">Hezron</span></span></div>
+      <div class="person"><span class="year">~BC 1600</span><span class="connector"></span><span class="name">람 <span class="eng">Ram</span></span></div>
+      <div class="person"><span class="year">~BC 1500</span><span class="connector"></span><span class="name">암미나답 <span class="eng">Amminadab</span></span></div>
+      <div class="person"><span class="year">~BC 1440</span><span class="connector"></span><span class="name">나손 <span class="eng">Nahshon</span></span></div>
+      <div class="person"><span class="year">~BC 1400</span><span class="connector"></span><span class="name">살몬 <span class="eng">Salmon</span></span></div>
+      <div class="person"><span class="year">~BC 1150</span><span class="connector"></span><span class="name">보아스 <span class="eng">Boaz</span></span></div>
+      <div class="person"><span class="year">~BC 1100</span><span class="connector"></span><span class="name">오벳 <span class="eng">Obed</span></span></div>
+      <div class="person"><span class="year">~BC 1070</span><span class="connector"></span><span class="name">이새 <span class="eng">Jesse</span></span></div>
+    </div>
+
+    <!-- ===== 다윗 → 예수 (마 1) — 28세대 ===== -->
+    <div class="section seg-3 section-last">
+      <div style="text-align:center;"><span class="section-title">③ 다윗 → 예수 · 28세대</span></div>
+      <p class="section-source">마태복음 1:6–16</p>
+      <div class="person highlight"><span class="year">~BC 1010</span><span class="connector"></span><span class="name">다윗 <span class="eng">David</span></span></div>
+      <div class="person"><span class="year">~BC 970</span><span class="connector"></span><span class="name">솔로몬 <span class="eng">Solomon</span></span></div>
+      <div class="person"><span class="year">~BC 930</span><span class="connector"></span><span class="name">르호보암 <span class="eng">Rehoboam</span></span></div>
+      <div class="person"><span class="year">~BC 913</span><span class="connector"></span><span class="name">아비야 <span class="eng">Abijah</span></span></div>
+      <div class="person"><span class="year">~BC 910</span><span class="connector"></span><span class="name">아사 <span class="eng">Asa</span></span></div>
+      <div class="person"><span class="year">~BC 872</span><span class="connector"></span><span class="name">여호사밧 <span class="eng">Jehoshaphat</span></span></div>
+      <div class="person"><span class="year">~BC 848</span><span class="connector"></span><span class="name">요람 <span class="eng">Joram</span></span></div>
+      <div class="person"><span class="year">~BC 790</span><span class="connector"></span><span class="name">웃시야 <span class="eng">Uzziah</span></span></div>
+      <div class="person"><span class="year">~BC 750</span><span class="connector"></span><span class="name">요담 <span class="eng">Jotham</span></span></div>
+      <div class="person"><span class="year">~BC 732</span><span class="connector"></span><span class="name">아하스 <span class="eng">Ahaz</span></span></div>
+      <div class="person"><span class="year">~BC 715</span><span class="connector"></span><span class="name">히스기야 <span class="eng">Hezekiah</span></span></div>
+      <div class="person"><span class="year">~BC 697</span><span class="connector"></span><span class="name">므낫세 <span class="eng">Manasseh</span></span></div>
+      <div class="person"><span class="year">~BC 642</span><span class="connector"></span><span class="name">아몬 <span class="eng">Amon</span></span></div>
+      <div class="person"><span class="year">~BC 640</span><span class="connector"></span><span class="name">요시야 <span class="eng">Josiah</span></span></div>
+      <div class="person"><span class="year">~BC 598</span><span class="connector"></span><span class="name">여고냐 <span class="eng">Jechoniah</span></span></div>
+      <div class="person"><span class="year">~BC 580</span><span class="connector"></span><span class="name">스알디엘 <span class="eng">Shealtiel</span></span></div>
+      <div class="person"><span class="year">~BC 520</span><span class="connector"></span><span class="name">스룹바벨 <span class="eng">Zerubbabel</span></span></div>
+      <div class="person"><span class="year">~BC 480</span><span class="connector"></span><span class="name">아비훗 <span class="eng">Abiud</span></span></div>
+      <div class="person"><span class="year">~BC 440</span><span class="connector"></span><span class="name">엘리아김 <span class="eng">Eliakim</span></span></div>
+      <div class="person"><span class="year">~BC 400</span><span class="connector"></span><span class="name">아소르 <span class="eng">Azor</span></span></div>
+      <div class="person"><span class="year">~BC 360</span><span class="connector"></span><span class="name">사독 <span class="eng">Zadok</span></span></div>
+      <div class="person"><span class="year">~BC 320</span><span class="connector"></span><span class="name">아킴 <span class="eng">Achim</span></span></div>
+      <div class="person"><span class="year">~BC 280</span><span class="connector"></span><span class="name">엘리웃 <span class="eng">Eliud</span></span></div>
+      <div class="person"><span class="year">~BC 240</span><span class="connector"></span><span class="name">엘르아살 <span class="eng">Eleazar</span></span></div>
+      <div class="person"><span class="year">~BC 200</span><span class="connector"></span><span class="name">맛단 <span class="eng">Matthan</span></span></div>
+      <div class="person"><span class="year">~BC 150</span><span class="connector"></span><span class="name">야곱 <span class="eng">Jacob</span></span></div>
+      <div class="person"><span class="year">~BC 80</span><span class="connector"></span><span class="name">요셉 <span class="eng">Joseph (마리아의 남편)</span></span></div>
+      <div class="person jesus"><span class="year">~BC 4</span><span class="connector"></span><span class="name">예수 그리스도 <span class="eng">Jesus Christ</span></span></div>
+    </div>
+  </div>
+
+  <footer>
+    * BC 연도는 참고용 근사치 (Ussher 연대기 및 성경 내부 연대 기준, 마 1장 이후는 추정).<br>
+    * 마태복음 1장은 문학적 구조(14세대 × 3)를 위해 일부 왕(아하시야·요아스·아마샤)을 생략합니다.<br>
+    * 세대 간격이 긴 이유는 성경 족보가 선별적 기록이기 때문입니다 (대표 세대만 열거).
+  </footer>
+</div>
+
+</body>
+</html>
