@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1776897222408,
+  "lastScanned": 1777019976737,
   "projectRoot": "f:\\Project\\claude_code\\Romans8_memorization",
   "techStack": {
     "languages": [
@@ -38,11 +38,24 @@
   },
   "customNotes": [],
   "directoryMap": {
+    "성경": {
+      "path": "성경",
+      "purpose": null,
+      "fileCount": 1189,
+      "lastAccessed": 1777019976667,
+      "keyFiles": [
+        "갈라디아서_2장.txt",
+        "갈라디아서_3장.txt",
+        "갈라디아서_1장.txt",
+        "갈라디아서_4장.txt",
+        "갈라디아서_6장.txt"
+      ]
+    },
     "족보": {
       "path": "족보",
       "purpose": null,
-      "fileCount": 15,
-      "lastAccessed": 1776897222373,
+      "fileCount": 20,
+      "lastAccessed": 1777019976669,
       "keyFiles": [
         "biblical-genealogy.md",
         "biblical-genealogy-100.md",
@@ -55,7 +68,7 @@
       "path": "제자훈련1권",
       "purpose": null,
       "fileCount": 6,
-      "lastAccessed": 1776897222374,
+      "lastAccessed": 1777019976670,
       "keyFiles": [
         "01_롬10_9-10_마16_16.txt",
         "02_히4_16_애3_22-23.txt",
@@ -68,7 +81,7 @@
       "path": "제자훈련2권",
       "purpose": null,
       "fileCount": 14,
-      "lastAccessed": 1776897222374,
+      "lastAccessed": 1777019976671,
       "keyFiles": [
         "01_벧후1_21_수1_8.txt",
         "02_롬11_36상_렘31_3하.txt",
@@ -81,7 +94,7 @@
       "path": "제자훈련3권",
       "purpose": null,
       "fileCount": 12,
-      "lastAccessed": 1776897222375,
+      "lastAccessed": 1777019976672,
       "keyFiles": [
         "01_마7_24_요14_21.txt",
         "02_빌2_3-4_벧전4_11상.txt",
@@ -94,14 +107,14 @@
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1776897222376,
+      "lastAccessed": 1777019976673,
       "keyFiles": []
     },
     "사역훈련2권_교회와_평신도의_자화상": {
       "path": "사역훈련2권_교회와_평신도의_자화상",
       "purpose": null,
       "fileCount": 10,
-      "lastAccessed": 1776897222377,
+      "lastAccessed": 1777019976674,
       "keyFiles": [
         "01_엡2_19-20.txt",
         "02_요4_23-24.txt",
@@ -114,7 +127,7 @@
       "path": "사역훈련3권_소그룹_환경과_리더십",
       "purpose": null,
       "fileCount": 5,
-      "lastAccessed": 1776897222378,
+      "lastAccessed": 1777019976675,
       "keyFiles": [
         "02_살전2_7-8.txt",
         "04_사34_16.txt",
@@ -127,7 +140,7 @@
       "path": "__pycache__",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1776897222378,
+      "lastAccessed": 1777019976676,
       "keyFiles": [
         "scrape_bible.cpython-311.pyc"
       ]
@@ -136,20 +149,20 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 776,
-      "lastAccessed": 1776985226441,
+      "accessCount": 779,
+      "lastAccessed": 1777020484702,
       "type": "file"
     },
     {
       "path": "index.html",
-      "accessCount": 366,
-      "lastAccessed": 1776984738812,
+      "accessCount": 367,
+      "lastAccessed": 1777020217933,
       "type": "file"
     },
     {
       "path": "style.css",
-      "accessCount": 117,
-      "lastAccessed": 1776984559954,
+      "accessCount": 124,
+      "lastAccessed": 1777020454846,
       "type": "file"
     },
     {

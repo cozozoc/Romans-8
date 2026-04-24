@@ -469,8 +469,10 @@ button {
   cursor: pointer;
   transition: all 0.15s;
   font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 button:active { transform: translateY(1px); }
+a, select, summary { -webkit-tap-highlight-color: transparent; }
 
 button.primary {
   background: var(--primary);
@@ -1180,35 +1182,65 @@ summary:focus-visible,
 
 /* === Responsive === */
 @media (max-width: 640px) {
-  body { padding: 16px 16px; }
-  .container { padding: 24px 18px; border-radius: 14px; }
-  /* 모바일: 헤더 아이콘 버튼을 제목 위 한 줄로 분리 — 제목 겹침 방지 */
+  body { padding: 10px 8px; }
+  .container { padding: 18px 14px; border-radius: 14px; }
+
+  /* 모바일: 헤더 아이콘 버튼을 제목 위 한 줄로 분리 + 터치 타깃 확대 (32→40px, iOS 권장 44px에 근접) */
   .header-actions {
     position: static;
     justify-content: flex-end;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 8px;
   }
-  .app-header h1 { font-size: 22px; }
+  .header-icon-btn { width: 40px; height: 40px; font-size: 18px; }
+  .app-header { margin-bottom: 20px; padding-bottom: 14px; }
+  .app-header h1 { font-size: 22px; margin-bottom: 4px; }
+  .app-header .subtitle { font-size: 12px; line-height: 1.5; }
+
   .settings-grid { grid-template-columns: 1fr; gap: 10px; }
-  .status-bar { grid-template-columns: 1fr; gap: 8px; }
-  .question-box {
-    padding: 22px 18px;
-    font-size: 17px;
-    line-height: 2.0;
+
+  /* 상태 카드: 1열 스택 → 3열 컴팩트 (세로 공간 3배 절약) */
+  .status-bar {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
   }
+  .status-card { padding: 8px 8px; border-radius: 8px; }
+  .status-card .label { font-size: 10px; letter-spacing: 0.03em; margin-bottom: 2px; }
+  .status-card .value { font-size: 14px; line-height: 1.25; }
+  .status-card .sub { font-size: 10px; margin-left: 2px; }
+  .streak-dot { font-size: 12px; }
+
+  /* 질문 박스: line-height 2.0 → 1.85, padding/min-height 축소로 짧은 구절 공간 낭비 제거 */
+  .question-box {
+    padding: 16px 14px;
+    font-size: 17px;
+    line-height: 1.85;
+    min-height: 110px;
+    border-radius: 12px;
+  }
+
+  .input-area { margin-top: 16px; }
+  textarea { padding: 12px; line-height: 1.6; }
+  /* 물리 키보드 단축키 안내는 터치 기기에서 무의미 — 숨김으로 공간 회수 */
+  .input-hint { display: none; }
+
   /* iOS Safari zoom 방지: 입력 요소 16px 이상 유지 */
   .form-row input[type=number],
   .form-row select,
   .pdf-font-select select {
     font-size: 16px;
   }
+
   /* 좁은 화면: 본문 제목이 길어도 잘리지 않도록 진행률을 다음 줄로 내림 */
   .progress-labels {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
+    font-size: 11px;
   }
   .passage-title {
+    font-size: 15px;
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
@@ -1219,16 +1251,17 @@ summary:focus-visible,
   .progress-right {
     align-self: flex-end;
   }
-  .button-row { gap: 6px; }
+
+  .button-row { gap: 6px; margin-top: 10px; }
   .button-row > button {
     flex: 1 1 calc(50% - 3px);
     font-size: 13px;
-    padding: 12px 8px;
+    padding: 11px 8px;
   }
   .toggle-btn {
     flex: 1 1 calc(50% - 3px);
     font-size: 13px;
-    padding: 12px 8px;
+    padding: 11px 8px;
   }
   .level-stepper { flex: 1 1 calc(50% - 3px); }
   .level-stepper .stepper-btn { flex-basis: 36px; font-size: 17px; }
@@ -1242,7 +1275,7 @@ summary:focus-visible,
     right: 0;
     bottom: 0;
     margin: 0;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
     background: white;
     border-top: 1px solid var(--border);
     box-shadow: 0 -4px 14px rgba(0,0,0,0.08);
@@ -1250,19 +1283,55 @@ summary:focus-visible,
     gap: 8px;
   }
   .button-row.primary-row > .nav-btn {
-    padding: 14px 10px;
+    padding: 13px 8px;
     font-size: 15px;
     border-radius: 10px;
   }
   .button-row.primary-row > .submit-btn {
-    padding: 14px 12px;
+    padding: 13px 10px;
     font-size: 15px;
     border-radius: 10px;
   }
+
+  .quit-row { margin-top: 18px; padding-top: 14px; }
   .quit-btn {
     padding: 12px 14px;
     font-size: 14px;
   }
+
+  /* 도움말 모달: 패딩·폰트 컴팩트, 닫기 버튼 터치 타깃 확대 */
+  .modal-overlay { padding: 10px; }
+  .modal-panel { border-radius: 14px; max-height: 92vh; }
+  .modal-header { padding: 14px 16px; }
+  .modal-header h2 { font-size: 16px; }
+  .modal-close { width: 40px; height: 40px; font-size: 22px; border-radius: 10px; }
+  .modal-body { padding: 16px 18px 22px; font-size: 13px; }
+  .modal-body h3 { font-size: 14px; margin: 18px 0 6px; }
+}
+
+/* === 초소형 폰 (<380px, iPhone SE 1세대 · 갤럭시 폴드 닫힘 등) === */
+@media (max-width: 380px) {
+  body { padding: 8px 6px; }
+  .container { padding: 14px 11px; }
+  .app-header h1 { font-size: 20px; }
+  .app-header .subtitle { font-size: 11px; }
+  .question-box { padding: 14px 12px; font-size: 16px; line-height: 1.8; min-height: 100px; }
+  .status-card { padding: 6px 5px; }
+  .status-card .value { font-size: 13px; }
+  .status-card .label { font-size: 9px; }
+  .status-card .sub { font-size: 9px; }
+  .button-row > button { font-size: 12px; padding: 10px 6px; }
+  .toggle-btn { font-size: 12px; padding: 10px 6px; }
+  .level-stepper .stepper-btn { flex-basis: 32px; font-size: 16px; }
+  .level-stepper .stepper-value { font-size: 12px; }
+  .button-row.primary-row { padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)); gap: 6px; }
+  .button-row.primary-row > .nav-btn { font-size: 14px; padding: 12px 6px; }
+  .button-row.primary-row > .submit-btn { font-size: 14px; padding: 12px 8px; }
+  #test-screen { padding-bottom: 78px; }
+  .quit-btn { font-size: 13px; padding: 10px 12px; }
+  .reveal-countdown { padding: 8px 10px; }
+  .reveal-countdown-text { font-size: 11px; }
+  .reveal-skip-btn { padding: 5px 10px; font-size: 11px; }
 }
 
 .sermon-list {
