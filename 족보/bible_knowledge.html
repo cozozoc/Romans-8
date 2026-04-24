@@ -33,8 +33,15 @@
     }
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: var(--font); color: var(--text); }
-  body { display: flex; flex-direction: column; overflow: hidden; }
+  html, body { margin: 0; padding: 0; background: var(--bg); font-family: var(--font); color: var(--text); }
+  html { height: 100%; }
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh; /* 모바일 URL바 표시/숨김에 따라 동적 조정 */
+  }
 
   .bk-header {
     position: relative;
@@ -90,7 +97,10 @@
     cursor: pointer;
     transition: background 0.12s, color 0.12s, border-color 0.12s;
     flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
   }
+  .bk-tab-short { display: none; }
+  .bk-tab-long { display: inline; }
   .bk-tab:hover { background: var(--bg3); color: var(--text); }
   .bk-tab.active {
     background: var(--accent-bg); color: var(--accent);
@@ -113,19 +123,22 @@
   }
 
   @media (max-width: 640px) {
-    .bk-header { padding: 8px 56px 6px 12px; }
-    .bk-title { font-size: 16px; }
-    .bk-subtitle { font-size: 11px; }
-    .bk-close { width: 40px; height: 40px; font-size: 18px; right: 10px; }
-    .bk-tabs { padding: 7px 8px; }
-    .bk-tab { padding: 7px 11px; font-size: 12px; }
+    /* 모바일: 부제 숨김, 한 줄 헤더로 컴팩트 (세로 공간 ~25px 절약) */
+    .bk-header { padding: 6px 50px 6px 14px; }
+    .bk-title { font-size: 15px; margin: 0; }
+    .bk-subtitle { display: none; }
+    .bk-close { width: 36px; height: 36px; font-size: 16px; right: 10px; }
+    .bk-tabs { padding: 6px 8px; }
+    /* 모바일 탭: 짧은 라벨 사용으로 한 화면에 더 많이 표시 */
+    .bk-tab { padding: 7px 11px; font-size: 12.5px; }
+    .bk-tab-long { display: none; }
+    .bk-tab-short { display: inline; }
   }
   @media (max-width: 380px) {
-    .bk-header { padding: 6px 48px 4px 10px; }
-    .bk-title { font-size: 15px; }
-    .bk-subtitle { font-size: 10px; }
-    .bk-close { width: 36px; height: 36px; right: 8px; }
-    .bk-tab { padding: 6px 10px; font-size: 11.5px; }
+    .bk-header { padding: 5px 44px 5px 12px; }
+    .bk-title { font-size: 14px; }
+    .bk-close { width: 34px; height: 34px; right: 8px; font-size: 15px; }
+    .bk-tab { padding: 6px 9px; font-size: 11.5px; }
   }
 </style>
 </head>
@@ -139,13 +152,13 @@
 
 <nav class="bk-tabs" role="tablist" aria-label="Bible Knowledge 탭">
   <div class="bk-tabs-inner">
-    <button class="bk-tab active" role="tab" data-tab="ot-content"  data-src="old_testament_timeline.html?embed=1">📖 구약 연대기 (내용순)</button>
-    <button class="bk-tab"        role="tab" data-tab="ot-writing"  data-src="old_testament_timeline_writing.html?embed=1">📚 구약 연대기 (기록순)</button>
-    <button class="bk-tab"        role="tab" data-tab="kings"       data-src="divided_kingdom_kings.html?embed=1">👑 분열왕국 왕</button>
-    <button class="bk-tab"        role="tab" data-tab="figures"     data-src="chronological_apostolic_history.html?embed=1">📜 인물 연대기</button>
-    <button class="bk-tab"        role="tab" data-tab="adam-jesus"  data-src="adam_to_jesus_genealogy.html?embed=1">🌳 아담→예수 족보</button>
-    <button class="bk-tab"        role="tab" data-tab="canon"       data-src="bible_66_canon_order.html?embed=1">📚 성경 66권 순서</button>
-    <button class="bk-tab"        role="tab" data-tab="vocab"       data-src="biblical_greek_hebrew_vocabulary.html?embed=1">🔤 성경 원어 어휘</button>
+    <button class="bk-tab active" role="tab" data-tab="ot-content"  data-src="old_testament_timeline.html?embed=1"><span class="bk-tab-long">📖 구약 연대기 (내용순)</span><span class="bk-tab-short">📖 내용순</span></button>
+    <button class="bk-tab"        role="tab" data-tab="ot-writing"  data-src="old_testament_timeline_writing.html?embed=1"><span class="bk-tab-long">📚 구약 연대기 (기록순)</span><span class="bk-tab-short">📚 기록순</span></button>
+    <button class="bk-tab"        role="tab" data-tab="kings"       data-src="divided_kingdom_kings.html?embed=1"><span class="bk-tab-long">👑 분열왕국 왕</span><span class="bk-tab-short">👑 왕</span></button>
+    <button class="bk-tab"        role="tab" data-tab="figures"     data-src="chronological_apostolic_history.html?embed=1"><span class="bk-tab-long">📜 인물 연대기</span><span class="bk-tab-short">📜 인물</span></button>
+    <button class="bk-tab"        role="tab" data-tab="adam-jesus"  data-src="adam_to_jesus_genealogy.html?embed=1"><span class="bk-tab-long">🌳 아담→예수 족보</span><span class="bk-tab-short">🌳 족보</span></button>
+    <button class="bk-tab"        role="tab" data-tab="canon"       data-src="bible_66_canon_order.html?embed=1"><span class="bk-tab-long">📚 성경 66권 순서</span><span class="bk-tab-short">📚 66권</span></button>
+    <button class="bk-tab"        role="tab" data-tab="vocab"       data-src="biblical_greek_hebrew_vocabulary.html?embed=1"><span class="bk-tab-long">🔤 성경 원어 어휘</span><span class="bk-tab-short">🔤 어휘</span></button>
   </div>
 </nav>
 
