@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1777019976737,
+  "lastScanned": 1777115302993,
   "projectRoot": "f:\\Project\\claude_code\\Romans8_memorization",
   "techStack": {
     "languages": [
@@ -42,7 +42,7 @@
       "path": "성경",
       "purpose": null,
       "fileCount": 1189,
-      "lastAccessed": 1777019976667,
+      "lastAccessed": 1777115302797,
       "keyFiles": [
         "갈라디아서_2장.txt",
         "갈라디아서_3장.txt",
@@ -55,7 +55,7 @@
       "path": "족보",
       "purpose": null,
       "fileCount": 20,
-      "lastAccessed": 1777019976669,
+      "lastAccessed": 1777115302825,
       "keyFiles": [
         "biblical-genealogy.md",
         "biblical-genealogy-100.md",
@@ -68,7 +68,7 @@
       "path": "제자훈련1권",
       "purpose": null,
       "fileCount": 6,
-      "lastAccessed": 1777019976670,
+      "lastAccessed": 1777115302827,
       "keyFiles": [
         "01_롬10_9-10_마16_16.txt",
         "02_히4_16_애3_22-23.txt",
@@ -81,7 +81,7 @@
       "path": "제자훈련2권",
       "purpose": null,
       "fileCount": 14,
-      "lastAccessed": 1777019976671,
+      "lastAccessed": 1777115302831,
       "keyFiles": [
         "01_벧후1_21_수1_8.txt",
         "02_롬11_36상_렘31_3하.txt",
@@ -94,7 +94,7 @@
       "path": "제자훈련3권",
       "purpose": null,
       "fileCount": 12,
-      "lastAccessed": 1777019976672,
+      "lastAccessed": 1777115302832,
       "keyFiles": [
         "01_마7_24_요14_21.txt",
         "02_빌2_3-4_벧전4_11상.txt",
@@ -107,14 +107,14 @@
       "path": "data",
       "purpose": "Data files",
       "fileCount": 0,
-      "lastAccessed": 1777019976673,
+      "lastAccessed": 1777115302833,
       "keyFiles": []
     },
     "사역훈련2권_교회와_평신도의_자화상": {
       "path": "사역훈련2권_교회와_평신도의_자화상",
       "purpose": null,
       "fileCount": 10,
-      "lastAccessed": 1777019976674,
+      "lastAccessed": 1777115302842,
       "keyFiles": [
         "01_엡2_19-20.txt",
         "02_요4_23-24.txt",
@@ -127,7 +127,7 @@
       "path": "사역훈련3권_소그룹_환경과_리더십",
       "purpose": null,
       "fileCount": 5,
-      "lastAccessed": 1777019976675,
+      "lastAccessed": 1777115302875,
       "keyFiles": [
         "02_살전2_7-8.txt",
         "04_사34_16.txt",
@@ -140,7 +140,7 @@
       "path": "__pycache__",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1777019976676,
+      "lastAccessed": 1777115302890,
       "keyFiles": [
         "scrape_bible.cpython-311.pyc"
       ]
@@ -149,8 +149,8 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 780,
-      "lastAccessed": 1777074123148,
+      "accessCount": 782,
+      "lastAccessed": 1777115541639,
       "type": "file"
     },
     {
@@ -244,6 +244,12 @@
       "type": "file"
     },
     {
+      "path": ".claude\\agents\\bible-curator.md",
+      "accessCount": 3,
+      "lastAccessed": 1777074828954,
+      "type": "file"
+    },
+    {
       "path": "data\\bible\\1corinthians.json",
       "accessCount": 2,
       "lastAccessed": 1776490626751,
@@ -254,12 +260,6 @@
       "accessCount": 2,
       "lastAccessed": 1776497125542,
       "type": "directory"
-    },
-    {
-      "path": ".claude\\agents\\bible-curator.md",
-      "accessCount": 2,
-      "lastAccessed": 1776501734959,
-      "type": "file"
     },
     {
       "path": ".claude\\skills\\bible\\SKILL.md",
