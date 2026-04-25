@@ -20,3 +20,15 @@
 {"t":0,"agent":"a083b31","agent_type":"bible-checker","event":"agent_stop","success":true,"duration_ms":68974}
 {"t":0,"agent":"ae48a15","agent_type":"beta-tester","event":"agent_start","parent_mode":"none"}
 {"t":0,"agent":"ae48a15","agent_type":"beta-tester","event":"agent_stop","success":true,"duration_ms":683842}
+{"t":0,"agent":"aecd666","agent_type":"planner","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"aecd666","agent_type":"planner","event":"agent_stop","success":true,"duration_ms":322364}
+{"t":0,"agent":"a463cc4","agent_type":"bible-checker","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a463cc4","agent_type":"bible-checker","event":"agent_stop","success":true,"duration_ms":71551}
+{"t":0,"agent":"aea1c3f","agent_type":"ux-designer","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"aea1c3f","agent_type":"ux-designer","event":"agent_stop","success":true,"duration_ms":269851}
+{"t":0,"agent":"a4e22af","agent_type":"programmer","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a4e22af","agent_type":"programmer","event":"agent_stop","success":true,"duration_ms":1008365}
+{"t":0,"agent":"acbe673","agent_type":"bible-checker","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"acbe673","agent_type":"bible-checker","event":"agent_stop","success":true,"duration_ms":114156}
+{"t":0,"agent":"a9a8cff","agent_type":"beta-tester","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a9a8cff","agent_type":"beta-tester","event":"agent_stop","success":true,"duration_ms":151922}

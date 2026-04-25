@@ -98,10 +98,64 @@
       "status": "completed",
       "completed_at": "2026-04-25T13:15:59.227Z",
       "duration_ms": 683842
+    },
+    {
+      "agent_id": "aecd6669690efa415",
+      "agent_type": "planner",
+      "started_at": "2026-04-25T13:26:18.689Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T13:31:41.053Z",
+      "duration_ms": 322364
+    },
+    {
+      "agent_id": "a463cc4788a98dba4",
+      "agent_type": "bible-checker",
+      "started_at": "2026-04-25T13:31:59.607Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T13:33:11.158Z",
+      "duration_ms": 71551
+    },
+    {
+      "agent_id": "aea1c3f7bae847826",
+      "agent_type": "ux-designer",
+      "started_at": "2026-04-25T13:33:37.302Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T13:38:07.153Z",
+      "duration_ms": 269851
+    },
+    {
+      "agent_id": "a4e22af2bcf7740f3",
+      "agent_type": "programmer",
+      "started_at": "2026-04-25T13:38:28.472Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T13:55:16.837Z",
+      "duration_ms": 1008365
+    },
+    {
+      "agent_id": "acbe673ec8b1dea77",
+      "agent_type": "bible-checker",
+      "started_at": "2026-04-25T13:55:27.933Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T13:57:22.089Z",
+      "duration_ms": 114156
+    },
+    {
+      "agent_id": "a9a8cffd374abddee",
+      "agent_type": "beta-tester",
+      "started_at": "2026-04-25T13:57:43.328Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T14:00:15.250Z",
+      "duration_ms": 151922
     }
   ],
-  "total_spawned": 11,
-  "total_completed": 11,
+  "total_spawned": 17,
+  "total_completed": 17,
   "total_failed": 0,
-  "last_updated": "2026-04-25T13:15:59.332Z"
+  "last_updated": "2026-04-25T14:00:15.369Z"
 }

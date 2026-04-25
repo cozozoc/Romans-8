@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-25T13:15:59.227Z",
+  "updatedAt": "2026-04-25T14:00:15.250Z",
   "missions": [
     {
       "id": "session:e2a0e097-8c41-4020-b835-b496015e49f6:none",
@@ -89,15 +89,15 @@
       "name": "none",
       "objective": "Session mission",
       "createdAt": "2026-04-25T12:08:08.011Z",
-      "updatedAt": "2026-04-25T13:15:59.227Z",
+      "updatedAt": "2026-04-25T14:00:15.250Z",
       "status": "done",
-      "workerCount": 11,
+      "workerCount": 17,
       "taskCounts": {
-        "total": 11,
+        "total": 17,
         "pending": 0,
         "blocked": 0,
         "inProgress": 0,
-        "completed": 11,
+        "completed": 17,
         "failed": 0
       },
       "agents": [
@@ -210,40 +210,100 @@
           "latestUpdate": "completed",
           "completedSummary": null,
           "updatedAt": "2026-04-25T13:15:59.227Z"
+        },
+        {
+          "name": "planner:aecd666",
+          "role": "planner",
+          "ownership": "aecd6669690efa415",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-25T13:31:41.053Z"
+        },
+        {
+          "name": "bible-checker:a463cc4",
+          "role": "bible-checker",
+          "ownership": "a463cc4788a98dba4",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-25T13:33:11.158Z"
+        },
+        {
+          "name": "ux-designer:aea1c3f",
+          "role": "ux-designer",
+          "ownership": "aea1c3f7bae847826",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-25T13:38:07.153Z"
+        },
+        {
+          "name": "programmer:a4e22af",
+          "role": "programmer",
+          "ownership": "a4e22af2bcf7740f3",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-25T13:55:16.837Z"
+        },
+        {
+          "name": "bible-checker:acbe673",
+          "role": "bible-checker",
+          "ownership": "acbe673ec8b1dea77",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-25T13:57:22.089Z"
+        },
+        {
+          "name": "beta-tester:a9a8cff",
+          "role": "beta-tester",
+          "ownership": "a9a8cffd374abddee",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-04-25T14:00:15.250Z"
         }
       ],
       "timeline": [
         {
-          "id": "session-start:a083b31d990b8a04e:2026-04-25T13:03:07.992Z",
-          "at": "2026-04-25T13:03:07.992Z",
+          "id": "session-start:acbe673ec8b1dea77:2026-04-25T13:55:27.933Z",
+          "at": "2026-04-25T13:55:27.933Z",
           "kind": "update",
-          "agent": "bible-checker:a083b31",
-          "detail": "started bible-checker:a083b31",
-          "sourceKey": "session-start:a083b31d990b8a04e"
+          "agent": "bible-checker:acbe673",
+          "detail": "started bible-checker:acbe673",
+          "sourceKey": "session-start:acbe673ec8b1dea77"
         },
         {
-          "id": "session-stop:a083b31d990b8a04e:2026-04-25T13:04:16.966Z",
-          "at": "2026-04-25T13:04:16.966Z",
+          "id": "session-stop:acbe673ec8b1dea77:2026-04-25T13:57:22.089Z",
+          "at": "2026-04-25T13:57:22.089Z",
           "kind": "completion",
-          "agent": "bible-checker:a083b31",
+          "agent": "bible-checker:acbe673",
           "detail": "completed",
-          "sourceKey": "session-stop:a083b31d990b8a04e"
+          "sourceKey": "session-stop:acbe673ec8b1dea77"
         },
         {
-          "id": "session-start:ae48a154e19b853d9:2026-04-25T13:04:35.385Z",
-          "at": "2026-04-25T13:04:35.385Z",
+          "id": "session-start:a9a8cffd374abddee:2026-04-25T13:57:43.328Z",
+          "at": "2026-04-25T13:57:43.328Z",
           "kind": "update",
-          "agent": "beta-tester:ae48a15",
-          "detail": "started beta-tester:ae48a15",
-          "sourceKey": "session-start:ae48a154e19b853d9"
+          "agent": "beta-tester:a9a8cff",
+          "detail": "started beta-tester:a9a8cff",
+          "sourceKey": "session-start:a9a8cffd374abddee"
         },
         {
-          "id": "session-stop:ae48a154e19b853d9:2026-04-25T13:15:59.227Z",
-          "at": "2026-04-25T13:15:59.227Z",
+          "id": "session-stop:a9a8cffd374abddee:2026-04-25T14:00:15.250Z",
+          "at": "2026-04-25T14:00:15.250Z",
           "kind": "completion",
-          "agent": "beta-tester:ae48a15",
+          "agent": "beta-tester:a9a8cff",
           "detail": "completed",
-          "sourceKey": "session-stop:ae48a154e19b853d9"
+          "sourceKey": "session-stop:a9a8cffd374abddee"
         }
       ]
     }
