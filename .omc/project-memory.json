@@ -149,8 +149,8 @@
   "hotPaths": [
     {
       "path": "app.js",
-      "accessCount": 788,
-      "lastAccessed": 1777120802540,
+      "accessCount": 791,
+      "lastAccessed": 1777122286047,
       "type": "file"
     },
     {
@@ -173,9 +173,15 @@
     },
     {
       "path": "",
-      "accessCount": 63,
-      "lastAccessed": 1777119026418,
+      "accessCount": 69,
+      "lastAccessed": 1777121534998,
       "type": "directory"
+    },
+    {
+      "path": "성경\\요한복음_1장.txt",
+      "accessCount": 20,
+      "lastAccessed": 1777121733132,
+      "type": "file"
     },
     {
       "path": "scrape_bible.py",
@@ -286,6 +292,12 @@
       "type": "file"
     },
     {
+      "path": "성경\\고린도전서_13장.txt",
+      "accessCount": 2,
+      "lastAccessed": 1777121525573,
+      "type": "file"
+    },
+    {
       "path": "사역훈련2권_교회와_평신도의_자화상\\02_요4_23-24.txt",
       "accessCount": 1,
       "lastAccessed": 1776487504192,
@@ -364,12 +376,6 @@
       "type": "file"
     },
     {
-      "path": "성경\\고린도전서_13장.txt",
-      "accessCount": 1,
-      "lastAccessed": 1776495068707,
-      "type": "file"
-    },
-    {
       "path": "성경\\_smoketest_시편_23편.txt",
       "accessCount": 1,
       "lastAccessed": 1776496004467,
@@ -409,12 +415,6 @@
       "path": "discipleship_gen.js",
       "accessCount": 1,
       "lastAccessed": 1776519648634,
-      "type": "file"
-    },
-    {
-      "path": "성경\\요한복음_1장.txt",
-      "accessCount": 1,
-      "lastAccessed": 1776519673302,
       "type": "file"
     },
     {

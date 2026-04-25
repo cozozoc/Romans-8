@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>성경 헬라어/히브리어 어휘 (30개)</title>
+<title>성경 헬라어/히브리어/아람어 어휘 (30 + 16개)</title>
 <style>
   :root {
     --color-text-primary: #1f1f1d;
@@ -196,12 +196,41 @@
     text-align: center; line-height: 1.7;
   }
 
+  .aram-section-header {
+    border-top: 2px solid var(--color-aram);
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .aram-section-title {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.02em; margin: 0;
+    color: var(--color-text-primary);
+  }
+  .aram-section-count {
+    font-size: 18px; font-weight: 400;
+    color: var(--color-aram); margin-left: 6px;
+  }
+  .aram-cat-block { margin-bottom: 2rem; }
+  .aram-cat-title {
+    font-size: 15px; font-weight: 700;
+    color: var(--color-aram);
+    letter-spacing: 0.01em;
+    margin-bottom: 10px; padding-left: 6px;
+    border-left: 3px solid var(--color-aram);
+  }
+
   @media (max-width: 640px) {
     body { padding: 12px; }
     h1.title { font-size: 24px; }
     .grid { grid-template-columns: 1fr; gap: 10px; }
     .korean-name { font-size: 19px; }
     .original { font-size: 19px; }
+    .aram-section-title { font-size: 20px; }
+    .aram-cat-title { font-size: 13px; }
+  }
+  @media (max-width: 380px) {
+    .aram-cat-title { font-size: 12px; }
   }
 </style>
 <script>(function(){try{if(new URLSearchParams(location.search).get("embed")==="1"||window.self!==window.top)document.documentElement.classList.add("bk-embed");}catch(e){}})();</script>
@@ -226,8 +255,8 @@ html.bk-embed p.sub,html.bk-embed p.ig-sub{font-size:13px!important;margin-botto
 <body>
 
 <div class="container">
-  <h1 class="title">성경 헬라어/히브리어 어휘</h1>
-  <p class="sub">성경 원어 중 가장 중요한 <b>30개</b> 단어 · 히브리어 · 헬라어 · 아람어</p>
+  <h1 class="title">성경 헬라어/히브리어/아람어 어휘</h1>
+  <p class="sub">성경 원어 어휘 — 핵심 히브리어/헬라어/아람어 30개 + 신약 아람어 16개</p>
 
   <p class="page-nav">
     <a href="old_testament_timeline.html" target="_blank" rel="noopener">📖 구약 연대기 (내용순)</a>
@@ -577,6 +606,189 @@ html.bk-embed p.sub,html.bk-embed p.ig-sub{font-size:13px!important;margin-botto
     </div>
 
   </div>
+
+  <section class="aram-section">
+    <div class="aram-section-header">
+      <h2 class="aram-section-title">신약 아람어 <span class="aram-section-count">(16개)</span></h2>
+    </div>
+
+    <!-- 치유 및 선포 (아바는 No.20 참조 — 3개) -->
+    <div class="aram-cat-block">
+      <div class="aram-cat-title" role="heading" aria-level="3">치유 및 선포</div>
+      <div class="grid">
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">달리다굼</div>
+          <div class="romanization">Talitha koum</div>
+          <div class="meaning">소녀야, 일어나라</div>
+          <div class="ref">마가복음 5:41</div>
+          <div class="note">야이로의 딸을 살리실 때 하신 말씀. ※ 개역개정 본문에는 번역만 수록.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">에바다</div>
+          <div class="romanization">Ephphatha</div>
+          <div class="meaning">열려라</div>
+          <div class="ref">마가복음 7:34</div>
+          <div class="note">귀 먹고 말 더듬는 자를 고치실 때.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">엘리 엘리 라마 사박다니</div>
+          <div class="romanization">Eli Eli lama sabachthani</div>
+          <div class="meaning">나의 하나님, 나의 하나님, 어찌하여 나를 버리셨나이까</div>
+          <div class="ref">마태복음 27:46</div>
+          <div class="note">십자가 위에서의 마지막 절규. ※ 개역개정 본문에는 번역만 수록.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 인명 및 호칭 (5개) -->
+    <div class="aram-cat-block">
+      <div class="aram-cat-title" role="heading" aria-level="3">인명 및 호칭</div>
+      <div class="grid">
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">게바</div>
+          <div class="romanization">Cephas</div>
+          <div class="meaning">반석, 돌</div>
+          <div class="ref">요한복음 1:42</div>
+          <div class="note">시몬 베드로의 아람어 이름.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">바요나</div>
+          <div class="romanization">Bar-Jonah</div>
+          <div class="meaning">요나의 아들</div>
+          <div class="ref">마태복음 16:17</div>
+          <div class="note">베드로의 부친 이름을 포함한 호칭.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">바나바</div>
+          <div class="romanization">Barnabas</div>
+          <div class="meaning">위로의 아들</div>
+          <div class="ref">사도행전 4:36</div>
+          <div class="note">요셉이라는 레위인에게 붙여진 별명.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">보아너게</div>
+          <div class="romanization">Boanerges</div>
+          <div class="meaning">우레의 아들</div>
+          <div class="ref">마가복음 3:17</div>
+          <div class="note">야고보와 요한 형제에게 주신 별칭.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">도마</div>
+          <div class="romanization">Thomas</div>
+          <div class="meaning">쌍둥이</div>
+          <div class="ref">요한복음 11:16</div>
+          <div class="note">디두모라고도 불리는 제자의 이름.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 지명 (4개) -->
+    <div class="aram-cat-block">
+      <div class="aram-cat-title" role="heading" aria-level="3">지명</div>
+      <div class="grid">
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">골고다</div>
+          <div class="romanization">Golgotha</div>
+          <div class="meaning">해골의 곳</div>
+          <div class="ref">마태복음 27:33</div>
+          <div class="note">예수님이 십자가에 못 박히신 장소.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">겟세마네</div>
+          <div class="romanization">Gethsemane</div>
+          <div class="meaning">기름 짜는 틀</div>
+          <div class="ref">마태복음 26:36</div>
+          <div class="note">감람산에 위치한 기도의 장소.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">베데스다</div>
+          <div class="romanization">Bethesda</div>
+          <div class="meaning">자비의 집</div>
+          <div class="ref">요한복음 5:2</div>
+          <div class="note">예루살렘 양문 곁에 있는 못.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">아겔다마</div>
+          <div class="romanization">Akeldama</div>
+          <div class="meaning">피의 밭</div>
+          <div class="ref">사도행전 1:19</div>
+          <div class="note">가룟 유다의 죽음과 관련된 장소.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 신앙 관용구 및 경고 (4개) -->
+    <div class="aram-cat-block">
+      <div class="aram-cat-title" role="heading" aria-level="3">신앙 관용구 및 경고</div>
+      <div class="grid">
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">마라나타</div>
+          <div class="romanization">Maranatha</div>
+          <div class="meaning">주여, 오시옵소서</div>
+          <div class="ref">고린도전서 16:22</div>
+          <div class="note">초대 교회의 재림 신앙 고백. ※ 개역개정 본문에는 번역만 수록, 아람어 원형 미표기.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">라가</div>
+          <div class="romanization">Raca</div>
+          <div class="meaning">미련한 놈, 골 빈 놈</div>
+          <div class="ref">마태복음 5:22</div>
+          <div class="note">형제를 모욕할 때 쓰는 비속어.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">맘몬</div>
+          <div class="romanization">Mammon</div>
+          <div class="meaning">재물, 부</div>
+          <div class="ref">마태복음 6:24</div>
+          <div class="note">하나님과 대립하는 세속적 가치. ※ 개역개정 본문에는 번역만 수록.</div>
+        </div>
+
+        <div class="term lang-aram">
+          <div class="term-head"><span class="lang-chip">아람어 · Aramaic</span></div>
+          <div class="korean-name">고르반</div>
+          <div class="romanization">Corban</div>
+          <div class="meaning">하나님께 드림</div>
+          <div class="ref">마가복음 7:11</div>
+          <div class="note">하나님께 드리는 예물에 관한 전통.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
 
   <footer>
     * 음역·표기는 주요 신학사전(BDAG · HALOT · TDNT)과 개역개정 음역 관례를 따름.<br>
