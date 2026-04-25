@@ -1,0 +1,8 @@
+{"t":0,"agent":"a774681","agent_type":"planner","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a774681","agent_type":"planner","event":"agent_stop","success":true,"duration_ms":101134}
+{"t":0,"agent":"a39461e","agent_type":"ux-designer","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a39461e","agent_type":"ux-designer","event":"agent_stop","success":true,"duration_ms":102241}
+{"t":0,"agent":"a9c171a","agent_type":"programmer","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a9c171a","agent_type":"programmer","event":"agent_stop","success":true,"duration_ms":1140287}
+{"t":0,"agent":"a8d85cb","agent_type":"beta-tester","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"a8d85cb","agent_type":"beta-tester","event":"agent_stop","success":true,"duration_ms":92015}

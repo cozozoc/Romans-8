@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"head -1 app.js | grep -oP '0\\\\.\\\\d+\\\\.\\\\d+' \",\"description\":\"Extract APP_VERSION from app.js\"}",
+  "error": "Exit code 2\ngrep: -P supports only unibyte and UTF-8 locales",
+  "timestamp": "2026-04-25T12:31:51.107Z",
+  "retry_count": 1
+}

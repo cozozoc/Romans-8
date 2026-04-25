@@ -1,0 +1,44 @@
+{
+  "agents": [
+    {
+      "agent_id": "a774681d373b0d259",
+      "agent_type": "planner",
+      "started_at": "2026-04-25T12:08:08.011Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T12:09:49.145Z",
+      "duration_ms": 101134
+    },
+    {
+      "agent_id": "a39461eb9a0017141",
+      "agent_type": "ux-designer",
+      "started_at": "2026-04-25T12:10:06.891Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T12:11:49.132Z",
+      "duration_ms": 102241
+    },
+    {
+      "agent_id": "a9c171a8c85740e31",
+      "agent_type": "programmer",
+      "started_at": "2026-04-25T12:11:59.744Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T12:31:00.031Z",
+      "duration_ms": 1140287
+    },
+    {
+      "agent_id": "a8d85cbb29c3c4573",
+      "agent_type": "beta-tester",
+      "started_at": "2026-04-25T12:31:17.634Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-25T12:32:49.649Z",
+      "duration_ms": 92015
+    }
+  ],
+  "total_spawned": 4,
+  "total_completed": 4,
+  "total_failed": 0,
+  "last_updated": "2026-04-25T12:32:49.765Z"
+}
